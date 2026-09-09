@@ -11,6 +11,7 @@ func _ready() -> void:
 		func():
 			game_map_scene.execute_code(code_text_edit.text)
 	)
+	game_map_scene.HintLabel = $VBoxContainer/HBoxContainer/VBoxContainer/HintLabel
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

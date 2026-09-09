@@ -47,7 +47,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "robot.move_right(5)
-robot.move_down(4)"
+robot.move_down(4)
+（hard coded compiler）"
 placeholder_text = "Type instruction to the Robot here......"
 context_menu_enabled = false
 emoji_menu_enabled = false

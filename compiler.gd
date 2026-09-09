@@ -13,11 +13,13 @@ enum Action{
 	RESCUE,
 }
 
+# plz ensure ErrorCode doesnt have actual value same as any of the Action, otherwise it would crash
 enum ErrorCode{
-	OK,              # 无错误
+	OK = 1000,              # 无错误
 	EMPTY_CODE,          # 输入为空
 	SYNTAX_ERROR,        # 语法错误
 	UNKNOWN_ACTION,      # 未知指令	
+	TIMEOUT_ERROR,		#時間過長，防止無限循環
 }
 
 # Called when the node enters the scene tree for the first time.
@@ -30,12 +32,12 @@ func _process(delta: float) -> void:
 
 
 func process_code(input_code: String) -> Array:
-	if len(input_code) == 0:
+	if input_code.length() == 0:
 		return [
 			[ErrorCode.EMPTY_CODE]
 		]
 	
 	return [
-		[Action.MOVE_LEFT, 5],
+		[Action.MOVE_RIGHT, 5],
 		[Action.MOVE_DOWN, 4],
 	]

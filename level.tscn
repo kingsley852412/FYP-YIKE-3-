@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://df7bkpec17vnt"]
+
+[ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_oi3di"]
+[ext_resource type="PackedScene" uid="uid://bq182abjff338" path="res://game_map_scenes/game_map_scene_level1.tscn" id="1_vonw3"]
+[ext_resource type="Script" uid="uid://cmmecxv710jum" path="res://game_map_script/game_map_scene_level_1.gd" id="2_oi3di"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xgho"]
+bg_color = Color(0.48773485, 0.61558396, 0.73970956, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u52ul"]
+bg_color = Color(0.60775006, 0.66, 0.495, 1)
+
+[node name="Level" type="Control" unique_id=1353138049]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oi3di")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1894878508]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1736282667]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_5xgho")
+text = "Level 1 demo"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1573318574]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=4354782]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CodeTextEdit" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1473680451]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "robot.move_right(5)
+robot.move_down(4)"
+placeholder_text = "Type instruction to the Robot here......"
+context_menu_enabled = false
+emoji_menu_enabled = false
+
+[node name="HintLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1139675910]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_u52ul")
+text = "Hi, im hint label"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1341030296]
+layout_mode = 2
+
+[node name="SubmitButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1539872353]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Submit"
+
+[node name="ResetButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=376378441]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Reset"
+
+[node name="HintButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=272316367]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Hint"
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=1949104473]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.05
+
+[node name="GameMapScene" parent="VBoxContainer/HBoxContainer/Panel" unique_id=1966619356 instance=ExtResource("1_vonw3")]
+script = ExtResource("2_oi3di")

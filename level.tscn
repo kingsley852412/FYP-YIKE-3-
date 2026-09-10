@@ -1,8 +1,6 @@
 [gd_scene format=3 uid="uid://df7bkpec17vnt"]
 
 [ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_oi3di"]
-[ext_resource type="PackedScene" uid="uid://bq182abjff338" path="res://game_map_scenes/game_map_scene_level1.tscn" id="1_vonw3"]
-[ext_resource type="Script" uid="uid://cmmecxv710jum" path="res://game_map_script/game_map_scene_level_1.gd" id="2_oi3di"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xgho"]
 bg_color = Color(0.48773485, 0.61558396, 0.73970956, 1)
@@ -80,6 +78,3 @@ text = "Hint"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.05
-
-[node name="GameMapScene" parent="VBoxContainer/HBoxContainer/Panel" unique_id=1966619356 instance=ExtResource("1_vonw3")]
-script = ExtResource("2_oi3di")

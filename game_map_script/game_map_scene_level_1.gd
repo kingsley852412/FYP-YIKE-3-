@@ -1,30 +1,31 @@
 extends GameMapScene
 
-var compiler: Compiler = Compiler.new()
-@onready var mcbody:= $MCBody
-
-# "Level" node should pass the Hint Label to here, so that we can update HintLabel
-var HintLabel: Label
-
-# hints and hint index for looping the hints list to show to player
-var current_hint_index: int = 0
-var hints: Array[String] = [
-	"click execute button to run your code!",
-	"clicking hint button to get more hints!",
-	"when you are stuck, hit reset button to reset level progress!",
-	"you can use robot.up/down/left/right to move around!",
-]
+@onready var mc_body: mcBody = $MCBody
+@onready var road_tiles:TileMapLayer = $RoadTileMapLayer
+@onready var target_body: mcBody = $TargetBody
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
-
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	
+func setup(hintLabelInput: Label) -> void:
+	super.setup(hintLabelInput)
+	
+	hints.append_array(
+		[
+			"you can use robot.up/down/left/right to move around!",
+		]
+	)
+	
+	level_reset()
 
 func level_reset() -> void:
-	pass
+	mc_body.snap_to_cell(Vector2i(0, 0))
+	target_body.snap_to_cell(Vector2i(5, 4))
 
 func execute_code(code_text: String) -> void:
 	# get list of instructions from compiler
@@ -41,28 +42,19 @@ func execute_code(code_text: String) -> void:
 			
 			compiler.Action.MOVE_UP:
 				for j in range(i[1]):
-					await mcbody.tile_movement(Vector2.UP)
+					await mc_body.tile_movement(Vector2.UP)
 					
 			compiler.Action.MOVE_DOWN:
 				for j in range(i[1]):
-					await mcbody.tile_movement(Vector2.DOWN)
+					await mc_body.tile_movement(Vector2.DOWN)
 					
 			compiler.Action.MOVE_LEFT:
 				for j in range(i[1]):
-					await mcbody.tile_movement(Vector2.LEFT)
+					await mc_body.tile_movement(Vector2.LEFT)
 					
 			compiler.Action.MOVE_RIGHT:
 				for j in range(i[1]):
-					await mcbody.tile_movement(Vector2.RIGHT)
+					await mc_body.tile_movement(Vector2.RIGHT)
 					
 			_:
 				assert(false, "unknown instruction")
-
-func refresh_hint() -> void:
-	assert(HintLabel != null, "HintLabel Not Initialized/ missing")
-	
-	# show the next hint in the list to the player
-	current_hint_index += 1
-	current_hint_index %= len(hints)
-	
-	HintLabel.text = hints[current_hint_index]

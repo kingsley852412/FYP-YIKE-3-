@@ -131,6 +131,7 @@ autoplay = "default"
 [node name="TargetBody" type="CharacterBody2D" parent="." unique_id=700413905]
 position = Vector2(381, 328)
 scale = Vector2(4, 4)
+script = ExtResource("2_uhp08")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TargetBody" unique_id=908686093]

@@ -1,3 +1,4 @@
+class_name mcBody
 extends CharacterBody2D
 
 @onready var tiles: TileMapLayer = $"../RoadTileMapLayer"
@@ -9,6 +10,8 @@ func tile_movement(direction:Vector2):
 	# calculates current and destination cell/grid	
 	var current_cell=tiles.local_to_map(tiles.to_local(global_position))
 	var target_cell=current_cell+Vector2i(direction)
+	
+
 
 	await get_tree().create_timer(0.5).timeout
 
@@ -17,3 +20,9 @@ func tile_movement(direction:Vector2):
 	if tiles.get_cell_source_id(target_cell)!=-1:
 		var traget_postion=tiles.to_global(tiles.map_to_local(target_cell))
 		global_position=traget_postion
+
+# ------------------------------------------------------------------
+# move the character to a specific grid cell, e.g. (0, 0)
+# ------------------------------------------------------------------
+func snap_to_cell(cell: Vector2i) -> void:
+	global_position = tiles.to_global(tiles.map_to_local(cell))

@@ -17,8 +17,13 @@ func _process(delta: float) -> void:
 
 
 func goto(path: String) -> void:
-	get_tree().change_scene_to_file(path)
+	var err: int = get_tree().change_scene_to_file(path)
+	assert(err == OK, "SceneManager.goto: failed to change scene to '%s' (error %d)" % [path, err])
+	
+	# wait until current scene code all ended to switch to new scene, avoid error
 	await get_tree().process_frame
+	
+	#emit signal for other objects to do things
 	scene_changed.emit()
 
 func goto_level(level_number: int) -> void:
@@ -29,4 +34,4 @@ func goto_main_menu() -> void:
 	goto("res://main_menu.tscn")
 
 func goto_level_select() -> void:
-	goto("res://level_select.tscn")
+	goto("res://level_select_menu.tscn")

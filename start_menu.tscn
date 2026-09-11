@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cv65urvgh4twg"]
 
+[ext_resource type="Script" uid="uid://w0k1ra6edy8y" path="res://start_menu.gd" id="1_jwbto"]
+
 [node name="StartMenu" type="Control" unique_id=1068859303]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_jwbto")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2119428959]
 layout_mode = 1

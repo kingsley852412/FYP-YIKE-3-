@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://d1b046ax2titf"]
+
+[node name="StartMenu" type="Control" unique_id=1068859303]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2119428959]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105172314, 0.19182104, 0.20829758, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=94416610]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameTitleLabel" type="Label" parent="VBoxContainer" unique_id=245632018]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_override_font_sizes/font_size = 50
+text = "YIKE 3
+Programming Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartGameButton" type="Button" parent="VBoxContainer" unique_id=114153918]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Start Game"
+
+[node name="ExitGameButton" type="Button" parent="VBoxContainer" unique_id=957080254]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Exit"

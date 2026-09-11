@@ -13,7 +13,9 @@ enum Action{
 	RESCUE,
 }
 
-# plz ensure ErrorCode doesnt have actual value same as any of the Action, otherwise it would crash
+# !!!!Important!!!!
+# plz ensure ErrorCode doesnt have actual value same as any of the Action,
+# otherwise it would crash
 enum ErrorCode{
 	OK = 1000,              # 无错误
 	EMPTY_CODE,          # 输入为空

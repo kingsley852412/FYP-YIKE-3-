@@ -14,6 +14,10 @@ config/name="FYP_Demo_Level1"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SceneManager="*uid://cqllv71aflkme"
+
 [display]
 
 window/stretch/mode="canvas_items"

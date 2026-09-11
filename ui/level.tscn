@@ -52,9 +52,12 @@ context_menu_enabled = false
 emoji_menu_enabled = false
 
 [node name="HintLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1139675910]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
+size_flags_stretch_ratio = 0.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_u52ul")
 text = "Hi, im hint label"
+autowrap_mode = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1341030296]
 layout_mode = 2

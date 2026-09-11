@@ -35,6 +35,18 @@ extends Control
 ## Passed to the level via [method GameMapScene.setup].
 @onready var hint_label: Label = $VBoxContainer/HBoxContainer/VBoxContainer/HintLabel
 
+const LEVEL_PATHS := {
+	1: "res://game_map_scenes/game_map_scene_level1.tscn",
+	
+	#2: "res://game_map_scenes/game_map_scene_level2.tscn",
+	#3: "res://game_map_scenes/game_map_scene_level3.tscn",
+}
+
+const LEVEL_SCRIPT_PATHS: Dictionary = {
+	1: "res://game_map_script/game_map_scene_level_1.gd",
+	
+}
+
 ## Builds the level UI: instantiates the level scene, embeds it, and connects
 ## the three buttons.
 ##
@@ -48,8 +60,14 @@ func _ready() -> void:
 	
 	# make an instance of level1 gameMapScene, set its script, 
 	# so that it knows its a gameMapScene class, otherwise casting as gameMapScene will FAIL
-	var inst : Node = load("res://game_map_scenes/game_map_scene_level1.tscn").instantiate()
-	inst.set_script(load("res://game_map_script/game_map_scene_level_1.gd"))
+	var scene_path = LEVEL_PATHS.get(SceneManager.selected_level, "")
+	var script_path = LEVEL_SCRIPT_PATHS.get(SceneManager.selected_level, "")
+	
+	assert(scene_path != "", ".tscn not found in LEVEL_PATH")
+	assert(script_path != "", ".gd not found in LEVEL_PATH")
+	
+	var inst : Node = load(scene_path).instantiate()
+	inst.set_script(load(script_path))
 	
 	# initiating the GameMapScene node
 	game_map_scene = inst as GameMapScene

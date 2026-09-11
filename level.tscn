@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://df7bkpec17vnt"]
 
-[ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_oi3di"]
+[ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_u52ul"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xgho"]
 bg_color = Color(0.48773485, 0.61558396, 0.73970956, 1)
@@ -15,7 +15,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_oi3di")
+script = ExtResource("1_u52ul")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1894878508]
 layout_mode = 1
@@ -35,6 +35,11 @@ text = "Level 1 demo"
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1573318574]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=1949104473]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.05
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=4354782]
 layout_mode = 2
@@ -76,8 +81,3 @@ text = "Reset"
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Hint"
-
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=1949104473]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.05

@@ -5,13 +5,6 @@ signal scene_changed
 # anything you want to remember across scene changes
 var selected_level: int = 1
 
-const LEVEL_PATHS := {
-	1: "res://game_map_scenes/game_map_scene_level1.tscn",
-	
-	#2: "res://game_map_scenes/game_map_scene_level2.tscn",
-	#3: "res://game_map_scenes/game_map_scene_level3.tscn",
-}
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -30,12 +23,10 @@ func goto(path: String) -> void:
 
 func goto_level(level_number: int) -> void:
 	selected_level = level_number
-	var path: String = LEVEL_PATHS.get(level_number, "")
-	assert(path != "", "No scene registered for level %d" % level_number)
-	goto(path)
+	goto("res://level.tscn")
 
 func goto_main_menu() -> void:
-	goto("res://ui/main_menu.tscn")
+	goto("res://main_menu.tscn")
 
 func goto_level_select() -> void:
-	goto("res://ui/level_select.tscn")
+	goto("res://level_select.tscn")

@@ -86,6 +86,10 @@ layout_mode = 2
 size_flags_horizontal = 6
 text = "Reset"
 
+[node name="ResetCodeButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1691948934]
+layout_mode = 2
+text = "Reset Code"
+
 [node name="HintButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=272316367]
 layout_mode = 2
 size_flags_horizontal = 6

@@ -18,6 +18,10 @@ extends Control
 ## Resets the level to its starting state. Disabled during execution.
 @onready var reset_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ResetButton
 
+## reset code entry box's content to default text
+@onready var reset_code_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ResetCodeButton
+
+
 ## Shows the next hint in the level's hint list.
 @onready var hint_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/HintButton
 
@@ -49,6 +53,14 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 	
 }
 
+## default text in code entry box for each level
+const DEFAULT_CODE_TEXT: Dictionary = {
+	1: "robot.move_right(5)
+robot.move_down(4)
+（hard coded compiler）",
+	
+}
+
 ## Builds the level UI: instantiates the level scene, embeds it, and connects
 ## the three buttons.
 ##
@@ -59,11 +71,12 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 ## [br]3. Call [method GameMapScene.setup] with parameter [member hint_label].
 ## [br]4. Connect the buttons.
 func _ready() -> void:
+	var current_level: int = SceneManager.selected_level
 	
 	# make an instance of level1 gameMapScene, set its script, 
 	# so that it knows its a gameMapScene class, otherwise casting as gameMapScene will FAIL
-	var scene_path = LEVEL_PATHS.get(SceneManager.selected_level, "")
-	var script_path = LEVEL_SCRIPT_PATHS.get(SceneManager.selected_level, "")
+	var scene_path = LEVEL_PATHS.get(current_level, "")
+	var script_path = LEVEL_SCRIPT_PATHS.get(current_level, "")
 	
 	assert(scene_path != "", ".tscn not found in LEVEL_PATH")
 	assert(script_path != "", ".gd not found in LEVEL_PATH")
@@ -71,12 +84,14 @@ func _ready() -> void:
 	var inst : Node = load(scene_path).instantiate()
 	inst.set_script(load(script_path))
 	
-	# initiating the GameMapScene node
+	# set up the GameMapScene node
 	game_map_scene = inst as GameMapScene
-	
 	panel.add_child(game_map_scene)
 
 	game_map_scene.setup(hint_label)
+
+	# initializing code input box to default text content
+	reset_code_input(current_level)
 
 	## Submit handler.
 	## Resets the level, runs the player's code, and locks Submit + Reset for
@@ -100,6 +115,10 @@ func _ready() -> void:
 		game_map_scene.level_reset
 	)
 	
+	reset_code_button.pressed.connect(
+		reset_code_input.bind(SceneManager.selected_level)
+	)
+	
 	## Hint handler. Cycles the level's hint list and shows the next hint entry.
 	hint_button.pressed.connect(
 		game_map_scene.refresh_hint
@@ -110,3 +129,9 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func reset_code_input(selected_level: int) -> void:
+	var default_code: String = DEFAULT_CODE_TEXT.get(selected_level, "")
+	assert(default_code != "", "default code not defined, or empty")
+	
+	code_text_edit.text = default_code

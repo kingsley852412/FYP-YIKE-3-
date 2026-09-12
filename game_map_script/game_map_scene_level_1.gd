@@ -69,7 +69,11 @@ func setup(hintLabelInput: Label) -> void:
 ## (as opposed to the animated [method mcBody.tile_movement]).
 func level_reset() -> void:
 	mc_body.snap_to_cell(Vector2i(0, 0))
+	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
+	mc_animated_sprite.play("default")
+	
 	target_body.snap_to_cell(Vector2i(5, 4))
+	target_body.global_position.y += 20
 
 
 ## Compiles [param code_text] and performs each resulting action, one instruction at a time.
@@ -118,6 +122,20 @@ func execute_code(code_text: String) -> void:
 			compiler.Action.MOVE_RIGHT:
 				for j in range(i[1]):
 					await mc_body.tile_movement(Vector2.RIGHT)
+					
+			compiler.Action.RESCUE:
+				# both bodies share the same TileMapLayer (../RoadTileMapLayer),
+				# so we can resolve cell coordinates through either one
+				var mc_cell: Vector2i = mc_body.tiles.local_to_map(
+					mc_body.tiles.to_local(mc_body.global_position)
+				)
+				var target_cell: Vector2i = target_body.tiles.local_to_map(
+					target_body.tiles.to_local(target_body.global_position)
+				)
+				
+				if mc_cell == target_cell:
+					# mc_body is standing on target_body's cell -> rescue succeeds.
+					mc_body.rescue()
 					
 			_:
 				assert(false, "unknown instruction")

@@ -59,3 +59,10 @@ func tile_movement(direction:Vector2):
 func snap_to_cell(cell: Vector2i) -> void:
 	# e.g. if cell is [0, 0], the chracter teleports to (0, 0) grid in the gridMapLayer
 	global_position = tiles.to_global(tiles.map_to_local(cell))
+
+## main character use this function to rescue target
+## 
+func rescue() -> void:
+	## after rescuring target, play the "happy" animation on mcbody
+	var mcbody_sprite: AnimatedSprite2D = $AnimatedSprite2D
+	mcbody_sprite.play("happy")

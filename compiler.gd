@@ -42,4 +42,5 @@ func process_code(input_code: String) -> Array:
 	return [
 		[Action.MOVE_RIGHT, 5],
 		[Action.MOVE_DOWN, 4],
+		[Action.RESCUE],
 	]

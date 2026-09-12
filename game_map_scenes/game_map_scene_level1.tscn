@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cx6tcki4n7f8a" path="res://asset/tiles-animated.png" id="1_l0olh"]
 [ext_resource type="Texture2D" uid="uid://d1qns5qi7d3fi" path="res://asset/blob.png" id="2_m6wmu"]
 [ext_resource type="Script" uid="uid://d3n58aoqfdgwu" path="res://mc_body.gd" id="2_uhp08"]
+[ext_resource type="Texture2D" uid="uid://c735rd36smicw" path="res://asset/blob-happy.png" id="4_1vypj"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oi3di"]
 texture = ExtResource("1_l0olh")
@@ -69,6 +70,14 @@ region = Rect2(17, 0, 16, 10)
 atlas = ExtResource("2_m6wmu")
 region = Rect2(34, 0, 16, 10)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwogo"]
+atlas = ExtResource("4_1vypj")
+region = Rect2(0, 0, 16, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hnnyu"]
+atlas = ExtResource("4_1vypj")
+region = Rect2(34, 0, 16, 10)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_f2txt"]
 animations = [{
 "frames": [{
@@ -84,6 +93,17 @@ animations = [{
 "loop": true,
 "name": &"default",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwogo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hnnyu")
+}],
+"loop": true,
+"name": &"happy",
+"speed": 20.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_l0olh"]
@@ -126,6 +146,7 @@ shape = SubResource("CircleShape2D_f2txt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
 sprite_frames = SubResource("SpriteFrames_f2txt")
+animation = &"happy"
 autoplay = "default"
 
 [node name="TargetBody" type="CharacterBody2D" parent="." unique_id=700413905]

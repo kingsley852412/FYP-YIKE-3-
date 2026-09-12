@@ -30,8 +30,8 @@ func goto_level(level_number: int) -> void:
 	selected_level = level_number
 	goto("res://level.tscn")
 
-func goto_main_menu() -> void:
-	goto("res://main_menu.tscn")
+func goto_start_menu() -> void:
+	goto("res://start_menu.tscn")
 
 func goto_level_select() -> void:
 	goto("res://level_select_menu.tscn")

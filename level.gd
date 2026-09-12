@@ -21,6 +21,8 @@ extends Control
 ## Shows the next hint in the level's hint list.
 @onready var hint_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/HintButton
 
+@onready var exit_button: Button = $VBoxContainer/HBoxContainer2/ExitButton
+
 ## The embedded level instance. Created in [method _ready]; do not access before then.
 @onready var game_map_scene: GameMapScene
 
@@ -102,6 +104,8 @@ func _ready() -> void:
 	hint_button.pressed.connect(
 		game_map_scene.refresh_hint
 	)
+	
+	exit_button.pressed.connect(SceneManager.goto_level_select)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

@@ -136,6 +136,7 @@ func execute_code(code_text: String) -> void:
 				if mc_cell == target_cell:
 					# mc_body is standing on target_body's cell -> rescue succeeds.
 					mc_body.rescue()
+					level_completed.emit()
 					
 			_:
 				assert(false, "unknown instruction")

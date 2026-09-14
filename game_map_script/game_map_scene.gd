@@ -11,6 +11,10 @@
 class_name GameMapScene
 extends Node2D
 
+## this signal is to be used by external nodes
+## e.g. Level.gd can use this to show notification/message/etc.
+signal level_completed
+
 ## Converts player code text into a list of instructions.
 var compiler: Compiler = Compiler.new()
 

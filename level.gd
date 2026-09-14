@@ -12,34 +12,39 @@
 ## [br]- Lock the Submit and Reset buttons while code is executing.
 extends Control
 
+## title label of this level
+@onready var title_label: Label = %TitleLabel
+
 ## Runs the player's code. Disabled during execution to prevent double-submit.
-@onready var submit_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/SubmitButton
+@onready var submit_button: Button = %SubmitButton
 
 ## Resets the level to its starting state. Disabled during execution.
-@onready var reset_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ResetButton
+@onready var reset_button: Button = %ResetButton
 
 ## reset code entry box's content to default text
-@onready var reset_code_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ResetCodeButton
+@onready var reset_code_button: Button = %ResetCodeButton
 
 
 ## Shows the next hint in the level's hint list.
-@onready var hint_button: Button = $VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/HintButton
+@onready var hint_button: Button = %HintButton
 
-@onready var exit_button: Button = $VBoxContainer/HBoxContainer2/ExitButton
+@onready var exit_button: Button = %ExitButton
 
 ## The embedded level instance. Created in [method _ready]; do not access before then.
 @onready var game_map_scene: GameMapScene
 
 ## The player's code input box.
-@onready var code_text_edit: TextEdit = $VBoxContainer/HBoxContainer/VBoxContainer/CodeTextEdit
+@onready var code_text_edit: TextEdit = %CodeTextEdit
 
 ## Placeholder container that reserves screen space for the level scene.
 ## The level is added as its child, so the Panel's layout determines where the level appears.
-@onready var panel: Panel = $VBoxContainer/HBoxContainer/Panel
+@onready var panel: Panel = %Panel
 
 ## Displays hints and code-error / status messages.
 ## Passed to the level via [method GameMapScene.setup].
-@onready var hint_label: Label = $VBoxContainer/HBoxContainer/VBoxContainer/HintLabel
+@onready var hint_label: Label = %HintLabel
+
+@onready var confirm_modal: ConfirmationModal = %ConfirmationModal
 
 const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
@@ -89,6 +94,7 @@ func _ready() -> void:
 	panel.add_child(game_map_scene)
 
 	game_map_scene.setup(hint_label)
+	game_map_scene.level_completed.connect(confirm_modal.show)
 
 	# initializing code input box to default text content
 	reset_code_input(current_level)
@@ -98,7 +104,7 @@ func _ready() -> void:
 	## the full duration of execution (including all awaited movement steps).
 	## [code]await[/code] is required: [method GameMapScene.execute_code] is a
 	## coroutine and returns at its first internal [code]await[/code].
-	
+	##
 	## without await, while game_map_scene.execute_code(code_text_edit.text) is awaiting, the buttons will be enabled too soon (unintended
 	submit_button.pressed.connect(
 		func():
@@ -126,6 +132,8 @@ func _ready() -> void:
 	
 	exit_button.pressed.connect(SceneManager.goto_level_select)
 	
+	confirm_modal.confirmed.connect(_on_confirmation_modal_confirmed)
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -135,3 +143,9 @@ func reset_code_input(selected_level: int) -> void:
 	assert(default_code != "", "default code not defined, or empty")
 	
 	code_text_edit.text = default_code
+
+func _on_confirmation_modal_confirmed(is_confirmed: bool) -> void:
+	if is_confirmed:
+		SceneManager.goto_level(SceneManager.selected_level + 1)
+	else:
+		confirm_modal.hide()

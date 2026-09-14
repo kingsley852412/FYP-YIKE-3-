@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://df7bkpec17vnt"]
 
 [ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_u52ul"]
+[ext_resource type="PackedScene" uid="uid://n6uxis3iw2ug" path="res://confirmation_modal.tscn" id="2_vonw3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xgho"]
 bg_color = Color(0.48773485, 0.61558396, 0.73970956, 1)
@@ -29,6 +30,7 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=1736282667]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -37,6 +39,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_5xgho")
 text = "Level 1 demo"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1766664081]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Exit"
@@ -46,6 +49,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=1949104473]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.05
@@ -55,6 +59,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CodeTextEdit" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1473680451]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -66,6 +71,7 @@ context_menu_enabled = false
 emoji_menu_enabled = false
 
 [node name="HintLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1139675910]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 size_flags_stretch_ratio = 0.0
@@ -77,20 +83,29 @@ autowrap_mode = 3
 layout_mode = 2
 
 [node name="SubmitButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1539872353]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Submit"
 
 [node name="ResetButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=376378441]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Reset"
 
 [node name="ResetCodeButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1691948934]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Reset Code"
 
 [node name="HintButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=272316367]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Hint"
+
+[node name="ConfirmationModal" parent="." unique_id=839314098 instance=ExtResource("2_vonw3")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1

@@ -3,7 +3,35 @@ HKUST FYP YIKE 3, programming game
 
 Programming Game about basic programming/AI/Data analysis
 
-uses customized programming language for user input
+Players submit basic Python code and call the provided `robot` object. Each
+submission runs in a fresh CPython worker process; players do not need any
+third-party package. Imports are rejected.
+
+## Python runtime
+
+```python
+for i in range(5):
+    robot.move_right()
+robot.move_down(4)
+robot.rescue()
+print(robot.position)
+```
+
+`robot.move_up/down/left/right(steps=1)` returns whether the requested movement
+finished. `robot.can_move("up")` and the directional variants query the live
+board. `robot.position` returns `(x, y)`. `robot.rescue()` returns true only
+while standing on the target and opens the completion dialog.
+
+Godot and Python use a local JSON Lines connection. Python waits for every game
+API reply, so loops such as `while robot.can_move_right(): robot.move_right()`
+always read the actual post-animation board state. Stop and Reset terminate the
+worker and cancel delayed movement callbacks. The runtime limits source size,
+Python steps, output, API calls, movement steps and elapsed time.
+
+Development requires Python 3.10+ on PATH. To use a different interpreter, set
+the `FYP_PYTHON` environment variable to its executable. For desktop export,
+include `runtime/python_worker.py` as a non-resource file and distribute a full
+CPython runtime in `runtime/python/` if Python is not already installed.
 
 <h1> Class Diagram of a Level </h1>
 <img src="documentation/Level class diagram.png" alt="Alt text" width="800"/>

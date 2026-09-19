@@ -16,6 +16,8 @@ extends CharacterBody2D
 
 ## The tilemap that defines grid coordinates and walkable cells.
 @onready var tiles: TileMapLayer = $"../RoadTileMapLayer"
+var movement_delay := 0.5
+var _movement_generation := 0
 
 ## Moves this body one cell in [param direction], if the destination is walkable.
 ##
@@ -30,25 +32,38 @@ extends CharacterBody2D
 ## [param direction] A cardinal direction as a [Vector2], e.g. [constant Vector2.UP],
 ## [constant Vector2.DOWN], [constant Vector2.LEFT], [constant Vector2.RIGHT].
 ## Converted to [Vector2i] internally.
-func tile_movement(direction:Vector2):
+func tile_movement(direction: Vector2) -> bool:
 	# this function moves the character across the grid board, according to the "direction" parameter,
 	# examples input for the direction: Vector2.UP, Vector2.Down, etc, other vector2 is unexpected input 
 
 	assert(direction in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT], "unexpected input")
 
 	# calculates current and destination cell/grid	
-	var current_cell=tiles.local_to_map(tiles.to_local(global_position))
-	var target_cell=current_cell+Vector2i(direction)
+	var ticket := _movement_generation
+	var target_cell := get_cell() + Vector2i(direction)
 	
 
 
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(movement_delay).timeout
+	if ticket != _movement_generation:
+		return false
 
 	
 	# if target cell isnt placed as a ground level tile 
 	if tiles.get_cell_source_id(target_cell)!=-1:
 		var traget_postion=tiles.to_global(tiles.map_to_local(target_cell))
 		global_position=traget_postion
+		return true
+	return false
+
+func get_cell() -> Vector2i:
+	return tiles.local_to_map(tiles.to_local(global_position))
+
+func can_move(direction: Vector2i) -> bool:
+	return tiles.get_cell_source_id(get_cell() + direction) != -1
+
+func cancel_pending_movement() -> void:
+	_movement_generation += 1
 
 ## Instantly moves this body to the centre of [param cell].
 ##
@@ -57,6 +72,7 @@ func tile_movement(direction:Vector2):
 ##
 ## [param cell] Target grid coordinate in [TileMapLayer] cell space.
 func snap_to_cell(cell: Vector2i) -> void:
+	cancel_pending_movement()
 	# e.g. if cell is [0, 0], the chracter teleports to (0, 0) grid in the gridMapLayer
 	global_position = tiles.to_global(tiles.map_to_local(cell))
 

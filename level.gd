@@ -27,6 +27,8 @@ extends Control
 
 ## Shows the next hint in the level's hint list.
 @onready var hint_button: Button = %HintButton
+@onready var stop_button: Button = %StopButton
+@onready var output_text: TextEdit = %OutputText
 
 @onready var exit_button: Button = %ExitButton
 
@@ -60,9 +62,12 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 
 ## default text in code entry box for each level
 const DEFAULT_CODE_TEXT: Dictionary = {
-	1: "robot.move_right(5)
+	1: "for i in range(5):
+    robot.move_right()
+
 robot.move_down(4)
-（hard coded compiler）",
+robot.rescue()
+print(robot.position)",
 	
 }
 
@@ -95,6 +100,11 @@ func _ready() -> void:
 
 	game_map_scene.setup(hint_label)
 	game_map_scene.level_completed.connect(confirm_modal.show)
+	game_map_scene.execution_state_changed.connect(_on_execution_state_changed)
+	game_map_scene.code_output.connect(_on_code_output)
+	game_map_scene.code_error.connect(_on_code_error)
+	stop_button.disabled = true
+	stop_button.pressed.connect(game_map_scene.stop_code)
 
 	# initializing code input box to default text content
 	reset_code_input(current_level)
@@ -108,12 +118,10 @@ func _ready() -> void:
 	## without await, while game_map_scene.execute_code(code_text_edit.text) is awaiting, the buttons will be enabled too soon (unintended
 	submit_button.pressed.connect(
 		func():
-			reset_button.disabled = true
-			submit_button.disabled = true
 			game_map_scene.level_reset()
-			await game_map_scene.execute_code(code_text_edit.text)
-			reset_button.disabled = false
-			submit_button.disabled = false
+			output_text.text = ""
+			code_text_edit.deselect()
+			game_map_scene.execute_code(code_text_edit.text)
 	)
 	
 	## Reset handler. Restores the level to its start state.
@@ -137,6 +145,22 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func _on_execution_state_changed(running: bool) -> void:
+	submit_button.disabled = running
+	reset_button.disabled = running
+	reset_code_button.disabled = running
+	stop_button.disabled = not running
+	code_text_edit.editable = not running
+
+func _on_code_output(text: String) -> void:
+	output_text.text += text
+	output_text.set_caret_line(output_text.get_line_count() - 1)
+
+func _on_code_error(line: int) -> void:
+	if line > 0 and line <= code_text_edit.get_line_count():
+		code_text_edit.select(line - 1, 0, line - 1, code_text_edit.get_line(line - 1).length())
+		code_text_edit.set_caret_line(line - 1)
 
 func reset_code_input(selected_level: int) -> void:
 	var default_code: String = DEFAULT_CODE_TEXT.get(selected_level, "")

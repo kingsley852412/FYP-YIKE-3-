@@ -22,12 +22,20 @@ extends GameMapScene
 
 ## The goal marker the player must move [member mc_body] onto.
 @onready var target_body: mcBody = $TargetBody
+var robot_api = preload("res://game_api/robot_api.gd").new()
 
 ## Called when the node enters the scene tree.
 ## Intentionally empty — all setup is deferred to [method setup], which is
 ## called by the [Level] UI after this node is added as a child.
 func _ready() -> void:
-	pass
+	super._ready()
+	robot_api.body = mc_body
+	robot_api.target_body = target_body
+	compiler.call_requested.connect(_on_call_requested)
+	compiler.execution_failed.connect(_on_execution_failed)
+	compiler.execution_finished.connect(_on_execution_finished)
+	compiler.execution_cancelled.connect(_on_execution_cancelled)
+	compiler.running_changed.connect(_on_running_changed)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -48,7 +56,8 @@ func setup(hintLabelInput: Label) -> void:
 	
 	hints.append_array(
 		[
-			"you can use robot.up/down/left/right to move around!",
+			"Use robot.move_right(5) and robot.move_down(4) to move!",
+			"Use robot.rescue() when you stand on the target.",
 			"hint1",
 			"hint2",
 			"hint3",
@@ -68,12 +77,15 @@ func setup(hintLabelInput: Label) -> void:
 ## See [method mcBody.snap_to_cell] for the instant-teleport behaviour, which is used here
 ## (as opposed to the animated [method mcBody.tile_movement]).
 func level_reset() -> void:
+	compiler.cancel()
+	robot_api.stop()
 	mc_body.snap_to_cell(Vector2i(0, 0))
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
 	target_body.snap_to_cell(Vector2i(5, 4))
 	target_body.global_position.y += 20
+	HintLabel.text = "Ready. Write Python code and press Submit."
 
 
 ## Compiles [param code_text] and performs each resulting action, one instruction at a time.
@@ -95,48 +107,30 @@ func level_reset() -> void:
 ##
 ## [param code_text] The raw text from the UI code editor.
 func execute_code(code_text: String) -> void:
-	# get list of instructions from compiler
-	var instructions: Array = compiler.process_code(code_text)
-	
-	# HintLabel should be provided from Level node!
-	assert(HintLabel != null, "HintLabel Not Initialized/ missing")
-	
-	# read instructions 1-by-1 to perform actions
-	for i in instructions:
-		match i[0]:
-			compiler.ErrorCode.EMPTY_CODE:
-				HintLabel.text = "empty Code!!!"
-			
-			compiler.Action.MOVE_UP:
-				for j in range(i[1]):
-					await mc_body.tile_movement(Vector2.UP)
-					
-			compiler.Action.MOVE_DOWN:
-				for j in range(i[1]):
-					await mc_body.tile_movement(Vector2.DOWN)
-					
-			compiler.Action.MOVE_LEFT:
-				for j in range(i[1]):
-					await mc_body.tile_movement(Vector2.LEFT)
-					
-			compiler.Action.MOVE_RIGHT:
-				for j in range(i[1]):
-					await mc_body.tile_movement(Vector2.RIGHT)
-					
-			compiler.Action.RESCUE:
-				# both bodies share the same TileMapLayer (../RoadTileMapLayer),
-				# so we can resolve cell coordinates through either one
-				var mc_cell: Vector2i = mc_body.tiles.local_to_map(
-					mc_body.tiles.to_local(mc_body.global_position)
-				)
-				var target_cell: Vector2i = target_body.tiles.local_to_map(
-					target_body.tiles.to_local(target_body.global_position)
-				)
-				
-				if mc_cell == target_cell:
-					# mc_body is standing on target_body's cell -> rescue succeeds.
-					mc_body.rescue()
-					level_completed.emit()
-					
-			_:
-				assert(false, "unknown instruction")
+	if compiler.is_running:
+		return
+	robot_api.begin_run()
+	HintLabel.text = "Running..."
+	compiler.run_code(code_text)
+
+func _on_call_requested(method: String, args: Array, request_id: int, ticket: int) -> void:
+	var result: Dictionary = await robot_api.dispatch(method, args)
+	if result.get("rescued", false):
+		level_completed.emit()
+	compiler.reply(request_id, ticket, result.get("value"), result.get("error", ""))
+
+func _on_running_changed(running: bool) -> void:
+	if not running:
+		robot_api.stop()
+
+func _on_execution_failed(error: Dictionary) -> void:
+	var line := int(error.get("line", 0))
+	var location := "Line %d: " % line if line > 0 else ""
+	HintLabel.text = location + str(error.get("name", "Error")) + ": " + str(error.get("message", "Unknown error"))
+	code_error.emit(line)
+
+func _on_execution_finished() -> void:
+	HintLabel.text = "Program finished."
+
+func _on_execution_cancelled() -> void:
+	HintLabel.text = "Stopped."

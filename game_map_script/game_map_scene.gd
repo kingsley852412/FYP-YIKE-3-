@@ -14,9 +14,12 @@ extends Node2D
 ## this signal is to be used by external nodes
 ## e.g. Level.gd can use this to show notification/message/etc.
 signal level_completed
+signal execution_state_changed(running: bool)
+signal code_output(text: String)
+signal code_error(line: int)
 
 ## Converts player code text into a list of instructions.
-var compiler: Compiler = Compiler.new()
+var compiler: Compiler
 
 ## Label used to display hints and code-error messages.
 ## Set by the UI via [method setup]; must not be null before [method execute_code]
@@ -37,7 +40,10 @@ var hints: Array[String] = [
 ## Called when the node enters the scene tree.
 ## Intentionally empty — subclass configuration happens in [method setup].
 func _ready() -> void:
-	pass
+	compiler = Compiler.new()
+	add_child(compiler)
+	compiler.running_changed.connect(execution_state_changed.emit)
+	compiler.output_received.connect(code_output.emit)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -61,6 +67,9 @@ func level_reset() -> void:
 ## callers that need to sequence logic after execution must [code]await[/code] them.
 func execute_code(code_text: String) -> void:
 	assert(false, "Error, game_map_scene.gd execute_code(), not implemented by subclass yet")
+
+func stop_code() -> void:
+	compiler.cancel()
 
 
 ## increase [member current_hint_index] and displays the next hint in [member HintLabel].

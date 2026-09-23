@@ -16,8 +16,11 @@ extends CharacterBody2D
 
 ## The tilemap that defines grid coordinates and walkable cells.
 @onready var tiles: TileMapLayer = $"../RoadTileMapLayer"
-var movement_delay := 0.5
-var _movement_generation := 0
+var movement_delay := 0.28		## Time required to move each cell.
+var _movement_generation := 0	
+var _movement_tween: Tween
+var _movement_start_position := Vector2.ZERO
+var _movement_active := false
 
 ## Moves this body one cell in [param direction], if the destination is walkable.
 ##
@@ -42,19 +45,57 @@ func tile_movement(direction: Vector2) -> bool:
 	var ticket := _movement_generation
 	var target_cell := get_cell() + Vector2i(direction)
 	
-
-
-	await get_tree().create_timer(movement_delay).timeout
-	if ticket != _movement_generation:
-		return false
-
 	
 	# if target cell isnt placed as a ground level tile 
-	if tiles.get_cell_source_id(target_cell)!=-1:
-		var traget_postion=tiles.to_global(tiles.map_to_local(target_cell))
-		global_position=traget_postion
-		return true
-	return false
+	if tiles.get_cell_source_id(target_cell)==-1: 
+		## Adding bump animation.
+		await bump(direction)
+		return false
+
+	# Convert grid coordinates to the target's world coordinates.
+	var target_position := tiles.to_global(
+		tiles.map_to_local(target_cell)
+	)
+
+	## Record the previous position.
+	_movement_start_position = global_position
+	_movement_active = true
+	
+	# Establish Tween.
+	var tween := create_tween()
+	_movement_tween = tween
+
+	tween.tween_property(
+		self, 
+		"global_position", 
+		target_position, 
+		movement_delay
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+	## Make sure that target won't be pulled back by the old animation after Reset/Stop.
+	while tween.is_running():
+		if ticket != _movement_generation:
+			tween.kill()
+			
+			if _movement_tween == tween:
+				_movement_tween = null
+			return false
+
+		await get_tree().process_frame
+	
+	if _movement_tween == tween:
+		_movement_tween = null
+
+	# If a Reset or Stop occurs before Tween completes, do not update the position.
+	if ticket != _movement_generation:
+		_movement_active = false
+		return false
+
+	# Ensure the final position falls in the center of the grid.
+	global_position = target_position
+	_movement_active = false
+	return true
+
 
 func get_cell() -> Vector2i:
 	return tiles.local_to_map(tiles.to_local(global_position))
@@ -64,6 +105,45 @@ func can_move(direction: Vector2i) -> bool:
 
 func cancel_pending_movement() -> void:
 	_movement_generation += 1
+
+	## To prevent the old Tween from continuing to change the target's position 
+	## and pulling the target away from the starting point if the player presses Reset or Stop while moving.
+	if _movement_tween != null and _movement_tween.is_valid():
+		_movement_tween.kill()
+		
+	if _movement_active:
+		global_position = _movement_start_position
+		
+	_movement_tween = null
+	_movement_active = false
+
+## Vibrates (left and right) or (back and forth) when hitting a wall.
+func bump(direction: Vector2) -> void:
+	var original_position := global_position
+	var bump_offset := direction.normalized() * 10.0
+
+	var tween := create_tween()
+	_movement_tween = tween
+
+	tween.tween_property(
+		self,
+		"global_position",
+		original_position + bump_offset,
+		0.06
+	)
+
+	tween.tween_property(
+		self,
+		"global_position",
+		original_position,
+		0.10
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+	await tween.finished
+
+	if _movement_tween == tween:
+		_movement_tween = null
+
 
 ## Instantly moves this body to the centre of [param cell].
 ##

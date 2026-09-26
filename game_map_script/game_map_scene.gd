@@ -37,6 +37,13 @@ var hints: Array[String] = [
 	"when you are stuck, hit reset button to reset level progress!",
 ]
 
+## this signal is **NOT** for code compiler error in PYTHON
+## this is for changing content of Hint Label in "Level"
+## when player bumped into wall
+## or other possible warnings in future levels
+## e.g. failed boss fights/ caught by enemies/ etc.
+signal warning_raised(message: String)
+
 ## Called when the node enters the scene tree.
 ## Intentionally empty — subclass configuration happens in [method setup].
 func _ready() -> void:

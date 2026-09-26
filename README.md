@@ -34,7 +34,7 @@ include `runtime/python_worker.py` as a non-resource file and distribute a full
 CPython runtime in `runtime/python/` if Python is not already installed.
 
 <h1> Class Diagram of a Level </h1>
-<img src="documentation/Level class diagram.png" alt="Alt text" width="800"/>
+<img src="documentation/Level class diagram.png" alt="class diagram loading FAILED" width="800"/>
 
 <h2> Level </h2>
 consist of UI/button/labels
@@ -51,6 +51,10 @@ also manages audio/animation/win condition checking
 Has a Compiler for parsing/processing code,
 recieving structured/formatted instruction from compiler to perform further tasks
 (e.g. audio/animation/etc.,)
+
+Send Warning Signals to Level for displaying message when Player Bumped Wall/ Lost Boss Fight/etc.
+
+(this signal is NOT for python compiling ERROR)
 
 (I guess this class is gonna be the most large/complicated)
 
@@ -93,6 +97,10 @@ are used by the scenes above to switch to other scenes.
 level completion signal are broadcasted from GameMapScene, then recieved by Level (node).
 <br></br>
 it is used for showing level completion message (confirmation modal), and asking player to go to next level (or stay at the level)
+<br></br>
+Also, warning signal are broadcasted from GameMapScene, then recieved by Level (node).
+<br></br>
+it is used for showing a warning message in the Hint Label when something goes wrong during a level, such as the robot bumping into a wall, falling into a hole, losing a boss fight, or being caught by an enemy.
 
 <h2>ConfirmationModal to Level</h2>
 after asking player to choose if they go to next level, a ConfirmationModal is shown.

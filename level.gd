@@ -103,6 +103,8 @@ func _ready() -> void:
 	game_map_scene.execution_state_changed.connect(_on_execution_state_changed)
 	game_map_scene.code_output.connect(_on_code_output)
 	game_map_scene.code_error.connect(_on_code_error)
+	game_map_scene.warning_raised.connect(_on_warning_raised)
+	
 	stop_button.disabled = true
 	stop_button.pressed.connect(game_map_scene.stop_code)
 
@@ -188,3 +190,10 @@ func _on_reset_button_pressed() -> void:
 
 func _on_exit_button_pressed() -> void:
 	AudioManager.play_click()
+## this function is **NOT** for code compiler error in PYTHON
+## this is for changing content of Hint Label in "Level"
+## when player bumped into wall
+## or other possible warnings in future levels
+## e.g. failed boss fights/ caught by enemies/ etc.
+func _on_warning_raised(message: String) -> void:
+	hint_label.text = message

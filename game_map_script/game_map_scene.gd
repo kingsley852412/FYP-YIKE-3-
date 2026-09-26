@@ -67,7 +67,6 @@ func setup(hintLabelInput: Label) -> void:
 ## Restores the level to its starting state.
 ## [b]Virtual — every subclass must override this.[/b]
 func level_reset() -> void:
-	AudioManager.play_click()
 	assert(false, "Error, game_map_scene.gd level_reset(), not implemented by subclass yet")
 
 ## Compiles [param code_text] and performs the resulting actions.
@@ -78,14 +77,11 @@ func execute_code(code_text: String) -> void:
 	assert(false, "Error, game_map_scene.gd execute_code(), not implemented by subclass yet")
 
 func stop_code() -> void:
-	AudioManager.play_click()
 	compiler.cancel()
-
 
 ## increase [member current_hint_index] and displays the next hint in [member HintLabel].
 ## Requires [member HintLabel] to be set via [method setup].
 func refresh_hint() -> void:
-	AudioManager.play_click()
 	assert(HintLabel != null, "HintLabel Not Initialized/ missing")
 	
 	# show the next hint in the list to the player

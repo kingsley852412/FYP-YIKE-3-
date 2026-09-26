@@ -22,6 +22,9 @@ var _movement_tween: Tween
 var _movement_start_position := Vector2.ZERO
 var _movement_active := false
 
+## Emitted when [method tile_movement] is blocked by a wall.
+signal bumped_into_wall
+
 ## Moves this body one cell in [param direction], if the destination is walkable.
 ##
 ## Waits 0.5 s, then checks the destination cell:
@@ -49,7 +52,9 @@ func tile_movement(direction: Vector2) -> bool:
 	# if target cell isnt placed as a ground level tile 
 	if tiles.get_cell_source_id(target_cell)==-1: 
 		## Adding bump animation.
+		print("wall bumped!")
 		await bump(direction)
+		bumped_into_wall.emit()
 		return false
 
 	# Convert grid coordinates to the target's world coordinates.

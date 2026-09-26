@@ -70,12 +70,12 @@ placeholder_text = "Type instruction to the Robot here......"
 context_menu_enabled = false
 emoji_menu_enabled = false
 
-[node name="OutputText" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="OutputText" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=824946506]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-editable = false
 placeholder_text = "Python output appears here..."
+editable = false
 
 [node name="HintLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1139675910]
 unique_name_in_owner = true
@@ -95,12 +95,12 @@ layout_mode = 2
 size_flags_horizontal = 6
 text = "Submit"
 
-[node name="StopButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="StopButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=873264536]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
-text = "Stop"
 disabled = true
+text = "Stop"
 
 [node name="ResetButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=376378441]
 unique_name_in_owner = true

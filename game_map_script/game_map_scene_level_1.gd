@@ -37,6 +37,8 @@ func _ready() -> void:
 	compiler.execution_cancelled.connect(_on_execution_cancelled)
 	compiler.running_changed.connect(_on_running_changed)
 	
+	mc_body.bumped_into_wall.connect(_on_mc_bumped_wall)
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -134,3 +136,7 @@ func _on_execution_finished() -> void:
 
 func _on_execution_cancelled() -> void:
 	HintLabel.text = "Stopped."
+
+func _on_mc_bumped_wall() -> void:
+	warning_raised.emit("Bumped Into Wall!")
+	

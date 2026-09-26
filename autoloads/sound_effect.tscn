@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://crb7m3vtgqu2o"]
+
+[ext_resource type="Script" uid="uid://xitwdc6kjsnm" path="res://autoloads/sound_effect.gd" id="1_hofj3"]
+
+[node name="PlayAudioOnce" type="AudioStreamPlayer" unique_id=486954849]
+script = ExtResource("1_hofj3")

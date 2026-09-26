@@ -33,3 +33,11 @@ func set_up(
 	message_label.text = message_text
 	confirm_button.text = confirm_button_text
 	cancel_button.text = cancel_button_text
+
+
+func _on_confirm_button_pressed() -> void:
+	AudioManager.play_click()
+
+
+func _on_cancel_button_pressed() -> void:
+	AudioManager.play_click()

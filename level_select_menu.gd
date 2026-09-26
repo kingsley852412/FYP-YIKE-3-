@@ -9,6 +9,7 @@ const BUTTON_MIN_SIZE: Vector2 = Vector2(90, 45)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:	
+	AudioManager.play_music("Title_bgm", 0, true)
 	for level_num in range(1, LEVEL_COUNT + 1):
 		var btn := Button.new()
 		btn.text = "Level %d" % level_num

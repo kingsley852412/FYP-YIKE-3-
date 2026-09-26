@@ -165,7 +165,6 @@ func _on_code_error(line: int) -> void:
 		code_text_edit.set_caret_line(line - 1)
 
 func reset_code_input(selected_level: int) -> void:
-	AudioManager.play_click()
 	var default_code: String = DEFAULT_CODE_TEXT.get(selected_level, "")
 	assert(default_code != "", "default code not defined, or empty")
 	
@@ -190,6 +189,8 @@ func _on_reset_button_pressed() -> void:
 
 func _on_exit_button_pressed() -> void:
 	AudioManager.play_click()
+	
+
 ## this function is **NOT** for code compiler error in PYTHON
 ## this is for changing content of Hint Label in "Level"
 ## when player bumped into wall
@@ -197,3 +198,15 @@ func _on_exit_button_pressed() -> void:
 ## e.g. failed boss fights/ caught by enemies/ etc.
 func _on_warning_raised(message: String) -> void:
 	hint_label.text = message
+
+
+func _on_reset_code_button_pressed() -> void:
+	AudioManager.play_click()
+
+
+func _on_stop_button_pressed() -> void:
+	AudioManager.play_click()
+	
+
+func _on_hint_button_pressed() -> void:
+	AudioManager.play_click()

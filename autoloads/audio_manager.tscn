@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://d0d0uyt1iqga4"]
+
+[ext_resource type="Script" uid="uid://bhy4cpvrf8lc7" path="res://autoloads/audio_manager.gd" id="1_tr7pb"]
+[ext_resource type="AudioStream" uid="uid://c2513y8m0ta48" path="res://asset/audio/chinmokunorasen.mp3" id="2_alnp1"]
+[ext_resource type="PackedScene" uid="uid://crb7m3vtgqu2o" path="res://autoloads/sound_effect.tscn" id="2_k2mv4"]
+[ext_resource type="AudioStream" uid="uid://balxww2htfw4" path="res://asset/audio/se_uwaaan.mp3" id="3_xdfsh"]
+[ext_resource type="AudioStream" uid="uid://dgbesxl6l36e4" path="res://asset/audio/rescue.mp3" id="4_a4ose"]
+[ext_resource type="AudioStream" uid="uid://duom7rk7cwdhl" path="res://asset/audio/se_pikon20.mp3" id="4_nb6j2"]
+[ext_resource type="AudioStream" uid="uid://ddiu21mb2xu7n" path="res://asset/audio/jiyunoparadox.mp3" id="5_vovef"]
+
+[node name="Audio Manager" type="Node" unique_id=1609571131 node_paths=PackedStringArray("music", "se")]
+script = ExtResource("1_tr7pb")
+music = NodePath("Music")
+se = NodePath("SE")
+sound_effect_scene = ExtResource("2_k2mv4")
+click = ExtResource("4_nb6j2")
+rescue = ExtResource("4_a4ose")
+robot_walk = ExtResource("3_xdfsh")
+
+[node name="Music" type="Node" parent="." unique_id=1031142268]
+auto_translate_mode = 1
+
+[node name="Title_bgm" type="AudioStreamPlayer" parent="Music" unique_id=520959147]
+process_mode = 3
+stream = ExtResource("2_alnp1")
+
+[node name="level1_bgm" type="AudioStreamPlayer" parent="Music" unique_id=16225789]
+stream = ExtResource("5_vovef")
+
+[node name="SE" type="Node" parent="." unique_id=1417424783]
+
+[node name="robot_walking" type="AudioStreamPlayer" parent="SE" unique_id=424251053]
+stream = ExtResource("3_xdfsh")

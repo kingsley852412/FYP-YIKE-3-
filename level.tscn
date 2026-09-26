@@ -70,7 +70,7 @@ placeholder_text = "Type instruction to the Robot here......"
 context_menu_enabled = false
 emoji_menu_enabled = false
 
-[node name="OutputText" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=824946506]
+[node name="OutputText" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=573219015]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
@@ -95,7 +95,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 text = "Submit"
 
-[node name="StopButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=873264536]
+[node name="StopButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1382539046]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
@@ -123,3 +123,7 @@ text = "Hint"
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/SubmitButton" to="." method="_on_submit_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]

@@ -103,8 +103,6 @@ func _ready() -> void:
 	game_map_scene.execution_state_changed.connect(_on_execution_state_changed)
 	game_map_scene.code_output.connect(_on_code_output)
 	game_map_scene.code_error.connect(_on_code_error)
-	game_map_scene.warning_raised.connect(_on_warning_raised)
-	
 	stop_button.disabled = true
 	stop_button.pressed.connect(game_map_scene.stop_code)
 
@@ -165,6 +163,7 @@ func _on_code_error(line: int) -> void:
 		code_text_edit.set_caret_line(line - 1)
 
 func reset_code_input(selected_level: int) -> void:
+	AudioManager.play_click()
 	var default_code: String = DEFAULT_CODE_TEXT.get(selected_level, "")
 	assert(default_code != "", "default code not defined, or empty")
 	
@@ -172,14 +171,20 @@ func reset_code_input(selected_level: int) -> void:
 
 func _on_confirmation_modal_confirmed(is_confirmed: bool) -> void:
 	if is_confirmed:
+		AudioManager.play_click()
 		SceneManager.goto_level(SceneManager.selected_level + 1)
 	else:
+		AudioManager.play_click()
 		confirm_modal.hide()
 
-## this function is **NOT** for code compiler error in PYTHON
-## this is for changing content of Hint Label in "Level"
-## when player bumped into wall
-## or other possible warnings in future levels
-## e.g. failed boss fights/ caught by enemies/ etc.
-func _on_warning_raised(message: String) -> void:
-	hint_label.text = message
+
+func _on_submit_button_pressed() -> void:
+	AudioManager.play_click()
+
+
+func _on_reset_button_pressed() -> void:
+	AudioManager.play_click()
+
+
+func _on_exit_button_pressed() -> void:
+	AudioManager.play_click()

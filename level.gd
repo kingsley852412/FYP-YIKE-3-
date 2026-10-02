@@ -47,6 +47,7 @@ extends Control
 @onready var hint_label: Label = %HintLabel
 
 @onready var confirm_modal: ConfirmationModal = %ConfirmationModal
+@onready var retry_modal: RetryModal = %RetryModal
 
 const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
@@ -100,6 +101,7 @@ func _ready() -> void:
 
 	game_map_scene.setup(hint_label)
 	game_map_scene.level_completed.connect(confirm_modal.show)
+	game_map_scene.level_failed.connect(_on_level_failed)
 	game_map_scene.execution_state_changed.connect(_on_execution_state_changed)
 	game_map_scene.code_output.connect(_on_code_output)
 	game_map_scene.code_error.connect(_on_code_error)
@@ -143,6 +145,7 @@ func _ready() -> void:
 	exit_button.pressed.connect(SceneManager.goto_level_select)
 	
 	confirm_modal.confirmed.connect(_on_confirmation_modal_confirmed)
+	retry_modal.confirmed.connect(_on_retry_modal_confirmed)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -164,6 +167,10 @@ func _on_code_error(line: int) -> void:
 		code_text_edit.select(line - 1, 0, line - 1, code_text_edit.get_line(line - 1).length())
 		code_text_edit.set_caret_line(line - 1)
 
+func _on_level_failed(fail_message: String) -> void:
+	retry_modal.set_message_text(fail_message)
+	retry_modal.show()
+
 func reset_code_input(selected_level: int) -> void:
 	var default_code: String = DEFAULT_CODE_TEXT.get(selected_level, "")
 	assert(default_code != "", "default code not defined, or empty")
@@ -172,12 +179,12 @@ func reset_code_input(selected_level: int) -> void:
 
 func _on_confirmation_modal_confirmed(is_confirmed: bool) -> void:
 	if is_confirmed:
-		AudioManager.play_click()
 		SceneManager.goto_level(SceneManager.selected_level + 1)
 	else:
-		AudioManager.play_click()
 		confirm_modal.hide()
 
+func _on_retry_modal_confirmed() -> void:
+	retry_modal.hide()
 
 func _on_submit_button_pressed() -> void:
 	AudioManager.play_click()

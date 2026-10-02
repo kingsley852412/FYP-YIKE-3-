@@ -35,7 +35,7 @@ func dispatch(method: String, args: Array) -> Dictionary:
 	
 	if method == "robot.rescue" and args.is_empty():
 		if body.get_cell() != target_body.get_cell():
-			return {"value": false}
+			return {"value": false, "rescued": false}
 		body.rescue()
 		return {"value": true, "rescued": true}
 	

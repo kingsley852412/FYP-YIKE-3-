@@ -14,6 +14,7 @@ extends Node2D
 ## this signal is to be used by external nodes
 ## e.g. Level.gd can use this to show notification/message/etc.
 signal level_completed
+signal level_failed(fail_message: String)
 signal execution_state_changed(running: bool)
 signal code_output(text: String)
 signal code_error(line: int)
@@ -63,6 +64,8 @@ func _process(delta: float) -> void:
 ## [param hintLabelInput] The Hint Label owned by the UI scene.
 func setup(hintLabelInput: Label) -> void:
 	HintLabel = hintLabelInput
+	level_reset()
+
 
 ## Restores the level to its starting state.
 ## [b]Virtual — every subclass must override this.[/b]

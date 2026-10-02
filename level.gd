@@ -36,7 +36,7 @@ extends Control
 @onready var game_map_scene: GameMapScene
 
 ## The player's code input box.
-@onready var code_text_edit: TextEdit = %CodeTextEdit
+@onready var code_text_edit: CodeEdit = %CodeTextEdit
 
 ## Placeholder container that reserves screen space for the level scene.
 ## The level is added as its child, so the Panel's layout determines where the level appears.

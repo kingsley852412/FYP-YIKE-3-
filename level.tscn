@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_u52ul"]
 [ext_resource type="PackedScene" uid="uid://n6uxis3iw2ug" path="res://confirmation_modal.tscn" id="2_vonw3"]
+[ext_resource type="Script" path="res://ui/player_code_edit.gd" id="3_code_editor"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xgho"]
 bg_color = Color(0.48773485, 0.61558396, 0.73970956, 1)
@@ -58,17 +59,21 @@ size_flags_stretch_ratio = 2.05
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CodeTextEdit" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1473680451]
+[node name="CodeTextEdit" type="CodeEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1473680451]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "robot.move_right(5)
+text = "for i in range(5):
+    robot.move_right()
+
 robot.move_down(4)
-（hard coded compiler）"
+robot.rescue()
+print(robot.position)"
 placeholder_text = "Type instruction to the Robot here......"
 context_menu_enabled = false
 emoji_menu_enabled = false
+script = ExtResource("3_code_editor")
 
 [node name="OutputText" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=573219015]
 unique_name_in_owner = true

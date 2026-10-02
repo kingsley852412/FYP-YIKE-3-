@@ -7,6 +7,21 @@ Players submit basic Python code and call the provided `robot` object. Each
 submission runs in a fresh CPython worker process; players do not need any
 third-party package. Imports are rejected.
 
+## Player code editor
+
+The code entry box uses `CodeEdit` with Python syntax highlighting, a monospace
+font and line numbers. Enter preserves the current indentation and adds one
+four-space level after a block colon or an opening bracket. Tab indents and
+Shift+Tab dedents, including selected lines. Comment and string delimiters prevent
+colons inside them from triggering block indentation. Reset Code restores the
+level's example; editing remains disabled while player code is running.
+
+To verify editing behavior and the Python integration:
+
+```text
+godot --headless --path . --script tests/test_player_code_edit.gd
+```
+
 ## Python runtime
 
 ```python

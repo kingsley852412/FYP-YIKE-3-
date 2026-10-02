@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_u52ul"]
 [ext_resource type="PackedScene" uid="uid://n6uxis3iw2ug" path="res://confirmation_modal.tscn" id="2_vonw3"]
-[ext_resource type="Script" path="res://ui/player_code_edit.gd" id="3_code_editor"]
+[ext_resource type="Script" uid="uid://pfs13pwr6hak" path="res://ui/player_code_edit.gd" id="3_code_editor"]
+[ext_resource type="PackedScene" uid="uid://du7kuqbxcjb63" path="res://retry_modal.tscn" id="4_0b4ue"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xgho"]
 bg_color = Color(0.48773485, 0.61558396, 0.73970956, 1)
@@ -125,6 +126,11 @@ size_flags_horizontal = 6
 text = "Hint"
 
 [node name="ConfirmationModal" parent="." unique_id=839314098 instance=ExtResource("2_vonw3")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="RetryModal" parent="." unique_id=732685555 instance=ExtResource("4_0b4ue")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

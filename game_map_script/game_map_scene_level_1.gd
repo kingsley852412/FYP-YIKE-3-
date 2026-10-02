@@ -67,7 +67,6 @@ func setup(hintLabelInput: Label) -> void:
 		]
 	)
 	
-	level_reset()
 
 
 ## Restores the level to its starting state.
@@ -117,8 +116,17 @@ func execute_code(code_text: String) -> void:
 
 func _on_call_requested(method: String, args: Array, request_id: int, ticket: int) -> void:
 	var result: Dictionary = await robot_api.dispatch(method, args)
-	if result.get("rescued", false):
-		level_completed.emit()
+	
+	if result.has("rescued"):
+		if result["rescued"] == true:
+			level_completed.emit()
+		elif result["rescued"] == false:
+			level_failed.emit("Target not Rescued!")
+		else:
+			assert(false, "unexpected value: non-bool value on result['rescued']")
+			
+		stop_code()
+
 	compiler.reply(request_id, ticket, result.get("value"), result.get("error", ""))
 
 func _on_running_changed(running: bool) -> void:

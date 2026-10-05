@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bosf4nmedmwdr"
-path="res://.godot/imported/tiles-animated.png-5047d44acffbca4a0eb1b0e418fe7f87.ctex"
+uid="uid://c00ne7t3jyqvt"
+path="res://.godot/imported/robot.png-c416e6f53b2caa77ef2d4fd7286a1a46.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/tiles-animated.png"
-dest_files=["res://.godot/imported/tiles-animated.png-5047d44acffbca4a0eb1b0e418fe7f87.ctex"]
+source_file="res://asset/robot.png"
+dest_files=["res://.godot/imported/robot.png-c416e6f53b2caa77ef2d4fd7286a1a46.ctex"]
 
 [params]
 

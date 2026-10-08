@@ -1,12 +1,37 @@
 [gd_scene format=4 uid="uid://bq182abjff338"]
 
-[ext_resource type="Texture2D" uid="uid://cx6tcki4n7f8a" path="res://asset/tiles-animated.png" id="1_l0olh"]
-[ext_resource type="Texture2D" uid="uid://d1qns5qi7d3fi" path="res://asset/blob.png" id="2_m6wmu"]
+[ext_resource type="Texture2D" uid="uid://bosf4nmedmwdr" path="res://asset/tiles-animated.png" id="2_mwogo"]
 [ext_resource type="Script" uid="uid://d3n58aoqfdgwu" path="res://mc_body.gd" id="2_uhp08"]
 [ext_resource type="Texture2D" uid="uid://c735rd36smicw" path="res://asset/blob-happy.png" id="4_1vypj"]
+[ext_resource type="Texture2D" uid="uid://c00ne7t3jyqvt" path="res://asset/robot.png" id="4_mwogo"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mwogo"]
+texture = ExtResource("2_mwogo")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1vypj"]
+load_path = "res://.godot/imported/tiles-animated.png-5047d44acffbca4a0eb1b0e418fe7f87.ctex"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oi3di"]
-texture = ExtResource("1_l0olh")
+texture = SubResource("CompressedTexture2D_1vypj")
 texture_region_size = Vector2i(16, 21)
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, -2)
@@ -29,9 +54,32 @@ texture_region_size = Vector2i(16, 21)
 
 [sub_resource type="TileSet" id="TileSet_0b4ue"]
 sources/1 = SubResource("TileSetAtlasSource_oi3di")
+sources/0 = SubResource("TileSetAtlasSource_mwogo")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iet1i"]
+texture = ExtResource("2_mwogo")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m6wmu"]
-texture = ExtResource("1_l0olh")
+texture = SubResource("CompressedTexture2D_1vypj")
 texture_region_size = Vector2i(16, 21)
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, -2)
@@ -53,22 +101,23 @@ texture_region_size = Vector2i(16, 21)
 2:2/0/texture_origin = Vector2i(0, -2)
 
 [sub_resource type="TileSet" id="TileSet_uhp08"]
+sources/0 = SubResource("TileSetAtlasSource_iet1i")
 sources/1 = SubResource("TileSetAtlasSource_m6wmu")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f2txt"]
 radius = 5.0990195
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vonw3"]
-atlas = ExtResource("2_m6wmu")
-region = Rect2(0, 0, 16, 10)
+[sub_resource type="AtlasTexture" id="AtlasTexture_iet1i"]
+atlas = ExtResource("4_mwogo")
+region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_oi3di"]
-atlas = ExtResource("2_m6wmu")
-region = Rect2(17, 0, 16, 10)
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwxoi"]
+atlas = ExtResource("4_mwogo")
+region = Rect2(17, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0b4ue"]
-atlas = ExtResource("2_m6wmu")
-region = Rect2(34, 0, 16, 10)
+[sub_resource type="AtlasTexture" id="AtlasTexture_5l1ru"]
+atlas = ExtResource("4_mwogo")
+region = Rect2(34, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwogo"]
 atlas = ExtResource("4_1vypj")
@@ -82,13 +131,13 @@ region = Rect2(34, 0, 16, 10)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vonw3")
+"texture": SubResource("AtlasTexture_iet1i")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_oi3di")
+"texture": SubResource("AtlasTexture_kwxoi")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0b4ue")
+"texture": SubResource("AtlasTexture_5l1ru")
 }],
 "loop": 1,
 "name": &"default",
@@ -109,14 +158,29 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_l0olh"]
 radius = 5.0990195
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0cv0"]
+atlas = ExtResource("4_mwogo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ao6j1"]
+atlas = ExtResource("4_mwogo")
+region = Rect2(17, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xnmgc"]
+atlas = ExtResource("4_mwogo")
+region = Rect2(34, 0, 16, 16)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_m6wmu"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_oi3di")
+"texture": SubResource("AtlasTexture_n0cv0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0b4ue")
+"texture": SubResource("AtlasTexture_ao6j1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xnmgc")
 }],
 "loop": 1,
 "name": &"default",
@@ -145,8 +209,8 @@ metadata/_edit_group_ = true
 shape = SubResource("CircleShape2D_f2txt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
+position = Vector2(0, 2)
 sprite_frames = SubResource("SpriteFrames_f2txt")
-animation = &"happy"
 autoplay = "default"
 
 [node name="TargetBody" type="CharacterBody2D" parent="." unique_id=700413905]
@@ -159,5 +223,6 @@ metadata/_edit_group_ = true
 shape = SubResource("CircleShape2D_l0olh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TargetBody" unique_id=1869722130]
+position = Vector2(0, 2)
 sprite_frames = SubResource("SpriteFrames_m6wmu")
 autoplay = "default"

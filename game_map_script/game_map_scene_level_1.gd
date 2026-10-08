@@ -85,7 +85,6 @@ func level_reset() -> void:
 	mc_animated_sprite.play("default")
 	
 	target_body.snap_to_cell(Vector2i(5, 4))
-	target_body.global_position.y += 20
 	HintLabel.text = "Ready. Write Python code and press Submit."
 
 

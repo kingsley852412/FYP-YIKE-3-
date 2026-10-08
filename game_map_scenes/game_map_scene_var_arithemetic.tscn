@@ -1,0 +1,163 @@
+[gd_scene format=4 uid="uid://co88ccbb1r7cs"]
+
+[ext_resource type="Texture2D" uid="uid://cx6tcki4n7f8a" path="res://asset/tiles-animated.png" id="1_0sjf5"]
+[ext_resource type="Script" uid="uid://d3n58aoqfdgwu" path="res://mc_body.gd" id="2_nmdic"]
+[ext_resource type="Texture2D" uid="uid://d1qns5qi7d3fi" path="res://asset/blob.png" id="3_ri5mr"]
+[ext_resource type="Texture2D" uid="uid://c735rd36smicw" path="res://asset/blob-happy.png" id="4_uf6ao"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oi3di"]
+texture = ExtResource("1_0sjf5")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSet" id="TileSet_0b4ue"]
+sources/1 = SubResource("TileSetAtlasSource_oi3di")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m6wmu"]
+texture = ExtResource("1_0sjf5")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSet" id="TileSet_uhp08"]
+sources/1 = SubResource("TileSetAtlasSource_m6wmu")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f2txt"]
+radius = 5.0990195
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vonw3"]
+atlas = ExtResource("3_ri5mr")
+region = Rect2(0, 0, 16, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oi3di"]
+atlas = ExtResource("3_ri5mr")
+region = Rect2(17, 0, 16, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0b4ue"]
+atlas = ExtResource("3_ri5mr")
+region = Rect2(34, 0, 16, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwogo"]
+atlas = ExtResource("4_uf6ao")
+region = Rect2(0, 0, 16, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hnnyu"]
+atlas = ExtResource("4_uf6ao")
+region = Rect2(34, 0, 16, 10)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f2txt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vonw3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oi3di")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0b4ue")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwogo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hnnyu")
+}],
+"loop": 1,
+"name": &"happy",
+"speed": 20.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l0olh"]
+radius = 5.0990195
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m6wmu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oi3di")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0b4ue")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 0.8
+}]
+
+[node name="GameMapScene" type="Node2D" unique_id=1966619356]
+
+[node name="RoadTileMapLayer" type="TileMapLayer" parent="." unique_id=1730706158]
+scale = Vector2(4.3, 4.3)
+tile_map_data = PackedByteArray("AAAFAAMAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAQAAQAAAAAAAAAGAAEAAQAAAAAAAAAGAAIAAQAAAAAAAAAGAAMAAQAAAAAAAAAGAAQAAQAAAAAAAAAHAAEAAQAAAAAAAAAHAAIAAQAAAAAAAAAHAAMAAQAAAAAAAAAHAAQAAQAAAAAAAAAIAAEAAQAAAAAAAAAIAAIAAQAAAAAAAAAIAAMAAQAAAAAAAAAIAAQAAQAAAAAAAAAJAAEAAQAAAAAAAAAJAAIAAQAAAAAAAAAJAAMAAQAAAAAAAAAJAAQAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_0b4ue")
+
+[node name="MountainTileMapLayer" type="TileMapLayer" parent="." unique_id=453869002]
+scale = Vector2(4.3, 4.3)
+tile_map_data = PackedByteArray("AAAAAAAAAQACAAIAAAABAAAAAQACAAIAAAACAAAAAQACAAIAAAADAAAAAQACAAIAAAAEAAAAAQACAAIAAAAFAAAAAQACAAIAAAAGAAAAAQACAAIAAAAHAAAAAQACAAIAAAAIAAAAAQACAAIAAAAJAAAAAQACAAIAAAAKAAAAAQACAAIAAAAKAAEAAQACAAIAAAAKAAIAAQACAAIAAAAKAAMAAQACAAIAAAAKAAQAAQACAAIAAAAKAAUAAQACAAIAAAAJAAUAAQACAAIAAAAIAAUAAQACAAIAAAAHAAUAAQACAAIAAAAGAAUAAQACAAIAAAAFAAUAAQACAAIAAAAEAAUAAQACAAIAAAADAAUAAQACAAIAAAACAAUAAQACAAIAAAABAAUAAQACAAIAAAAAAAUAAQACAAIAAAAAAAEAAQACAAIAAAAAAAIAAQACAAIAAAAAAAMAAQACAAIAAAAAAAQAAQACAAIAAAA=")
+tile_set = SubResource("TileSet_uhp08")
+
+[node name="MCBody" type="CharacterBody2D" parent="." unique_id=2020776745]
+position = Vector2(108, 126)
+scale = Vector2(4, 4)
+script = ExtResource("2_nmdic")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MCBody" unique_id=2000706987]
+shape = SubResource("CircleShape2D_f2txt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
+sprite_frames = SubResource("SpriteFrames_f2txt")
+animation = &"happy"
+autoplay = "default"
+
+[node name="TargetBody" type="CharacterBody2D" parent="." unique_id=700413905]
+position = Vector2(584, 258)
+scale = Vector2(4, 4)
+script = ExtResource("2_nmdic")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TargetBody" unique_id=908686093]
+shape = SubResource("CircleShape2D_l0olh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TargetBody" unique_id=1869722130]
+sprite_frames = SubResource("SpriteFrames_m6wmu")
+autoplay = "default"

@@ -123,3 +123,40 @@ after asking player to choose if they go to next level, a ConfirmationModal is s
 it will send signal about player choice, then Level node can take corresponding action.
 
 (call SceneManager/Hide ConfirmationModal)
+
+<h1>Acknowledgement and License</h1>
+
+<h2>Godot Engine</h2>
+
+This game is developed using the Godot Engine.
+
+Copyright (c) 2014-present Godot Engine contributors.  
+Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+<a href = "https://godotengine.org/license/"> Link to License </a>
+
+<h2>Python</h2>
+
+The in-game code interpreter is implemented using Python®.
+
+The full Python license stack is included in `PYTHON_LICENSE.txt`.
+
+Python is a registered trademark of the Python Software Foundation.

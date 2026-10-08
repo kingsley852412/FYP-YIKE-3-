@@ -52,7 +52,6 @@ func tile_movement(direction: Vector2) -> bool:
 	# if target cell isnt placed as a ground level tile 
 	if tiles.get_cell_source_id(target_cell)==-1: 
 		## Adding bump animation.
-		print("wall bumped!")
 		await bump(direction)
 		bumped_into_wall.emit()
 		return false

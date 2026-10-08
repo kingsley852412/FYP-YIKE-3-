@@ -51,6 +51,7 @@ extends Control
 
 const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
+	2: "res://game_map_scenes/game_map_scene_var_arithemetic.tscn",
 	
 	#2: "res://game_map_scenes/game_map_scene_level2.tscn",
 	#3: "res://game_map_scenes/game_map_scene_level3.tscn",
@@ -58,17 +59,37 @@ const LEVEL_PATHS := {
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
 	1: "res://game_map_script/game_map_scene_level_1.gd",
+	2: "res://game_map_script/game_map_scene_var_arithmetic.gd",
 	
 }
 
 ## default text in code entry box for each level
 const DEFAULT_CODE_TEXT: Dictionary = {
-	1: "for i in range(5):
-    robot.move_right()
+	1: "# Objective: 
+# move to Target
+# rescue Target
 
-robot.move_down(4)
-robot.rescue()
-print(robot.position)",
+# use these statements to move to other tiles
+robot.move_right()
+robot.move_down()
+robot.move_left()
+robot.move_up()
+robot.rescue()",
+
+	2: "# Objective: 
+# move to Target
+# rescue Target
+
+# this line create a Variable!
+a = 4
+
+# Put Number in ()
+# to move multiple times
+robot.move_right(a)
+robot.move_down(2)
+robot.move_left(1)
+robot.move_up(1)
+robot.rescue()",
 	
 }
 

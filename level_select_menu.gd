@@ -18,6 +18,8 @@ const DRAG_THRESHOLD: float = 90.0
 ## When completing other levels, added their number here.
 const IMPLEMENTED_LEVELS := {
 	1: true,
+	2: true,
+	3: true,
 }
 
 @onready var left_arrow_button: Button = $VBoxContainer/NavigationRow/LeftArrowButton

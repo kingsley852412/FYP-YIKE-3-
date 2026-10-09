@@ -24,6 +24,10 @@ func stop() -> void:
 
 
 func dispatch(method: String, args: Array) -> Dictionary:
+	if method == "robot.target_reached" and args.is_empty():
+		#print("target_reached() called")
+		return {"value": body.get_cell() == target_body.get_cell()}
+	
 	if method == "robot.position" and args.is_empty():
 		var cell := body.get_cell()
 		return {"value": [cell.x, cell.y]}

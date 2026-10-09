@@ -52,6 +52,7 @@ extends Control
 const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
 	2: "res://game_map_scenes/game_map_scene_var_arithemetic.tscn",
+	3: "res://game_map_scenes/game_map_scene_if_else.tscn",
 	
 	#2: "res://game_map_scenes/game_map_scene_level2.tscn",
 	#3: "res://game_map_scenes/game_map_scene_level3.tscn",
@@ -60,12 +61,15 @@ const LEVEL_PATHS := {
 const LEVEL_SCRIPT_PATHS: Dictionary = {
 	1: "res://game_map_script/game_map_scene_level_1.gd",
 	2: "res://game_map_script/game_map_scene_var_arithmetic.gd",
+	3: "res://game_map_script/game_map_scene_if_else.gd",
 	
 }
 
 ## default text in code entry box for each level
 const DEFAULT_CODE_TEXT: Dictionary = {
-	1: "# Objective: 
+	1: "# TUTORIAL
+# try using codes to move the Robot!
+# Objective: 
 # move to Target
 # rescue Target
 
@@ -76,7 +80,9 @@ robot.move_left()
 robot.move_up()
 robot.rescue()",
 
-	2: "# Objective: 
+	2: "# TUTORIAL
+# try using Variables to move multiple tiles
+# Objective: 
 # move to Target
 # rescue Target
 
@@ -90,6 +96,23 @@ robot.move_down(2)
 robot.move_left(1)
 robot.move_up(1)
 robot.rescue()",
+
+	3: "# TUTORIAL
+# try using if/else to detect Target!
+# Objective: 
+# Fix the Wrong Code!!!
+# move to Target
+# rescue Target
+
+# robot.target_reached()
+# returns true when you reached target
+# return false otherwise
+robot.move_left(2)
+
+if not robot.target_reached():
+    robot.rescue()
+else:
+	robot.move_up()",
 	
 }
 

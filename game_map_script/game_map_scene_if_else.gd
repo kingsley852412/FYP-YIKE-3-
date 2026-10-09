@@ -1,6 +1,6 @@
 ## an implementation of [GameMapScene].
 ##
-## This is for tutorial of variable/arithmetics programming
+## This is for tutorial of if/else programming
 extends GameMapScene
 
 ## The player-controlled robot. Handles grid-locked movement by using roadTileMapLayer.
@@ -66,11 +66,11 @@ func setup(hintLabelInput: Label) -> void:
 func level_reset() -> void:
 	compiler.cancel()
 	robot_api.stop()
-	mc_body.snap_to_cell(Vector2i(1, 1))
+	mc_body.snap_to_cell(Vector2i(2, 3))
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
-	target_body.snap_to_cell(Vector2i(5, 4))
+	target_body.snap_to_cell(Vector2i(6, 3))
 	target_body.global_position.y += 20
 	HintLabel.text = "Ready. Write Python code and press Submit."
 

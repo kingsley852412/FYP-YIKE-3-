@@ -51,24 +51,80 @@ extends Control
 
 const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
+	2: "res://game_map_scenes/game_map_scene_var_arithemetic.tscn",
+	3: "res://game_map_scenes/game_map_scene_if_else.tscn",
+	4: "res://game_map_scenes/game_map_scene_mist_search.tscn"
 	
-	#2: "res://game_map_scenes/game_map_scene_level2.tscn",
-	#3: "res://game_map_scenes/game_map_scene_level3.tscn",
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
 	1: "res://game_map_script/game_map_scene_level_1.gd",
-	
+	2: "res://game_map_script/game_map_scene_var_arithmetic.gd",
+	3: "res://game_map_script/game_map_scene_if_else.gd",
+	4: "res://game_map_script/game_map_scene_mist_search.gd"
 }
 
 ## default text in code entry box for each level
 const DEFAULT_CODE_TEXT: Dictionary = {
-	1: "for i in range(5):
-    robot.move_right()
+	1: "# TUTORIAL
+# try using codes to move the Robot!
+# Objective: 
+# move to Target
+# rescue Target
 
-robot.move_down(4)
-robot.rescue()
-print(robot.position)",
+# use these statements to move to other tiles
+robot.move_right()
+robot.move_down()
+robot.move_left()
+robot.move_up()
+robot.rescue()",
+
+	2: "# TUTORIAL
+# try using Variables to move multiple tiles
+# Objective: 
+# move to Target
+# rescue Target
+
+# this line create a Variable!
+a = 4
+
+# Put Number in ()
+# to move multiple times
+robot.move_right(a)
+robot.move_down(2)
+robot.move_left(1)
+robot.move_up(1)
+robot.rescue()",
+
+	3: "# TUTORIAL
+# try using if/else to detect Target!
+# Objective: 
+# Fix the Wrong Code!!!
+# move to Target
+# rescue Target
+
+# robot.target_reached()
+# returns true when you reached target
+# return false otherwise
+robot.move_left(2)
+
+if not robot.target_reached():
+    robot.rescue()
+else:
+	robot.move_up()",
+	
+	4: "# CHALLENGE
+# TARGET'S LOCATION IS UNKNOWN!!!
+
+# Objective: 
+# move to Target
+# rescue Target
+
+robot.move_right(2)
+robot.move_down(3)
+
+if robot.target_reached():
+	robot.rescue()",
 	
 }
 

@@ -1,20 +1,10 @@
-## Level 1 implementation of [GameMapScene].
+## an implementation of [GameMapScene].
 ##
-## A single-screen puzzle level: the player types movement commands into
-## the [Level] UI's code editor, and [MCBody] walks the robot across a
-## [TileMapLayer]-based grid. The objective is to reach [member target_body].
-##
-## Responsibilities:
-## - Own the level-1 scene nodes ([MCBody], [TargetBody], [RoadTileMapLayer]).
-## - Provide level-1-specific hints.
-## - Reset the robot and target to their starting cells.
-## - Translate the compiled action list into [MCBody] movements.
-##
-## This script must be attached to the root node of
-## [code]res://game_map_scenes/game_map_scene_level1.tscn[/code].
-## If the script is missing or fails to parse, [method GameMapScene.execute_code]
-## cannot be reached and casting the instance to [GameMapScene] will return
-## null.
+## This is a level for randomized target location
+## key learning objectives:
+## statements
+## if/else
+
 extends GameMapScene
 
 ## The player-controlled robot. Handles grid-locked movement by using roadTileMapLayer.
@@ -58,11 +48,8 @@ func setup(hintLabelInput: Label) -> void:
 	
 	hints.append_array(
 		[
-			"click execute button to run your code!",
-			"try clicking hint button to get more hints!",
-			"when you are stuck, hit reset button to reset level progress",
-			"click code reset button resets your codes.",
-			"Use robot.rescue() when you stand on the target.",
+			"Try using robot.target_reached() to detect target",
+			"try go through every possible grid!",
 		]
 	)
 	
@@ -83,7 +70,10 @@ func level_reset() -> void:
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
-	target_body.snap_to_cell(Vector2i(5, 4))
+	var random_x: int = randi_range(5, 7)
+	var random_y: int = randi_range(3, 5)
+	target_body.snap_to_cell(Vector2i(random_x, random_y))
+	target_body.global_position.y += 20
 	HintLabel.text = "Ready. Write Python code and press Submit."
 
 

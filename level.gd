@@ -53,16 +53,15 @@ const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
 	2: "res://game_map_scenes/game_map_scene_var_arithemetic.tscn",
 	3: "res://game_map_scenes/game_map_scene_if_else.tscn",
+	4: "res://game_map_scenes/game_map_scene_mist_search.tscn"
 	
-	#2: "res://game_map_scenes/game_map_scene_level2.tscn",
-	#3: "res://game_map_scenes/game_map_scene_level3.tscn",
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
 	1: "res://game_map_script/game_map_scene_level_1.gd",
 	2: "res://game_map_script/game_map_scene_var_arithmetic.gd",
 	3: "res://game_map_script/game_map_scene_if_else.gd",
-	
+	4: "res://game_map_script/game_map_scene_mist_search.gd"
 }
 
 ## default text in code entry box for each level
@@ -113,6 +112,19 @@ if not robot.target_reached():
     robot.rescue()
 else:
 	robot.move_up()",
+	
+	4: "# CHALLENGE
+# TARGET'S LOCATION IS UNKNOWN!!!
+
+# Objective: 
+# move to Target
+# rescue Target
+
+robot.move_right(2)
+robot.move_down(3)
+
+if robot.target_reached():
+	robot.rescue()",
 	
 }
 

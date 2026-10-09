@@ -44,12 +44,9 @@ func setup(hintLabelInput: Label) -> void:
 	
 	hints.append_array(
 		[
-			"Use robot.move_right(5) and robot.move_down(4) to move!",
-			"Use robot.rescue() when you stand on the target.",
-			"hint1",
-			"hint2",
-			"hint3",
-			"hint4",
+			"Try using Variable to store Numbers!",
+			"Try a = a + 1, this changes value of a",
+			"using +, -, *, / calculates numberss",
 		]
 	)
 	

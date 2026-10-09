@@ -1,6 +1,10 @@
 ## an implementation of [GameMapScene].
 ##
-## This is for tutorial of if/else programming
+## This is a level for randomized target location
+## key learning objectives:
+## statements
+## if/else
+
 extends GameMapScene
 
 ## The player-controlled robot. Handles grid-locked movement by using roadTileMapLayer.
@@ -44,9 +48,8 @@ func setup(hintLabelInput: Label) -> void:
 	
 	hints.append_array(
 		[
-			"hint4",
-			"hint4",
-			"hint4",
+			"Try using robot.target_reached() to detect target",
+			"try go through every possible grid!",
 		]
 	)
 	
@@ -63,11 +66,13 @@ func setup(hintLabelInput: Label) -> void:
 func level_reset() -> void:
 	compiler.cancel()
 	robot_api.stop()
-	mc_body.snap_to_cell(Vector2i(2, 3))
+	mc_body.snap_to_cell(Vector2i(0, 0))
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
-	target_body.snap_to_cell(Vector2i(6, 3))
+	var random_x: int = randi_range(5, 7)
+	var random_y: int = randi_range(3, 5)
+	target_body.snap_to_cell(Vector2i(random_x, random_y))
 	target_body.global_position.y += 20
 	HintLabel.text = "Ready. Write Python code and press Submit."
 

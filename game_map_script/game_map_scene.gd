@@ -33,9 +33,6 @@ var current_hint_index: int = 0
 ## Hints shown to the player. Base entries are shared by all levels; subclasses append
 ## level-specific hints string in their own [method setup] override.
 var hints: Array[String] = [
-	"click execute button to run your code!",
-	"clicking hint button to get more hints!",
-	"when you are stuck, hit reset button to reset level progress!",
 ]
 
 ## this signal is **NOT** for code compiler error in PYTHON

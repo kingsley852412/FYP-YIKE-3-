@@ -58,12 +58,11 @@ func setup(hintLabelInput: Label) -> void:
 	
 	hints.append_array(
 		[
-			"Use robot.move_right(5) and robot.move_down(4) to move!",
+			"click execute button to run your code!",
+			"try clicking hint button to get more hints!",
+			"when you are stuck, hit reset button to reset level progress",
+			"click code reset button resets your codes.",
 			"Use robot.rescue() when you stand on the target.",
-			"hint1",
-			"hint2",
-			"hint3",
-			"hint4",
 		]
 	)
 	

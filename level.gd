@@ -53,15 +53,17 @@ const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
 	2: "res://game_map_scenes/game_map_scene_var_arithemetic.tscn",
 	3: "res://game_map_scenes/game_map_scene_if_else.tscn",
-	4: "res://game_map_scenes/game_map_scene_mist_search.tscn"
-	
+	4: "res://game_map_scenes/game_map_scene_mist_search.tscn",
+	5: "res://game_map_scenes/game_map_scene_minimum_step.tscn"
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
 	1: "res://game_map_script/game_map_scene_level_1.gd",
 	2: "res://game_map_script/game_map_scene_var_arithmetic.gd",
 	3: "res://game_map_script/game_map_scene_if_else.gd",
-	4: "res://game_map_script/game_map_scene_mist_search.gd"
+	4: "res://game_map_script/game_map_scene_mist_search.gd",
+	5: "res://game_map_script/game_map_scene_minimum_step.gd",
+	
 }
 
 ## default text in code entry box for each level
@@ -126,6 +128,19 @@ robot.move_down(3)
 if robot.target_reached():
 	robot.rescue()",
 	
+	5: "# CHALLENGE
+# TARGET'S LOCATION IS UNKNOWN!!!
+
+# Objective: 
+# move to Target
+# rescue Target
+
+robot.move_right(2)
+robot.move_down(3)
+
+if robot.target_reached():
+	robot.rescue()",
+	
 }
 
 ## Builds the level UI: instantiates the level scene, embeds it, and connects
@@ -146,7 +161,7 @@ func _ready() -> void:
 	var script_path = LEVEL_SCRIPT_PATHS.get(current_level, "")
 	
 	assert(scene_path != "", ".tscn not found in LEVEL_PATH")
-	assert(script_path != "", ".gd not found in LEVEL_PATH")
+	assert(script_path != "", ".gd not found in LEVEL_SCRIPT_PATH")
 	
 	var inst : Node = load(scene_path).instantiate()
 	inst.set_script(load(script_path))

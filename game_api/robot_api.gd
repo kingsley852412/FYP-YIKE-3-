@@ -5,13 +5,18 @@ const DIRECTIONS := {
 	"up": Vector2i.UP, "down": Vector2i.DOWN,
 	"left": Vector2i.LEFT, "right": Vector2i.RIGHT,
 }
-const MAX_MOVEMENT_STEPS := 100
+var max_movement_steps: int
 
 var body: mcBody
 var target_body: mcBody
 var steps_used := 0
 var _generation := 0
 
+func _init(max_steps: int = 100) -> void:
+	max_movement_steps = max_steps
+	
+func set_max_movement_steps(new_max_movement_steps: int):
+	max_movement_steps = new_max_movement_steps
 
 func begin_run() -> void:
 	stop()
@@ -25,7 +30,6 @@ func stop() -> void:
 
 func dispatch(method: String, args: Array) -> Dictionary:
 	if method == "robot.target_reached" and args.is_empty():
-		#print("target_reached() called")
 		return {"value": body.get_cell() == target_body.get_cell()}
 	
 	if method == "robot.position" and args.is_empty():
@@ -62,8 +66,8 @@ func dispatch(method: String, args: Array) -> Dictionary:
 		if ticket != _generation:
 			return {"error": "Execution cancelled"}
 	
-		if steps_used >= MAX_MOVEMENT_STEPS:
-			return {"error": "Movement limit exceeded (100 steps per run)"}
+		if steps_used >= max_movement_steps:
+			return {"error": "Movement limit exceeded ({0} steps per run)".format([max_movement_steps])}
 	
 		steps_used += 1
 	

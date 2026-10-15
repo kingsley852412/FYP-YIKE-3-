@@ -24,6 +24,7 @@ var _movement_active := false
 
 ## Emitted when [method tile_movement] is blocked by a wall.
 signal bumped_into_wall
+signal updated_position(grid_coordinate: Vector2)
 
 ## Moves this body one cell in [param direction], if the destination is walkable.
 ##
@@ -98,6 +99,9 @@ func tile_movement(direction: Vector2) -> bool:
 	# Ensure the final position falls in the center of the grid.
 	global_position = target_position
 	_movement_active = false
+	
+	updated_position.emit(get_cell())
+	
 	return true
 
 

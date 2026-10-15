@@ -70,8 +70,8 @@ func level_reset() -> void:
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
-	var random_x: int = randi_range(5, 7)
-	var random_y: int = randi_range(3, 5)
+	var random_x: int = randi_range(5, 6)
+	var random_y: int = randi_range(3, 4)
 	target_body.snap_to_cell(Vector2i(random_x, random_y))
 	target_body.global_position.y += 20
 	HintLabel.text = "Ready. Write Python code and press Submit."

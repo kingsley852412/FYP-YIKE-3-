@@ -69,17 +69,17 @@ const CLOUD_REGIONS := [
 	Rect2(0, 260, 1660, 520),   # Cloud3
 ]
 
-const CLOUD_ROWS: int = 5
-const CLOUD_COLUMNS: int = 4
+const CLOUD_ROWS: int = 7
+const CLOUD_COLUMNS: int = 5
 
 # The size of each Cloud, relative to the Map.
-const CLOUD_WIDTH_RATIO: float = 0.48
+
 const CLOUD_HEIGHT_RATIO: float = 0.36
 
 # The distance between clouds.
 # The distance is smaller than the size of the cloud, so they will have a small amount of overlap.
-const CLOUD_HORIZONTAL_STEP: float = 0.34
-const CLOUD_VERTICAL_STEP: float = 0.20
+const CLOUD_HORIZONTAL_STEP: float = 0.24
+const CLOUD_VERTICAL_STEP: float = 0.16
 
 const CLOUD_MOVE_TIME: float = 0.7
 const CLOUD_COVER_HOLD_TIME: float = 0.12
@@ -288,10 +288,18 @@ func _create_reset_clouds() -> void:
 	if not reset_clouds.is_empty():
 		return
 	
-	var cloud_count: int = CLOUD_ROWS * CLOUD_COLUMNS
+	var grid_cloud_count: int = CLOUD_ROWS * CLOUD_COLUMNS
+	# Create another Cloud instance specifically to fill the top left corner.
+	var cloud_count: int = grid_cloud_count + 1
 	
 	for index in range(cloud_count):
-		var texture_index: int = index % CLOUD_TEXTURES.size()
+		var texture_index: int
+		
+		if index == grid_cloud_count:
+			# Additional top-left corner fill Cloud using Cloud2.
+			texture_index = 1
+		else:
+			texture_index = index % CLOUD_TEXTURES.size()
 	
 		# AtlasTexture only displays the area of ​​the cloud that is actually present in the PNG, 
 		# avoiding the appearance of a huge cloud due to a lot of transparent space.
@@ -304,7 +312,7 @@ func _create_reset_clouds() -> void:
 		cloud.texture = atlas_texture
 	
 		cloud.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		cloud.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		cloud.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		cloud.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 		cloud_mover.add_child(cloud)
@@ -312,7 +320,7 @@ func _create_reset_clouds() -> void:
 	
 # Set the position of each cloud
 func _layout_reset_clouds(map_size: Vector2) -> void:
-	var cloud_width: float = map_size.x * CLOUD_WIDTH_RATIO
+
 	var cloud_height: float = map_size.y * CLOUD_HEIGHT_RATIO
 	
 	var index: int = 0
@@ -331,12 +339,60 @@ func _layout_reset_clouds(map_size: Vector2) -> void:
 		
 		for column in range(CLOUD_COLUMNS):
 			var cloud: TextureRect = reset_clouds[index]
+			
+			var texture_index: int = index % CLOUD_REGIONS.size()
+			var region_size: Vector2 = CLOUD_REGIONS[texture_index].size
+			var cloud_aspect_ratio: float = region_size.x / region_size.y
+			var cloud_width: float = cloud_height * cloud_aspect_ratio
 			var cloud_x: float = row_start_x + (map_size.x * column *CLOUD_HORIZONTAL_STEP)
 			
 			cloud.position = Vector2(cloud_x, row_y)
 			cloud.size = Vector2(cloud_width, cloud_height)
 			
 			index += 1
+	
+	# Add an additional Cloud2 of same size, and use its thicker middle section to fill the top left corner.
+	var corner_cloud_index: int = CLOUD_ROWS * CLOUD_COLUMNS
+	var corner_cloud: TextureRect = reset_clouds[corner_cloud_index]
+	
+	# This additional Cloud uses Cloud2.
+	var corner_texture_index: int = 1
+	var corner_region_size: Vector2 = CLOUD_REGIONS[corner_texture_index].size
+	
+	var corner_aspect_ratio: float = corner_region_size.x / corner_region_size.y
+
+	# The altitude is exactly the same as other Clouds.
+	var corner_cloud_height: float = map_size.y *CLOUD_HEIGHT_RATIO
+	var corner_cloud_width: float = corner_cloud_height * corner_aspect_ratio
+	
+	corner_cloud.size = Vector2(corner_cloud_width, corner_cloud_height)
+	
+	# Place the solid central part of Cloud2 in the top left corner of the Map.
+	corner_cloud.position = Vector2(
+		map_size.x * 0.20 - corner_cloud_width * 0.50, 
+		corner_cloud_height * -0.30
+	)
+	
+	# It is placed behind other clouds and is only responsible for filling gaps.
+	corner_cloud.z_index = -1
+	
+func _get_cloud_horizontal_bounds() -> Vector2:
+	assert(not reset_clouds.is_empty(), "Reset clouds have not been created.")
+	
+	var first_cloud: TextureRect = reset_clouds[0]
+	
+	var minimum_x: float = first_cloud.position.x
+	var maximum_x: float = first_cloud.position.x + first_cloud.size.x
+	
+	for cloud in reset_clouds:
+		var cloud_left: float = cloud.position.x
+		var cloud_right: float = cloud.position.x + cloud.size.x
+		
+		minimum_x = min(minimum_x, cloud_left) 
+		maximum_x = max(maximum_x, cloud_right)
+		
+	# x stores the leftmost position, and y stores the rightmost position.
+	return Vector2(minimum_x, maximum_x)
 	
 func _play_reset_transition() -> void:
 	if reset_transition_running:
@@ -358,18 +414,39 @@ func _play_reset_transition() -> void:
 	var map_size: Vector2 = cloud_transition.size
 	var map_width: float = map_size.x
 	
-	# Arrange the 20 small clouds.
+	# Arrange the small clouds.
 	_layout_reset_clouds(map_size)
 	
-	# All the small clouds are initially on the left side of the map.
-	cloud_mover.position = Vector2(map_width * -1.50, 0.0)
+	# Calculate the actual left and right range of the entire Cloud group.
+	var cloud_bounds: Vector2 = _get_cloud_horizontal_bounds()
+	
+	var cloud_left: float = cloud_bounds.x
+	var cloud_right: float = cloud_bounds.y
+	
+	# The true center of the computing cloud cluster.
+	var cloud_group_center_x: float = (cloud_left + cloud_right) * 0.5
+	var map_center_x: float = map_width * 0.5
+	
+	# When aligning the Cloud cluster center with the Map center, CloudMover should stop at X.
+	var cover_position_x: float = map_center_x - cloud_group_center_x
+	
+	# Leave a little extra space to ensure that the object is completely out of the frame before entering the scene.
+	var outside_margin: float = map_width * 0.05
+	
+	# Make sure the rightmost Cloud is also completely on the left side of the Map.
+	var start_position_x: float = -cloud_right - outside_margin
+	
+	# Make sure the leftmost Cloud is also completely off the right side of the Map.
+	var leave_position_x: float = map_width - cloud_left + outside_margin
+	
+	cloud_mover.position = Vector2(start_position_x, 0.0)
 	
 	# Cloud enters from the left at the same time.
 	var enter_tween: Tween = create_tween()
 	enter_tween.set_trans(Tween.TRANS_SINE)
 	enter_tween.set_ease(Tween.EASE_IN_OUT)
 	
-	enter_tween.tween_property(cloud_mover, "position:x", 0.0, CLOUD_MOVE_TIME)
+	enter_tween.tween_property(cloud_mover, "position:x", cover_position_x, CLOUD_MOVE_TIME)
 	
 	await enter_tween.finished
 	
@@ -384,13 +461,13 @@ func _play_reset_transition() -> void:
 	leave_tween.set_trans(Tween.TRANS_SINE)
 	leave_tween.set_ease(Tween.EASE_IN_OUT)
 	
-	leave_tween.tween_property(cloud_mover, "position:x", map_width * 1.40, CLOUD_MOVE_TIME)
+	leave_tween.tween_property(cloud_mover, "position:x", leave_position_x, CLOUD_MOVE_TIME)
 	
 	await leave_tween.finished
 	
 	cloud_transition.hide()
 	
-	cloud_mover.position = Vector2(map_width * -1.50, 0.0)
+	cloud_mover.position = Vector2(start_position_x, 0.0)
 	
 	reset_transition_running = false
 	

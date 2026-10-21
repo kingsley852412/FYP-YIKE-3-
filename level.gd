@@ -49,6 +49,44 @@ extends Control
 @onready var confirm_modal: ConfirmationModal = %ConfirmationModal
 @onready var retry_modal: RetryModal = %RetryModal
 
+## Displays clouds transition while pressing the Reset button.
+@onready var cloud_transition: Control = %CloudTransition
+@onready var cloud_mover: Control = %CloudMover
+
+var reset_clouds: Array[TextureRect] = []
+
+## Load three Cloud images
+const CLOUD_TEXTURES := [
+	preload("res://asset/Cloud1.png"),
+	preload("res://asset/Cloud2.png"),
+	preload("res://asset/Cloud3.png"),
+]
+
+## Use AtlasTexture to crop out most of the transparent space of clouds.
+const CLOUD_REGIONS := [
+	Rect2(0, 240, 1920, 560),   # Cloud1
+	Rect2(80, 20, 1840, 860),   # Cloud2
+	Rect2(0, 260, 1660, 520),   # Cloud3
+]
+
+const CLOUD_ROWS: int = 5
+const CLOUD_COLUMNS: int = 4
+
+# The size of each Cloud, relative to the Map.
+const CLOUD_WIDTH_RATIO: float = 0.48
+const CLOUD_HEIGHT_RATIO: float = 0.36
+
+# The distance between clouds.
+# The distance is smaller than the size of the cloud, so they will have a small amount of overlap.
+const CLOUD_HORIZONTAL_STEP: float = 0.34
+const CLOUD_VERTICAL_STEP: float = 0.20
+
+const CLOUD_MOVE_TIME: float = 0.7
+const CLOUD_COVER_HOLD_TIME: float = 0.12
+
+## To prevent players from pressing Reset repeatedly.
+var reset_transition_running: bool = false
+
 const LEVEL_PATHS := {
 	1: "res://game_map_scenes/game_map_scene_level1.tscn",
 	2: "res://game_map_scenes/game_map_scene_var_arithemetic.tscn",
@@ -172,6 +210,9 @@ if robot.target_reached():
 ## [br]3. Call [method GameMapScene.setup] with parameter [member hint_label].
 ## [br]4. Connect the buttons.
 func _ready() -> void:
+	_create_reset_clouds()
+	cloud_transition.hide()
+	
 	var current_level: int = SceneManager.selected_level
 	
 	# make an instance of level1 gameMapScene, set its script, 
@@ -220,7 +261,7 @@ func _ready() -> void:
 	
 	## Reset handler. Restores the level to its start state.
 	reset_button.pressed.connect(
-		game_map_scene.level_reset
+		_play_reset_transition
 	)
 	
 	reset_code_button.pressed.connect(
@@ -240,8 +281,133 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	
+	
+func _create_reset_clouds() -> void:
+	# Prevent duplicate creation.
+	if not reset_clouds.is_empty():
+		return
+	
+	var cloud_count: int = CLOUD_ROWS * CLOUD_COLUMNS
+	
+	for index in range(cloud_count):
+		var texture_index: int = index % CLOUD_TEXTURES.size()
+	
+		# AtlasTexture only displays the area of ​​the cloud that is actually present in the PNG, 
+		# avoiding the appearance of a huge cloud due to a lot of transparent space.
+		var atlas_texture := AtlasTexture.new()
+		atlas_texture.atlas = CLOUD_TEXTURES[texture_index]
+		atlas_texture.region = CLOUD_REGIONS[texture_index]
+	
+		var cloud := TextureRect.new()
+		cloud.name = "ResetCloud_%02d" % index
+		cloud.texture = atlas_texture
+	
+		cloud.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		cloud.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		cloud.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+		cloud_mover.add_child(cloud)
+		reset_clouds.append(cloud)
+	
+# Set the position of each cloud
+func _layout_reset_clouds(map_size: Vector2) -> void:
+	var cloud_width: float = map_size.x * CLOUD_WIDTH_RATIO
+	var cloud_height: float = map_size.y * CLOUD_HEIGHT_RATIO
+	
+	var index: int = 0
+	
+	for row in range(CLOUD_ROWS):
+		# Even-numbered rows and odd-numbered rows use different starting points, 
+		# forming a staggered arrangement like bricks.
+		var row_start_x: float
+		
+		if row % 2 == 0:
+			row_start_x = map_size.x * -0.12
+		else:
+			row_start_x = map_size.x * -0.28
+		
+		var row_y: float = map_size.y * (-0.08 + row * CLOUD_VERTICAL_STEP)
+		
+		for column in range(CLOUD_COLUMNS):
+			var cloud: TextureRect = reset_clouds[index]
+			var cloud_x: float = row_start_x + (map_size.x * column *CLOUD_HORIZONTAL_STEP)
+			
+			cloud.position = Vector2(cloud_x, row_y)
+			cloud.size = Vector2(cloud_width, cloud_height)
+			
+			index += 1
+	
+func _play_reset_transition() -> void:
+	if reset_transition_running:
+		return
+	
+	reset_transition_running = true
+	
+	game_map_scene.stop_code()
+	
+	hint_button.disabled = true
+	exit_button.disabled = true
+	_on_execution_state_changed(false)
+	
+	cloud_transition.show()
+	
+	# Waiting for the Layout to calculate the Map size.
+	await get_tree().process_frame
+	
+	var map_size: Vector2 = cloud_transition.size
+	var map_width: float = map_size.x
+	
+	# Arrange the 20 small clouds.
+	_layout_reset_clouds(map_size)
+	
+	# All the small clouds are initially on the left side of the map.
+	cloud_mover.position = Vector2(map_width * -1.50, 0.0)
+	
+	# Cloud enters from the left at the same time.
+	var enter_tween: Tween = create_tween()
+	enter_tween.set_trans(Tween.TRANS_SINE)
+	enter_tween.set_ease(Tween.EASE_IN_OUT)
+	
+	enter_tween.tween_property(cloud_mover, "position:x", 0.0, CLOUD_MOVE_TIME)
+	
+	await enter_tween.finished
+	
+	# Reset when the small cloud cluster fully covers the map.
+	game_map_scene.level_reset()
+	
+	await get_tree().process_frame
+	await get_tree().create_timer(CLOUD_COVER_HOLD_TIME).timeout
+	
+	# The Cloud group continues to move to the right.
+	var leave_tween: Tween = create_tween()
+	leave_tween.set_trans(Tween.TRANS_SINE)
+	leave_tween.set_ease(Tween.EASE_IN_OUT)
+	
+	leave_tween.tween_property(cloud_mover, "position:x", map_width * 1.40, CLOUD_MOVE_TIME)
+	
+	await leave_tween.finished
+	
+	cloud_transition.hide()
+	
+	cloud_mover.position = Vector2(map_width * -1.50, 0.0)
+	
+	reset_transition_running = false
+	
+	hint_button.disabled = false
+	exit_button.disabled = false
+	_on_execution_state_changed(false)
 
 func _on_execution_state_changed(running: bool) -> void:
+	# All operations must remain locked during the cloud transition.
+	if reset_transition_running:
+		submit_button.disabled = true
+		reset_button.disabled = true
+		reset_code_button.disabled = true
+		stop_button.disabled = true
+		code_text_edit.editable = false
+		return
+		
 	submit_button.disabled = running
 	reset_button.disabled = running
 	reset_code_button.disabled = running

@@ -90,6 +90,9 @@ class Robot:
     def target_reached(self):
         return self._channel.call("robot.target_reached", [])
 
+    def goto(self, position):
+        return self._channel.call("robot.goto", [position])
+
     @property
     def position(self):
         return tuple(self._channel.call("robot.position", []))

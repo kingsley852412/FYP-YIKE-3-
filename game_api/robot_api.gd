@@ -31,6 +31,34 @@ func stop() -> void:
 func dispatch(method: String, args: Array) -> Dictionary:
 	if method == "robot.target_reached" and args.is_empty():
 		return {"value": body.get_cell() == target_body.get_cell()}
+
+	if method == "robot.goto":
+		# expects 1 arg, the position [x, y] stored in an array
+		# make robot goto the given position in param
+		assert (typeof(args[0]) == 28) 		# assert it is an array
+		
+		var goal_position: Vector2i = Vector2(args[0][0],args[0][1])
+		
+		while goal_position != Vector2i(body.get_cell()):
+			var cur_mc_position: Vector2i = body.get_cell()
+			
+			if goal_position.x < body.get_cell().x:
+				await body.tile_movement(Vector2(DIRECTIONS["left"]))
+
+			elif goal_position.x > body.get_cell().x:
+				await body.tile_movement(Vector2(DIRECTIONS["right"]))
+
+			elif goal_position.y < body.get_cell().y:
+				await body.tile_movement(Vector2(DIRECTIONS["up"]))
+
+			elif goal_position.y > body.get_cell().y:
+				await body.tile_movement(Vector2(DIRECTIONS["down"]))
+				
+			if cur_mc_position == Vector2i(body.get_cell()):
+				# if didnt moved (e.g. due to bumping wall
+				return {"value": false}
+				
+		return {"value": true}	
 	
 	if method == "robot.position" and args.is_empty():
 		var cell := body.get_cell()

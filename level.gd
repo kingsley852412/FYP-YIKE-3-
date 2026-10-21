@@ -69,7 +69,7 @@ const CLOUD_REGIONS := [
 	Rect2(0, 260, 1660, 520),   # Cloud3
 ]
 
-const CLOUD_ROWS: int = 7
+const CLOUD_ROWS: int = 6
 const CLOUD_COLUMNS: int = 5
 
 # The size of each Cloud, relative to the Map.

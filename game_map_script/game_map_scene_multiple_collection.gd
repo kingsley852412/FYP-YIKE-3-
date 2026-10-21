@@ -1,15 +1,3 @@
-## Level 1 implementation of [GameMapScene].
-##
-## A single-screen puzzle level: the player types movement commands into
-## the [Level] UI's code editor, and [MCBody] walks the robot across a
-## [TileMapLayer]-based grid. The objective is to reach [member target_body].
-##
-## Responsibilities:
-## - Own the level-1 scene nodes ([MCBody], [TargetBody], [RoadTileMapLayer]).
-## - Provide level-1-specific hints.
-## - Reset the robot and target to their starting cells.
-## - Translate the compiled action list into [MCBody] movements.
-##
 ## This script must be attached to the root node of
 ## [code]res://game_map_scenes/game_map_scene_level1.tscn[/code].
 ## If the script is missing or fails to parse, [method GameMapScene.execute_code]
@@ -21,7 +9,14 @@ extends GameMapScene
 @onready var mc_body: mcBody = $MCBody
 
 ## The goal marker the player must move [member mc_body] onto.
+## in this level, target_body is used as a template to duplicate multiple target_bodies
+## since this level has multiple target to collect
 @onready var target_body: mcBody = $TargetBody
+
+## this array stores the multiple target bodies
+@onready var target_bodies: Array[mcBody] = []
+var num_of_targets: int = 10 			# num of targets to collect, (including the initial target_body, that is used as template for duplication
+
 var robot_api = preload("res://game_api/robot_api.gd").new()
 
 ## Called when the node enters the scene tree.
@@ -29,8 +24,21 @@ var robot_api = preload("res://game_api/robot_api.gd").new()
 ## called by the [Level] UI after this node is added as a child.
 func _ready() -> void:
 	super._ready()
+	
+	# also uses the initial target_body that is used as template
+	target_bodies.append(target_body)
+	
+	# add (num_of_targets - 1) duplicate of target_body and add them to the node tree
+	for i in range(num_of_targets - 1):
+		var new_target: mcBody = target_body.duplicate()
+		new_target.name = "TargetBody_%d" % (i + 1)
+		add_child(new_target)
+		target_bodies.append(new_target)
+	
 	robot_api.body = mc_body
 	robot_api.target_body = target_body
+	robot_api.set_target_bodies(target_bodies)
+	
 	compiler.call_requested.connect(_on_call_requested)
 	compiler.execution_failed.connect(_on_execution_failed)
 	compiler.execution_finished.connect(_on_execution_finished)
@@ -79,11 +87,34 @@ func setup(hintLabelInput: Label) -> void:
 func level_reset() -> void:
 	compiler.cancel()
 	robot_api.stop()
-	mc_body.snap_to_cell(Vector2i(0, 0))
+	
+	var mc_body_spawn_point: Vector2i = Vector2i(5, 3)
+	mc_body.snap_to_cell(mc_body_spawn_point)
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
-	target_body.snap_to_cell(Vector2i(5, 4))
+	var target_coordinates: Array[Vector2] = []
+	# generate a vec2 coordinate for each of target from (0, 0) to (10, 5)
+	var all_cells: Array[Vector2i] = []
+	for x in range(11):          # x: 0 ~ 10
+		for y in range(6):       # y: 0 ~ 5
+			if Vector2i(x, y) == mc_body_spawn_point:
+				continue         # exclude spawn point of player
+			all_cells.append(Vector2i(x, y))
+	all_cells.shuffle()
+
+	for i in range(len(target_bodies)):
+		target_coordinates.append(all_cells[i])
+
+	assert (len(target_bodies) == len(target_coordinates))
+	
+	for i in range(len(target_bodies)):
+		var t = target_bodies[i]
+		var pos = target_coordinates[i]
+		t.snap_to_cell(pos)
+		t.global_position.y += 20
+
+	
 	HintLabel.text = "Ready. Write Python code and press Submit."
 
 
@@ -116,14 +147,24 @@ func _on_call_requested(method: String, args: Array, request_id: int, ticket: in
 	var result: Dictionary = await robot_api.dispatch(method, args)
 	
 	if result.has("rescued"):
-		if result["rescued"] == true:
+		if result["rescued"]:
 			level_completed.emit()
-		elif result["rescued"] == false:
+		elif not result["rescued"]:
 			level_failed.emit("Target not Rescued!")
 		else:
 			assert(false, "unexpected value: non-bool value on result['rescued']")
 			
 		stop_code()
+		
+	## assuming "rescued" and "collected" would appear in the same level code result
+	elif result.has("collected"):
+		if not result["collected"]:
+			level_failed.emit("Error!\nBattery not collected!")
+		else:
+			pass #does nothing if fails to collect Battery
+
+		if result["all_collected"]:
+			level_completed.emit()
 
 	compiler.reply(request_id, ticket, result.get("value"), result.get("error", ""))
 

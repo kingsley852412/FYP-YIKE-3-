@@ -170,3 +170,9 @@ func rescue() -> void:
 	## after rescuring target, play the "happy" animation on mcbody
 	var mcbody_sprite: AnimatedSprite2D = $AnimatedSprite2D
 	mcbody_sprite.play("happy")
+
+## MC calls this function after collecting a collectable (used in level with multiple collectable)
+## can put animation/audio code here, this function is for this purpose
+func collect() -> void:
+	pass
+	## animtaion/audio not implemented

@@ -94,6 +94,7 @@ const LEVEL_PATHS := {
 	4: "res://game_map_scenes/game_map_scene_mist_search.tscn",
 	5: "res://game_map_scenes/game_map_scene_minimum_step.tscn",
 	6: "res://game_map_scenes/game_map_scene_exploding_wall.tscn",
+	7: "res://game_map_scenes/game_map_scene_multiple_collection.tscn",
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
@@ -103,6 +104,7 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 	4: "res://game_map_script/game_map_scene_mist_search.gd",
 	5: "res://game_map_script/game_map_scene_minimum_step.gd",
 	6: "res://game_map_script/game_map_scene_exploding_wall.gd",
+	7: "res://game_map_script/game_map_scene_multiple_collection.gd",
 }
 
 ## default text in code entry box for each level
@@ -181,6 +183,24 @@ if robot.target_reached():
 	robot.rescue()",
 	
 	6: "# CHALLENGE
+# tips: step on blue tile to open a tunnel
+
+# Objective: 
+# move to Target
+# rescue Target
+
+robot.move_right(1)
+robot.move_down(4)
+
+robot.move_up()
+robot.move_right(6)
+robot.move_down()
+
+
+if robot.target_reached():
+	robot.rescue()",
+	
+	7: "# CHALLENGE
 # tips: step on blue tile to open a tunnel
 
 # Objective: 

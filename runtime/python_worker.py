@@ -87,8 +87,14 @@ class Robot:
     def rescue(self):
         return self._channel.call("robot.rescue", [])
 
+    def collect(self):
+        return self._channel.call("robot.collect", [])
+
     def target_reached(self):
         return self._channel.call("robot.target_reached", [])
+
+    def goto(self, position):
+        return self._channel.call("robot.goto", [position])
 
     @property
     def position(self):

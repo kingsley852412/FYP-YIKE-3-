@@ -111,7 +111,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"happy",
-"speed": 20.0
+"speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_l0olh"]
@@ -160,6 +160,7 @@ metadata/_edit_group_ = true
 shape = SubResource("CircleShape2D_f2txt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
+position = Vector2(0, 2)
 sprite_frames = SubResource("SpriteFrames_f2txt")
 animation = &"happy"
 autoplay = "default"

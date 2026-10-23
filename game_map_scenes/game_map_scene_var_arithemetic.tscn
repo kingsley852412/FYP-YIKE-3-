@@ -161,6 +161,7 @@ metadata/_edit_group_ = true
 shape = SubResource("CircleShape2D_f2txt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
+position = Vector2(0, 2)
 sprite_frames = SubResource("SpriteFrames_f2txt")
 animation = &"happy"
 autoplay = "default"

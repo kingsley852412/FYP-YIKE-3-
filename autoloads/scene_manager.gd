@@ -35,3 +35,6 @@ func goto_start_menu() -> void:
 
 func goto_level_select() -> void:
 	_goto("res://level_select_menu.tscn")
+
+func goto_settings() -> void:
+	_goto("res://settings.tscn")

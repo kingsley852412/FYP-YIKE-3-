@@ -3,4 +3,5 @@
 [ext_resource type="Script" uid="uid://xitwdc6kjsnm" path="res://autoloads/sound_effect.gd" id="1_hofj3"]
 
 [node name="PlayAudioOnce" type="AudioStreamPlayer" unique_id=486954849]
+bus = &"sound effects"
 script = ExtResource("1_hofj3")

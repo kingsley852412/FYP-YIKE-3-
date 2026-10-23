@@ -23,11 +23,14 @@ auto_translate_mode = 1
 [node name="Title_bgm" type="AudioStreamPlayer" parent="Music" unique_id=520959147]
 process_mode = 3
 stream = ExtResource("2_alnp1")
+bus = &"music"
 
 [node name="level1_bgm" type="AudioStreamPlayer" parent="Music" unique_id=16225789]
 stream = ExtResource("5_vovef")
+bus = &"music"
 
 [node name="SE" type="Node" parent="." unique_id=1417424783]
 
 [node name="robot_walking" type="AudioStreamPlayer" parent="SE" unique_id=424251053]
 stream = ExtResource("3_xdfsh")
+bus = &"sound effects"

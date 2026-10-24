@@ -150,10 +150,10 @@ robot.rescue()""",
 robot.move_left(2)
 
 if not robot.target_reached():
-    print("im NOT standing on target")
+	print("im NOT standing on target")
     robot.rescue()
 else:
-    print("im standing on target")
+	print("im standing on target")
 	robot.move_up()""",
 	
 	4: """# CHALLENGE
@@ -238,6 +238,15 @@ if robot.target_reached():
 ## [br]3. Call [method GameMapScene.setup] with parameter [member hint_label].
 ## [br]4. Connect the buttons.
 func _ready() -> void:
+	## decides which dialogue cue in the main_dialogue.dialogue to use for this function call
+	var dialogue_resource: DialogueResource = load("res://dialogues/main_dialogue.dialogue")
+	var all_cues: Array = dialogue_resource.cues.keys()
+	var dialogue_cue: String = "level_%d" % SceneManager.selected_level
+	if not dialogue_cue in all_cues:
+		dialogue_cue = "default"
+	
+	DialogueManager.show_dialogue_balloon_scene("res://dialogues/balloon.tscn",load("res://dialogues/main_dialogue.dialogue"), dialogue_cue)
+	
 	_create_reset_clouds()
 	cloud_transition.hide()
 	

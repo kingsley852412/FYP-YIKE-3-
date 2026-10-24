@@ -2,7 +2,7 @@ extends Node
 
 signal scene_changed
 
-# anything you want to remember across scene changes
+## declare anything you want to remember across scene changes
 var selected_level: int = 1
 
 # Called when the node enters the scene tree for the first time.

@@ -122,7 +122,7 @@ robot.move_left()
 robot.move_up()
 robot.rescue()",
 
-	2: "# TUTORIAL
+	2: """# TUTORIAL
 # try using Variables to move multiple tiles
 # Objective: 
 # move to Target
@@ -130,6 +130,10 @@ robot.rescue()",
 
 # this line create a Variable!
 a = 4
+print("a is now " + str(a))
+
+a = a + 3
+print("a is now " + str(a))
 
 # Put Number in ()
 # to move multiple times
@@ -137,27 +141,24 @@ robot.move_right(a)
 robot.move_down(2)
 robot.move_left(1)
 robot.move_up(1)
-robot.rescue()",
+robot.rescue()""",
 
-	3: "# TUTORIAL
-# try using if/else to detect Target!
+	3: """# TUTORIAL
 # Objective: 
 # Fix the Wrong Code!!!
-# move to Target
-# rescue Target
 
-# robot.target_reached()
-# returns true when you reached target
-# return false otherwise
 robot.move_left(2)
 
 if not robot.target_reached():
+    print("im NOT standing on target")
     robot.rescue()
 else:
-	robot.move_up()",
+    print("im standing on target")
+	robot.move_up()""",
 	
-	4: "# CHALLENGE
-# TARGET'S LOCATION IS UNKNOWN!!!
+	4: """# CHALLENGE
+# target is trapped in the square room
+# he could be in any grid!
 
 # Objective: 
 # move to Target
@@ -167,23 +168,31 @@ robot.move_right(2)
 robot.move_down(3)
 
 if robot.target_reached():
-	robot.rescue()",
+	robot.rescue()""",
 	
-	5: "# CHALLENGE
+	5: """# CHALLENGE
 # TARGET'S LOCATION IS UNKNOWN!!!
 
 # Objective: 
 # move to Target
 # rescue Target
 
-robot.move_right(2)
-robot.move_down(3)
+goal = robot.target_position
+print("target position is " + str(goal))
+
+while goal[0] < robot.position[0]:
+    # while goal is on the left,
+    # keep moving left!
+    robot.move_left()
+while goal[0] > robot.position[0]:
+    robot.move_right()
+
 
 if robot.target_reached():
-	robot.rescue()",
+	robot.rescue()""",
 	
 	6: "# CHALLENGE
-# tips: step on blue tile to open a tunnel
+# tips: step on blue tile to open the tunnel
 
 # Objective: 
 # move to Target
@@ -201,7 +210,7 @@ if robot.target_reached():
 	robot.rescue()",
 	
 	7: "# CHALLENGE
-# tips: step on blue tile to open a tunnel
+# tips: find the way to open the tunnel
 
 # Objective: 
 # move to Target
@@ -217,7 +226,6 @@ robot.move_down()
 
 if robot.target_reached():
 	robot.rescue()",
-	
 }
 
 ## Builds the level UI: instantiates the level scene, embeds it, and connects

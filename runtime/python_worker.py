@@ -100,6 +100,10 @@ class Robot:
     def position(self):
         return tuple(self._channel.call("robot.position", []))
 
+    @property
+    def target_position(self):
+        return tuple(self._channel.call("robot.target_position", []))
+
 
 def check_source(source):
     if not source.strip():

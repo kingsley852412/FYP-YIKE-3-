@@ -56,11 +56,7 @@ func setup(hintLabelInput: Label) -> void:
 	
 	hints.append_array(
 		[
-			"click execute button to run your code!",
-			"try clicking hint button to get more hints!",
-			"when you are stuck, hit reset button to reset level progress",
-			"click code reset button resets your codes.",
-			"Use robot.rescue() when you stand on the target.",
+			"that blue tiles seems suspicious...",
 		]
 	)
 	

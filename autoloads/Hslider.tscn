@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://1ti3w5el7n72"]
+
+[ext_resource type="Script" uid="uid://cetlcu3oj267y" path="res://autoloads/hslider.gd" id="1_3ek54"]
+
+[node name="HSlider" type="HSlider" unique_id=1138003164]
+offset_right = 8.0
+offset_bottom = 16.0
+max_value = 1.0
+step = 0.001
+script = ExtResource("1_3ek54")

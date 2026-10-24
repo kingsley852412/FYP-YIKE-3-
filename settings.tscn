@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://cbjlipmo6bc65"]
+
+[ext_resource type="Script" uid="uid://dyxbh0g45vvwy" path="res://settings.gd" id="1_nkug2"]
+[ext_resource type="PackedScene" uid="uid://1ti3w5el7n72" path="res://autoloads/Hslider.tscn" id="1_x2hje"]
+
+[sub_resource type="GDScript" id="GDScript_jwo76"]
+script/source = "extends HBoxContainer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_x2hje"]
+script/source = "extends Button
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="Settings" type="Node2D" unique_id=1418440726]
+script = ExtResource("1_nkug2")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1063652699]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105172314, 0.19182104, 0.20829758, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=681713288]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameTitleLabel" type="Label" parent="VBoxContainer" unique_id=1202014719]
+custom_minimum_size = Vector2(0, 200)
+custom_maximum_size = Vector2(-1, 200)
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 50
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1428041319]
+custom_minimum_size = Vector2(0, 350)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+offset_transform_enabled = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=449433721]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="Music" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer" unique_id=140407850]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Music"
+
+[node name="musicSlider" parent="VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1138003164 instance=ExtResource("1_x2hje")]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+value = 1.0
+bus_name = "music"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=1435877761]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+script = SubResource("GDScript_jwo76")
+
+[node name="Sound Effects" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=56158500]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Sound Effects"
+
+[node name="seSlider" parent="VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1192970903 instance=ExtResource("1_x2hje")]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+value = 1.0
+bus_name = "sound effects"
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1192149357]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Back"
+script = SubResource("GDScript_x2hje")
+
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

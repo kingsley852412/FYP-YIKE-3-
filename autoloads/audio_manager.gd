@@ -2,6 +2,9 @@ extends Node
 
 var active_music_stream: AudioStreamPlayer
 
+var seVolume = 80
+var musicVolume = 80
+
 @export_group("Title_bgm")
 @export var music: Node
 @export var se: Node
@@ -38,3 +41,14 @@ func play_rescue() -> void:
 func play_robot_walk() -> void:
 	play_audio_once(robot_walk, 0, 0.02)
 	
+func get_music_volume() -> int:
+	return musicVolume
+
+func get_se_volume() -> int:
+	return seVolume
+
+func set_music_volume(new_vol) -> void:
+	musicVolume = new_vol
+	
+func set_se_volume(new_vol) -> void:
+	seVolume = new_vol

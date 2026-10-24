@@ -39,15 +39,25 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="StartGameButton" type="Button" parent="VBoxContainer" unique_id=114153918]
-custom_minimum_size = Vector2(200, 100)
+custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "Start Game"
 
+[node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=1977041972]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+text = "Settings"
+
 [node name="ExitGameButton" type="Button" parent="VBoxContainer" unique_id=957080254]
-custom_minimum_size = Vector2(200, 100)
+custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 text = "Exit"
+
+[connection signal="pressed" from="VBoxContainer/StartGameButton" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]

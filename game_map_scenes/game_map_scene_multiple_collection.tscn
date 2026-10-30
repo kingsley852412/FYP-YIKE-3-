@@ -104,39 +104,25 @@ texture_region_size = Vector2i(16, 21)
 sources/0 = SubResource("TileSetAtlasSource_iet1i")
 sources/1 = SubResource("TileSetAtlasSource_m6wmu")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_f2txt"]
-radius = 5.0990195
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_l0olh"]
 radius = 5.0990195
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_f2txt"]
+radius = 5.0990195
+
 [node name="GameMapScene" type="Node2D" unique_id=1966619356]
+y_sort_enabled = true
 
 [node name="RoadTileMapLayer" type="TileMapLayer" parent="." unique_id=1730706158]
+z_index = -1
 scale = Vector2(4.3, 4.3)
 tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAADAAAAAQAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAAAAQAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAAAAQAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAAAAQAAAAAAAAAGAAEAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAAAAQAAAAAAAAAHAAEAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAAAAQAAAAAAAAAIAAEAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAAAAQAAAAAAAAAJAAEAAQAAAAAAAAAJAAIAAQAAAAAAAAAJAAMAAQAAAAAAAAAJAAQAAQAAAAAAAAAJAAUAAQAAAAAAAAAKAAAAAQAAAAAAAAAKAAEAAQAAAAAAAAAKAAIAAQAAAAAAAAAKAAMAAQAAAAAAAAAKAAQAAQAAAAAAAAAKAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAEAAQAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAHAAQAAAAAAAAAAAAIAAIAAAAAAAAAAAAIAAMAAAAAAAAAAAAIAAQAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_0b4ue")
 
 [node name="MountainTileMapLayer" type="TileMapLayer" parent="." unique_id=453869002]
-z_index = 2
+y_sort_enabled = true
 scale = Vector2(4.3, 4.3)
 tile_set = SubResource("TileSet_uhp08")
-
-[node name="MCBody" type="CharacterBody2D" parent="." unique_id=2020776745]
-z_index = 1
-position = Vector2(33.99999, 52)
-scale = Vector2(4, 4)
-script = ExtResource("2_12umo")
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MCBody" unique_id=2000706987]
-shape = SubResource("CircleShape2D_f2txt")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
-position = Vector2(0, 2)
-sprite_frames = ExtResource("3_w3sgq")
-animation = &"happy"
-autoplay = "default"
 
 [node name="TargetBody" type="CharacterBody2D" parent="." unique_id=700413905]
 position = Vector2(381, 328)
@@ -150,4 +136,19 @@ shape = SubResource("CircleShape2D_l0olh")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TargetBody" unique_id=1869722130]
 position = Vector2(0, 2)
 sprite_frames = ExtResource("4_12umo")
+autoplay = "default"
+
+[node name="MCBody" type="CharacterBody2D" parent="." unique_id=2020776745]
+position = Vector2(33.99999, 52)
+scale = Vector2(4, 4)
+script = ExtResource("2_12umo")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MCBody" unique_id=2000706987]
+shape = SubResource("CircleShape2D_f2txt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
+position = Vector2(0, 2)
+sprite_frames = ExtResource("3_w3sgq")
+animation = &"happy"
 autoplay = "default"

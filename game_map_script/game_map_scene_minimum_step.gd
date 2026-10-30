@@ -82,7 +82,6 @@ func level_reset() -> void:
 			break
 
 	target_body.snap_to_cell(target_cell)
-	target_body.global_position.y += 20
 	
 	var min_steps: int = abs(target_cell.x - mc_cell.x) + abs(target_cell.y - mc_cell.y)
 	robot_api.set_max_movement_steps(min_steps)

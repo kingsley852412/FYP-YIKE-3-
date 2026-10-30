@@ -112,7 +112,6 @@ func level_reset() -> void:
 		var t = target_bodies[i]
 		var pos = target_coordinates[i]
 		t.snap_to_cell(pos)
-		t.global_position.y += 20
 
 	
 	HintLabel.text = "Ready. Write Python code and press Submit."

@@ -251,7 +251,7 @@ func _ready() -> void:
 	panel.add_child(game_map_scene)
 
 	game_map_scene.setup(hint_label)
-	game_map_scene.level_completed.connect(confirm_modal.show)
+	game_map_scene.level_completed.connect(_on_level_completed)
 	game_map_scene.level_failed.connect(_on_level_failed)
 	game_map_scene.execution_state_changed.connect(_on_execution_state_changed)
 	game_map_scene.code_output.connect(_on_code_output)
@@ -520,7 +520,13 @@ func _on_code_error(line: int) -> void:
 		code_text_edit.select(line - 1, 0, line - 1, code_text_edit.get_line(line - 1).length())
 		code_text_edit.set_caret_line(line - 1)
 
+func _on_level_completed() -> void:
+	await get_tree().create_timer(0.5).timeout
+	confirm_modal.show()
+	
 func _on_level_failed(fail_message: String) -> void:
+	game_map_scene.show_damaged_robot()
+	await get_tree().create_timer(0.5).timeout
 	retry_modal.set_message_text(fail_message)
 	retry_modal.show()
 

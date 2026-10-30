@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://bosf4nmedmwdr" path="res://asset/tiles-animated.png" id="1_b0e5a"]
 [ext_resource type="Script" uid="uid://d3n58aoqfdgwu" path="res://mc_body.gd" id="2_df5sn"]
-[ext_resource type="Texture2D" uid="uid://c00ne7t3jyqvt" path="res://asset/robot.png" id="3_x7a8d"]
-[ext_resource type="Texture2D" uid="uid://bw4ro7oilhaa0" path="res://asset/robot-happy.png" id="4_b0e5a"]
+[ext_resource type="SpriteFrames" uid="uid://ci86qkt83u5sg" path="res://asset/robot_sprite_frames.tres" id="3_b0e5a"]
+[ext_resource type="SpriteFrames" uid="uid://dyoaxcgftr6lq" path="res://asset/human_sprite_frames.tres" id="4_df5sn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mwogo"]
 texture = ExtResource("1_b0e5a")
@@ -107,92 +107,8 @@ sources/1 = SubResource("TileSetAtlasSource_m6wmu")
 [sub_resource type="CircleShape2D" id="CircleShape2D_f2txt"]
 radius = 5.0990195
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iet1i"]
-atlas = ExtResource("3_x7a8d")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kwxoi"]
-atlas = ExtResource("3_x7a8d")
-region = Rect2(17, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5l1ru"]
-atlas = ExtResource("3_x7a8d")
-region = Rect2(34, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_df5sn"]
-atlas = ExtResource("4_b0e5a")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x7a8d"]
-atlas = ExtResource("4_b0e5a")
-region = Rect2(17, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_o0hoj"]
-atlas = ExtResource("4_b0e5a")
-region = Rect2(34, 0, 16, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_f2txt"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_iet1i")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kwxoi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5l1ru")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_df5sn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x7a8d")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_o0hoj")
-}],
-"loop": 1,
-"name": &"happy",
-"speed": 20.0
-}]
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_l0olh"]
 radius = 5.0990195
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n0cv0"]
-atlas = ExtResource("3_x7a8d")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ao6j1"]
-atlas = ExtResource("3_x7a8d")
-region = Rect2(17, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xnmgc"]
-atlas = ExtResource("3_x7a8d")
-region = Rect2(34, 0, 16, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_m6wmu"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_n0cv0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ao6j1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xnmgc")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 0.8
-}]
 
 [node name="GameMapScene" type="Node2D" unique_id=1966619356]
 
@@ -202,11 +118,13 @@ tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAA
 tile_set = SubResource("TileSet_0b4ue")
 
 [node name="MountainTileMapLayer" type="TileMapLayer" parent="." unique_id=453869002]
+z_index = 2
 scale = Vector2(4.3, 4.3)
 tile_map_data = PackedByteArray("AAAGAAEAAAACAAIAAAAGAAIAAAABAAIAAAAHAAEAAAACAAIAAAAHAAIAAAABAAIAAAAIAAEAAAACAAIAAAAIAAIAAAABAAIAAAAJAAEAAAACAAIAAAAJAAIAAAACAAIAAAABAAQAAAABAAIAAAABAAUAAAACAAIAAAACAAQAAAABAAIAAAACAAUAAAACAAIAAAADAAQAAAABAAIAAAADAAUAAAACAAIAAAAEAAQAAAABAAIAAAAEAAUAAAABAAIAAAAJAAMAAAABAAIAAAAJAAQAAAABAAIAAAAJAAUAAAABAAIAAAAKAAMAAAACAAIAAAAKAAQAAAACAAIAAAAKAAUAAAACAAIAAAAKAAEAAAACAAIAAAAKAAIAAAACAAIAAAADAAAAAAABAAIAAAADAAEAAAABAAIAAAAEAAAAAAACAAIAAAAEAAEAAAABAAIAAAAFAAAAAAACAAIAAAAFAAEAAAABAAIAAAAAAAQAAAABAAIAAAAAAAUAAAACAAEAAAAGAAAAAAACAAEAAAAHAAAAAAACAAEAAAAIAAAAAAACAAEAAAAJAAAAAAACAAEAAAAKAAAAAAACAAEAAAA=")
 tile_set = SubResource("TileSet_uhp08")
 
 [node name="MCBody" type="CharacterBody2D" parent="." unique_id=2020776745]
+z_index = 1
 position = Vector2(33.99999, 52)
 scale = Vector2(4, 4)
 script = ExtResource("2_df5sn")
@@ -217,8 +135,7 @@ shape = SubResource("CircleShape2D_f2txt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
 position = Vector2(0, 2)
-sprite_frames = SubResource("SpriteFrames_f2txt")
-animation = &"happy"
+sprite_frames = ExtResource("3_b0e5a")
 autoplay = "default"
 
 [node name="TargetBody" type="CharacterBody2D" parent="." unique_id=700413905]
@@ -232,5 +149,5 @@ shape = SubResource("CircleShape2D_l0olh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TargetBody" unique_id=1869722130]
 position = Vector2(0, 2)
-sprite_frames = SubResource("SpriteFrames_m6wmu")
+sprite_frames = ExtResource("4_df5sn")
 autoplay = "default"

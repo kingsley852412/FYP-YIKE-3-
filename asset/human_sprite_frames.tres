@@ -1,0 +1,33 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dyoaxcgftr6lq"]
+
+[ext_resource type="Texture2D" uid="uid://digw13didg4on" path="res://asset/Human.png" id="1_iqixl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0cv0"]
+atlas = ExtResource("1_iqixl")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ao6j1"]
+atlas = ExtResource("1_iqixl")
+region = Rect2(17, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xnmgc"]
+atlas = ExtResource("1_iqixl")
+region = Rect2(34, 0, 16, 16)
+
+[resource]
+resource_name = "default"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0cv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ao6j1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xnmgc")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]

@@ -79,6 +79,10 @@ func dispatch(method: String, args: Array) -> Dictionary:
 		var cell := body.get_cell()
 		return {"value": [cell.x, cell.y]}
 		
+	if method == "robot.target_position" and args.is_empty():
+		var cell := target_body.get_cell()
+		return {"value": [cell.x, cell.y]}
+		
 	if method == "robot.can_move":
 		if args.size() != 1 or not args[0] is String or not DIRECTIONS.has(args[0]):
 			return {"error": "can_move expects up, down, left, or right"}

@@ -44,9 +44,7 @@ func setup(hintLabelInput: Label) -> void:
 	
 	hints.append_array(
 		[
-			"hint4",
-			"hint4",
-			"hint4",
+			"try using if/else to see if you are standing on Target",
 		]
 	)
 	

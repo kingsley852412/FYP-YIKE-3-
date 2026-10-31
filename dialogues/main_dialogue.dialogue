@@ -1,0 +1,14 @@
+~ default
+Robot: seems like u havent set the dialogue for [wave amp=20 freq=8]this level yet......[/wave]
+=> END
+
+~ level_1
+Human: ...... [wait=0.5][speed=0.2]help .......
+Human: [speed=1]does this robot [/speed][wait=0.3][speed=0.2]even works???[/speed]
+- Do nothing
+	Robot: ...... => level_1
+- Try Moving
+	Robot: beep beep beep beep...
+	Robot: [#mood=happy] im robot_012, how may i help u?
+Human: come here and help me, im injured!
+=> END

@@ -155,7 +155,7 @@ func apply_dialogue_line() -> void:
 		character_folder,
 		mood,
 	]
-	
+
 	if ResourceLoader.exists(potrait_path):
 		potrait.texture = load(potrait_path)
 	else:

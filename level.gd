@@ -124,6 +124,8 @@ robot.rescue()",
 
 	2: """# TUTORIAL
 # try using Variables to move multiple tiles
+# u can use Python variables, list, etc, in this Game!
+
 # Objective: 
 # move to Target
 # rescue Target

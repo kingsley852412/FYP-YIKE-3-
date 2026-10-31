@@ -105,6 +105,31 @@ class Robot:
         return tuple(self._channel.call("robot.target_position", []))
 
 
+class CustomList(list):
+    def __init__(self, iterable=(), *, channel):
+        super().__init__(iterable)   # populate with items
+        self._channel = channel
+
+    def __getitem__(self, index):
+        print(f"[read] index={index}")
+        position = (index, 1)
+        self._channel.call("robot.goto", [position])
+        
+        value = super().__getitem__(index)
+        # You can transform the value here, e.g. type coercion
+        return value
+
+    def __setitem__(self, index, value):
+        print(f"[write] index={index} value={value!r}")
+        position = (index, 1)
+        self._channel.call("robot.goto", [position])
+        
+        # Validation / transformation
+        if not isinstance(value, int):
+            raise TypeError(f"Only ints allowed, got {type(value).__name__}")
+        super().__setitem__(index, value)
+
+
 def check_source(source):
     if not source.strip():
         raise SyntaxError("Please enter some Python code")
@@ -123,7 +148,7 @@ def check_source(source):
     return compile(tree, PLAYER_FILE, "exec")
 
 
-def execute(source, channel, max_steps=100000, max_output=16000):
+def execute(source, channel, max_steps=100000, max_output=16000, init_data = None):
     output_count = 0
     steps = 0
 
@@ -164,7 +189,32 @@ def execute(source, channel, max_steps=100000, max_output=16000):
     """.split()
     allowed = {name: getattr(builtins, name) for name in names}
     allowed["print"] = player_print
-    namespace = {"__builtins__": allowed, "__name__": "__player__", "robot": Robot(channel)}
+    namespace = {
+        "__builtins__": allowed, 
+        "__name__": "__player__", 
+        "robot": Robot(channel),
+    }
+
+    # ======================================================
+    """
+    NEW Section for adding values from Godot to be accessed by player
+    adding those value to namespace
+    e.g. sending a randomized array generated in Godot to be access by player
+    """
+
+    if init_data:
+        for key in init_data:
+            # some Special Case for initializing values
+            if key == 'array':
+                assert isinstance(init_data['array'], list)
+                namespace["array"] = CustomList(init_data['array'], channel = channel)
+
+            # non-special case, just initalize as normally
+            else:
+                namespace[key] = init_data[key]
+
+    # ======================================================
+
     try:
         program = check_source(source)
         sys.settrace(trace)
@@ -197,8 +247,13 @@ def main():
         if request.get("type") != "run":
             return
         try:
-            execute(request["source"], channel, request.get("max_steps", 100000),
-                    request.get("max_output", 16000))
+            execute(
+                request["source"], 
+                channel, 
+                request.get("max_steps", 100000),
+                request.get("max_output", 16000),
+                request.get("init_data"),           # NEW
+            )
         except BaseException as error:
             channel.send(error_details(error))
         else:

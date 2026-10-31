@@ -15,7 +15,9 @@ extends GameMapScene
 
 ## this array stores the multiple target bodies
 @onready var target_bodies: Array[mcBody] = []
+
 var num_of_targets: int = 10 			# num of targets to collect, (including the initial target_body, that is used as template for duplication
+
 
 var robot_api = preload("res://game_api/robot_api.gd").new()
 
@@ -98,6 +100,7 @@ func level_reset() -> void:
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
+	# Generating Random Spawn Points for the Targets
 	var target_coordinates: Array[Vector2] = []
 	# generate a vec2 coordinate for each of target from (0, 0) to (10, 5)
 	var all_cells: Array[Vector2i] = []
@@ -145,7 +148,17 @@ func execute_code(code_text: String) -> void:
 		return
 	robot_api.begin_run()
 	HintLabel.text = "Running..."
-	compiler.run_code(code_text)
+	compiler.run_code(
+		code_text, 
+		{
+			"a": 3,
+			"b": 1.2,
+			"c": "im a string",
+			"d": [1, 2, 3],
+			"e": [[1, 2], [1, 2, 3, 4, 5]],
+			"array": [1, 2, 3, 4],
+		},
+	)
 
 func _on_call_requested(method: String, args: Array, request_id: int, ticket: int) -> void:
 	var result: Dictionary = await robot_api.dispatch(method, args)

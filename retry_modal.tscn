@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c6ty66uvhh35i" path="res://retry_modal.gd" id="1_dvoyg"]
 
 [node name="RetryModal" type="Control" unique_id=839314098]
+z_index = 1000
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

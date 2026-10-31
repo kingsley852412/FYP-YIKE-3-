@@ -104,7 +104,6 @@ func tile_movement(direction: Vector2) -> bool:
 	
 	return true
 
-
 func get_cell() -> Vector2i:
 	return tiles.local_to_map(tiles.to_local(global_position))
 

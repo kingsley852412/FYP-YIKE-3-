@@ -33,6 +33,11 @@ func _ready() -> void:
 		var new_target: mcBody = target_body.duplicate()
 		new_target.name = "TargetBody_%d" % (i + 1)
 		add_child(new_target)
+		
+		# Place all Humans in front of the MCBody.
+		# When the Robot and Human have the same Y-position, the Robot will be drawn in front.
+		move_child(new_target, mc_body.get_index())
+		
 		target_bodies.append(new_target)
 	
 	robot_api.body = mc_body
@@ -112,7 +117,6 @@ func level_reset() -> void:
 		var t = target_bodies[i]
 		var pos = target_coordinates[i]
 		t.snap_to_cell(pos)
-		t.global_position.y += 20
 
 	
 	HintLabel.text = "Ready. Write Python code and press Submit."

@@ -63,7 +63,6 @@ func setup(hintLabelInput: Label) -> void:
 	HintLabel = hintLabelInput
 	level_reset()
 
-
 ## Restores the level to its starting state.
 ## [b]Virtual — every subclass must override this.[/b]
 func level_reset() -> void:
@@ -89,3 +88,13 @@ func refresh_hint() -> void:
 	current_hint_index %= len(hints)
 	
 	HintLabel.text = hints[current_hint_index]
+
+## Add status for playing Damaged Robot
+func show_damaged_robot() -> void:
+	var mc_sprite := (get_node_or_null("MCBody/AnimatedSprite2D") as AnimatedSprite2D)
+	
+	if mc_sprite == null:
+		return
+	
+	if mc_sprite.sprite_frames.has_animation(&"damaged"):
+		mc_sprite.play(&"damaged")

@@ -218,16 +218,10 @@ if robot.target_reached():
 # move to Target
 # rescue Target
 
-robot.move_right(1)
-robot.move_down(4)
-
-robot.move_up()
-robot.move_right(6)
-robot.move_down()
-
-
-if robot.target_reached():
-	robot.rescue()",
+for c in cords:
+    robot.goto(c)
+    robot.collect()
+",
 }
 
 ## Builds the level UI: instantiates the level scene, embeds it, and connects

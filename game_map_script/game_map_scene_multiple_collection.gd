@@ -15,7 +15,12 @@ extends GameMapScene
 
 ## this array stores the multiple target bodies
 @onready var target_bodies: Array[mcBody] = []
-var num_of_targets: int = 10 			# num of targets to collect, (including the initial target_body, that is used as template for duplication
+
+# num of targets to collect, (including the initial target_body, that is used as template for duplication
+var num_of_targets: int = 10
+# for storing Randomized Spawn Points of targets, used in execute code to initialize namespace
+var target_coordinates: Array[Vector2] = []
+
 
 var robot_api = preload("res://game_api/robot_api.gd").new()
 
@@ -98,7 +103,11 @@ func level_reset() -> void:
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
 	
-	var target_coordinates: Array[Vector2] = []
+	# Generating Random Spawn Points for the Targets, storing them in target_coordinates
+	for t in target_bodies:
+		t.visible = true		# make all Targets Visible, in case they are collected in prev Execution
+	robot_api.set_target_bodies(target_bodies)	# this is called to reset "Collected" Boolean record in robot_api 
+	target_coordinates = []
 	# generate a vec2 coordinate for each of target from (0, 0) to (10, 5)
 	var all_cells: Array[Vector2i] = []
 	for x in range(11):          # x: 0 ~ 10
@@ -145,7 +154,18 @@ func execute_code(code_text: String) -> void:
 		return
 	robot_api.begin_run()
 	HintLabel.text = "Running..."
-	compiler.run_code(code_text)
+	compiler.run_code(
+		code_text, 
+		{
+			"cords" : _vector2_array_to_nested_array(target_coordinates),
+			#"a": 3,
+			#"b": 1.2,
+			#"c": "im a string",
+			#"d": [1, 2, 3],
+			#"e": [[1, 2], [1, 2, 3, 4, 5]],
+			#"array": [1, 2, 3, 4],
+		},
+	)
 
 func _on_call_requested(method: String, args: Array, request_id: int, ticket: int) -> void:
 	var result: Dictionary = await robot_api.dispatch(method, args)
@@ -191,3 +211,10 @@ func _on_execution_cancelled() -> void:
 func _on_mc_bumped_wall() -> void:
 	warning_raised.emit("Bumped Into Wall!")
 	
+	
+## a Helper Function
+func _vector2_array_to_nested_array(coords: Array[Vector2]) -> Array:
+	return coords.map(
+		func(v: Vector2) -> Array:
+			return [v.x, v.y]
+	)

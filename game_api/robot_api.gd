@@ -89,6 +89,10 @@ func dispatch(method: String, args: Array) -> Dictionary:
 		return {"value": body.can_move(DIRECTIONS[args[0]])}
 	
 	if method == "robot.rescue" and args.is_empty():
+		if SceneManager.selected_level == 7:
+			# This function CAN NOT be used in level 7, multiple collection level
+			return {"value": false, "rescued": false}
+		
 		if body.get_cell() != target_body.get_cell():
 			return {"value": false, "rescued": false}
 		body.rescue()
@@ -96,6 +100,14 @@ func dispatch(method: String, args: Array) -> Dictionary:
 
 	if method == "robot.collect" and args.is_empty():
 		# TODO: change this to suit for multiple collection in target_bodies
+		if SceneManager.selected_level != 7:
+			# This function CAN ONLY be used in level 7, multiple collection level
+			return {
+				"value": false, 
+				"collected": false, 
+				"all_collected": not _target_bodies_collected.has(false)
+			}
+			
 		assert (_target_bodies.size() == _target_bodies_collected.size())
 		
 		for i in range(_target_bodies.size()):

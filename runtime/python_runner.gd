@@ -34,8 +34,11 @@ var _printed := 0
 var _requests := 0
 var _pending_id := 0
 
+var _init_data: Dictionary = {}   # NEW variable for transferring Godot data to Python
 
-func run_code(source: String) -> bool:
+
+
+func run_code(source: String, init_data: Dictionary = {}) -> bool:
 	if is_running:
 		return false
 	generation += 1
@@ -72,6 +75,9 @@ func run_code(source: String) -> bool:
 		_fail("Could not open the local Python connection.")
 		return false
 	_source = source
+	
+	_init_data = init_data		# NEW line about setting _init_data
+	
 	_started_at = Time.get_ticks_msec()
 	_pid = OS.create_process(executable, PackedStringArray([
 		"-I", "-u", ProjectSettings.globalize_path(_worker_path),
@@ -160,7 +166,14 @@ func _handle_message(message: Dictionary) -> void:
 		_authenticated = true
 		_server.stop()
 		_started_at = Time.get_ticks_msec()
-		_queue({"type": "run", "source": _source, "max_steps": max_steps, "max_output": MAX_OUTPUT})
+		_queue({
+			"type": "run", 
+			"source": _source, 
+			"max_steps": max_steps, 
+			"max_output": MAX_OUTPUT,
+			
+			"init_data": _init_data,       # ← 新增
+		})
 		return
 	match message.get("type"):
 		"call":
@@ -223,6 +236,8 @@ func _cleanup() -> void:
 	_printed = 0
 	is_running = false
 	running_changed.emit(false)
+	
+	_init_data.clear()		# NEW
 
 
 func _find_python() -> String:

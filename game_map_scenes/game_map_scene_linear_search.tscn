@@ -1,0 +1,108 @@
+[gd_scene format=4 uid="uid://bsn8ri2x5bi3d"]
+
+[ext_resource type="Texture2D" uid="uid://bosf4nmedmwdr" path="res://asset/tiles-animated.png" id="1_owg5k"]
+[ext_resource type="Script" uid="uid://d3n58aoqfdgwu" path="res://mc_body.gd" id="2_rld58"]
+[ext_resource type="SpriteFrames" uid="uid://dyoaxcgftr6lq" path="res://asset/human_sprite_frames.tres" id="3_yrdt5"]
+[ext_resource type="SpriteFrames" uid="uid://ci86qkt83u5sg" path="res://asset/robot_sprite_frames.tres" id="4_i10mr"]
+[ext_resource type="PackedScene" uid="uid://drbqdou6e7qss" path="res://number_tag.tscn" id="4_rld58"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oi3di"]
+texture = ExtResource("1_owg5k")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSet" id="TileSet_0b4ue"]
+sources/1 = SubResource("TileSetAtlasSource_oi3di")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m6wmu"]
+texture = ExtResource("1_owg5k")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSet" id="TileSet_uhp08"]
+sources/1 = SubResource("TileSetAtlasSource_m6wmu")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l0olh"]
+radius = 5.0990195
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f2txt"]
+radius = 5.0990195
+
+[node name="GameMapScene2" type="Node2D" unique_id=1966619356]
+y_sort_enabled = true
+
+[node name="RoadTileMapLayer" type="TileMapLayer" parent="." unique_id=1730706158]
+z_index = -1
+scale = Vector2(4.3, 4.3)
+tile_map_data = PackedByteArray("AAAFAAMAAQAAAAAAAAABAAEAAQAAAAAAAAABAAIAAQAAAAAAAAABAAMAAQAAAAAAAAABAAQAAQAAAAAAAAACAAEAAQAAAAAAAAACAAIAAQAAAAAAAAACAAMAAQAAAAAAAAACAAQAAQAAAAAAAAADAAEAAQAAAAAAAAADAAIAAQAAAAAAAAADAAMAAQAAAAAAAAADAAQAAQAAAAAAAAAEAAEAAQAAAAAAAAAEAAIAAQAAAAAAAAAEAAMAAQAAAAAAAAAEAAQAAQAAAAAAAAAFAAEAAQAAAAAAAAAFAAIAAQAAAAAAAAAFAAQAAQAAAAAAAAAGAAEAAQAAAAAAAAAGAAIAAQAAAAAAAAAGAAMAAQAAAAAAAAAGAAQAAQAAAAAAAAAHAAEAAQAAAAAAAAAHAAIAAQAAAAAAAAAHAAMAAQAAAAAAAAAHAAQAAQAAAAAAAAAIAAEAAQAAAAAAAAAIAAIAAQAAAAAAAAAIAAMAAQAAAAAAAAAIAAQAAQAAAAAAAAAJAAEAAQAAAAAAAAAJAAIAAQAAAAAAAAAJAAMAAQAAAAAAAAAJAAQAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAAAAQAAAAAAAAABAAUAAQAAAAAAAAACAAAAAQAAAAAAAAACAAUAAQAAAAAAAAADAAAAAQAAAAAAAAADAAUAAQAAAAAAAAAEAAAAAQAAAAAAAAAEAAUAAQAAAAAAAAAFAAAAAQAAAAAAAAAFAAUAAQAAAAAAAAAGAAAAAQAAAAAAAAAGAAUAAQAAAAAAAAAHAAAAAQAAAAAAAAAHAAUAAQAAAAAAAAAIAAAAAQAAAAAAAAAIAAUAAQAAAAAAAAAJAAAAAQAAAAAAAAAJAAUAAQAAAAAAAAAKAAAAAQAAAAAAAAAKAAEAAQAAAAAAAAAKAAIAAQAAAAAAAAAKAAMAAQAAAAAAAAAKAAQAAQAAAAAAAAAKAAUAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_0b4ue")
+
+[node name="MountainTileMapLayer" type="TileMapLayer" parent="." unique_id=453869002]
+y_sort_enabled = true
+scale = Vector2(4.3, 4.3)
+tile_set = SubResource("TileSet_uhp08")
+
+[node name="TargetBody" type="CharacterBody2D" parent="." unique_id=700413905]
+position = Vector2(33, 43)
+scale = Vector2(4, 4)
+script = ExtResource("2_rld58")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TargetBody" unique_id=908686093]
+shape = SubResource("CircleShape2D_l0olh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TargetBody" unique_id=1869722130]
+position = Vector2(0, 2)
+sprite_frames = ExtResource("3_yrdt5")
+autoplay = "default"
+
+[node name="NumberTag" parent="TargetBody" unique_id=916065628 instance=ExtResource("4_rld58")]
+position = Vector2(-4.25, 2.75)
+scale = Vector2(0.07, 0.07)
+
+[node name="MCBody" type="CharacterBody2D" parent="." unique_id=2020776745]
+position = Vector2(377, 258)
+scale = Vector2(4, 4)
+script = ExtResource("2_rld58")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MCBody" unique_id=2000706987]
+shape = SubResource("CircleShape2D_f2txt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
+sprite_frames = ExtResource("4_i10mr")
+autoplay = "default"

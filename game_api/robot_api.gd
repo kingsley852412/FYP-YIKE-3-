@@ -19,6 +19,9 @@ var _target_bodies_collected: Array[bool] = []
 var steps_used := 0
 var _generation := 0
 
+signal array_get_item(index: int)
+signal array_set_item(index: int, value)
+
 func _init(max_steps: int = 100) -> void:
 	max_movement_steps = max_steps
 	
@@ -89,7 +92,7 @@ func dispatch(method: String, args: Array) -> Dictionary:
 		return {"value": body.can_move(DIRECTIONS[args[0]])}
 	
 	if method == "robot.rescue" and args.is_empty():
-		if SceneManager.selected_level == 7:
+		if SceneManager.selected_level in [7, 11]:
 			# This function CAN NOT be used in level 7, multiple collection level
 			return {"value": false, "rescued": false}
 		
@@ -131,8 +134,78 @@ func dispatch(method: String, args: Array) -> Dictionary:
 			"all_collected": not _target_bodies_collected.has(false)
 		}
 
+	#=====================================================
 	
+	#section for "array"
 	
+	if method == "array.__getitem__":
+		if (args.size() != 1):
+			return {"error": "expect only 1 arguments!!"}
+			
+		# 1. check if index is int OR float,
+		# since Json Parsing will parse Interger Index to be float
+		if not (args[0] is int or args[0] is float):
+			return {"error": "index of array can only be int!"}
+			
+		# 2. check if index is a whole number, (can it be turned into INT safely???)
+		if args[0] is float and args[0] != floor(args[0]):
+			return {"error": "index of array can only be an integer!"}
+			
+		# 3. covert to index to INT
+		var index: int = int(args[0])
+		
+		array_get_item.emit(args[0])
+		return {"value": true}
+	
+	if method == "array.__setitem__":
+		if (args.size() != 2):
+			return {"error": "expect 2 arguments!!"}
+			
+		# 1. check if index is int OR float,
+		# since Json Parsing will parse Interger Index to be float
+		if not (args[0] is int or args[0] is float):
+			return {"error": "index of array can only be int!"}
+			
+		# 2. check if index is a whole number, (can it be turned into INT safely???)
+		if args[0] is float and args[0] != floor(args[0]):
+			return {"error": "index of array can only be an integer!"}
+			
+		# 3. covert to index to INT
+		var index: int = int(args[0])
+		var value = args[1]			# this stores the value to be SET into the array
+		
+		array_set_item.emit(index, value)
+		return {"value": true}
+		
+	
+	#=====================================================
+	
+	#section for general Functions
+		
+	# private function, should NOT be used by players
+	if method == "_wait":
+		if args.size() not in [0, 1]:
+			return {"error": "input only 0, or 1 argument!"}
+		
+		if args.size() == 1:
+			# when has input param for WAITING_TIME
+			if not (typeof(args[0]) in [TYPE_INT, TYPE_FLOAT]):
+				return {"error": "enter a number!"}
+				
+			if args[0] < 0:
+				return {"error": "enter positive waiting Time!!!"}
+				
+			# the await here uses "body", but it can also use any Node in the game node tree
+			await body.get_tree().create_timer(args[0]).timeout	
+		else:
+			const DEFAULT_WAIT_TIME: int = 1
+			await body.get_tree().create_timer(DEFAULT_WAIT_TIME).timeout	
+		
+		return {"value": true}	
+		
+		
+	
+	## Section Below is for robot.move_xxxx()
 	var direction_name := method.trim_prefix("robot.move_")
 	
 	if not method.begins_with("robot.move_") or not DIRECTIONS.has(direction_name):

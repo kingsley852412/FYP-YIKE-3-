@@ -95,6 +95,7 @@ const LEVEL_PATHS := {
 	5: "res://game_map_scenes/game_map_scene_minimum_step.tscn",
 	6: "res://game_map_scenes/game_map_scene_exploding_wall.tscn",
 	7: "res://game_map_scenes/game_map_scene_multiple_collection.tscn",
+	11: "res://game_map_scenes/game_map_scene_linear_search.tscn",
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
@@ -105,6 +106,7 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 	5: "res://game_map_script/game_map_scene_minimum_step.gd",
 	6: "res://game_map_script/game_map_scene_exploding_wall.gd",
 	7: "res://game_map_script/game_map_scene_multiple_collection.gd",
+	11: "res://game_map_script/game_map_scene_linear_search.gd",
 }
 
 ## default text in code entry box for each level
@@ -222,6 +224,8 @@ for c in cords:
     robot.goto(c)
     robot.collect()
 ",
+	11: """# not initialized yet
+"""
 }
 
 ## Builds the level UI: instantiates the level scene, embeds it, and connects

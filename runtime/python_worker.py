@@ -114,6 +114,8 @@ class CustomList(list):
         print(f"[read] index={index}")
         position = (index, 1)
         self._channel.call("robot.goto", [position])
+        self._channel.call("array.__getitem__", [index])
+        self._channel.call("_wait", [])
         
         value = super().__getitem__(index)
         # You can transform the value here, e.g. type coercion
@@ -124,9 +126,12 @@ class CustomList(list):
         position = (index, 1)
         self._channel.call("robot.goto", [position])
         
-        # Validation / transformation
-        if not isinstance(value, int):
-            raise TypeError(f"Only ints allowed, got {type(value).__name__}")
+        # Validation
+        # ONLY int/floats are allowed to be in CustomList
+        if not isinstance(value, int) and not isinstance(value, float):
+            raise TypeError(f"Only ints/floats allowed, got {type(value).__name__}")
+
+        self._channel.call("array.__setitem__", [index, value])
         super().__setitem__(index, value)
 
 

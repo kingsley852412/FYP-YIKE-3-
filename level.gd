@@ -95,7 +95,7 @@ const LEVEL_PATHS := {
 	5: "res://game_map_scenes/game_map_scene_minimum_step.tscn",
 	6: "res://game_map_scenes/game_map_scene_exploding_wall.tscn",
 	7: "res://game_map_scenes/game_map_scene_multiple_collection.tscn",
-	11: "res://game_map_scenes/game_map_scene_linear_search.tscn",
+	13: "res://game_map_scenes/game_map_scene_bubble_sort.tscn",
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
@@ -106,7 +106,7 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 	5: "res://game_map_script/game_map_scene_minimum_step.gd",
 	6: "res://game_map_script/game_map_scene_exploding_wall.gd",
 	7: "res://game_map_script/game_map_scene_multiple_collection.gd",
-	11: "res://game_map_script/game_map_scene_linear_search.gd",
+	13: "res://game_map_script/game_map_scene_bubble_sort.gd",
 }
 
 ## default text in code entry box for each level
@@ -224,7 +224,31 @@ for c in cords:
     robot.goto(c)
     robot.collect()
 ",
-	11: """# not initialized yet
+	13: """# not initialized yet
+def bubble_sort(array):
+    n = len(array)
+    # Traverse through all elements
+    for i in range(n):
+        # Track whether a swap happened this pass
+        swapped = False
+        # Last i elements are already in place
+        for j in range(0, n - i - 1):
+            if array[j] > array[j + 1]:
+                # Swap if the element is greater than the next
+                array[j], array[j + 1] = array[j + 1], array[j]
+                swapped = True
+        # If no swaps occurred, the array is already sorted
+        if not swapped:
+            break
+    return array
+
+
+# Example usage
+print("Before:", array)
+bubble_sort(array)
+print("After: ", array)
+
+robot.submit(array)
 """
 }
 

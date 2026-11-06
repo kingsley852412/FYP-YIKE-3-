@@ -84,12 +84,9 @@ func setup(hintLabelInput: Label) -> void:
 			"try clicking hint button to get more hints!",
 			"when you are stuck, hit reset button to reset level progress",
 			"click code reset button resets your codes.",
-			"Use robot.collect() when you stand on the target.",
 		]
 	)
 	
-
-
 ## Restores the level to its starting state.
 ##
 ## Places the robot at cell (0, 0) and the target at (5, 4).
@@ -110,18 +107,35 @@ func level_reset() -> void:
 	robot_api.set_target_bodies(target_bodies)	# this is called to reset "Collected" Boolean record in robot_api 
 	target_coordinates = []
 	# generate a vec2 coordinate for each target
-	const ARRAY_ROW_POSITION = 0
-	# ---- randomize random values for array_values to be used by players ----
-	array_values.assign(range(num_of_targets))
-	array_values.shuffle()
+	var start_row = 0
+	var row_margin = 1
+	var board_width = 11
+
+	# randomize random values in range (1, 100) inclusive
+	# for array_values to be used by players
+	array_values.clear()
+	var pool: Array[int] = []
+	pool.assign(range(1, 101))   # 1..100 inclusive
+	pool.shuffle()
+	array_values.assign(pool.slice(0, num_of_targets))
 	# -----------------------------------------------
+
+	# the correct answer is the sorted version of array_values
+	var sorted_answer: Array = array_values.duplicate()
+	sorted_answer.sort()
+	robot_api.answer = [sorted_answer]
+	robot_api.max_array_access = 4 * num_of_targets * (num_of_targets - 1)
 	
 	for i in range(num_of_targets):
-		target_coordinates.append(Vector2(i, ARRAY_ROW_POSITION))
+		var row_group: int = i / board_width          # int division in GDScript 4
+		var col:       int = i % board_width
+		var box_row:   int = start_row + row_group * (row_margin + 1)
+		target_coordinates.append(Vector2(col, box_row))
 
 	assert (len(target_bodies) == len(target_coordinates))
 	assert (len(target_bodies) == len(array_values))
 	
+	# move all targets to their position
 	for i in range(len(target_bodies)):
 		var t = target_bodies[i]
 		var pos = target_coordinates[i]
@@ -162,14 +176,14 @@ func execute_code(code_text: String) -> void:
 	compiler.run_code(
 		code_text, 
 		{
-			"array" : array_values,
+			"array" : array_values,		# this part initializes what variables are AVAILABLE to player
 		},
 	)
 
 func _on_call_requested(method: String, args: Array, request_id: int, ticket: int) -> void:
 	var result: Dictionary = await robot_api.dispatch(method, args)
 	
-	if result.has("rescued"):
+	if method == "robot.rescue" and not result.has("error"):
 		if result["rescued"]:
 			level_completed.emit()
 		elif not result["rescued"]:
@@ -180,7 +194,7 @@ func _on_call_requested(method: String, args: Array, request_id: int, ticket: in
 		stop_code()
 		
 	## assuming "rescued" and "collected" would appear in the same level code result
-	elif result.has("collected"):
+	elif method == "robot.collect" and not result.has("error"):
 		if not result["collected"]:
 			level_failed.emit("Error!\nBattery not collected!")
 		else:
@@ -188,7 +202,13 @@ func _on_call_requested(method: String, args: Array, request_id: int, ticket: in
 
 		if result["all_collected"]:
 			level_completed.emit()
-
+			
+	elif method == "robot.submit" and not result.has("error"):
+		if result["value"]:
+			level_completed.emit()
+		else:
+			level_failed.emit("Incorrect Answer!")
+			
 	compiler.reply(request_id, ticket, result.get("value"), result.get("error", ""))
 
 func _on_running_changed(running: bool) -> void:

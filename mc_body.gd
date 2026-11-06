@@ -16,7 +16,7 @@ extends CharacterBody2D
 
 ## The tilemap that defines grid coordinates and walkable cells.
 @onready var tiles: TileMapLayer = $"../RoadTileMapLayer"
-var movement_delay := 0.28		## Time required to move each cell.
+var movement_delay := 0.1		## Time required to move each cell.
 var _movement_generation := 0	
 var _movement_tween: Tween
 var _movement_start_position := Vector2.ZERO

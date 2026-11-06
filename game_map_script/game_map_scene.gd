@@ -11,6 +11,8 @@
 class_name GameMapScene
 extends Node2D
 
+# ========================== signals ===============================
+
 ## this signal is to be used by external nodes
 ## e.g. Level.gd can use this to show notification/message/etc.
 signal level_completed
@@ -18,6 +20,15 @@ signal level_failed(fail_message: String)
 signal execution_state_changed(running: bool)
 signal code_output(text: String)
 signal code_error(line: int)
+
+## this signal is **NOT** for code compiler error in PYTHON
+## this is for changing content of Hint Label in "Level"
+## when player bumped into wall
+## or other possible warnings in future levels
+## e.g. failed boss fights/ caught by enemies/ etc.
+signal warning_raised(message: String)
+
+# =========================== variables ==============================
 
 ## Converts player code text into a list of instructions.
 var compiler: Compiler
@@ -35,12 +46,7 @@ var current_hint_index: int = 0
 var hints: Array[String] = [
 ]
 
-## this signal is **NOT** for code compiler error in PYTHON
-## this is for changing content of Hint Label in "Level"
-## when player bumped into wall
-## or other possible warnings in future levels
-## e.g. failed boss fights/ caught by enemies/ etc.
-signal warning_raised(message: String)
+# =================== functions ======================================
 
 ## Called when the node enters the scene tree.
 ## Intentionally empty — subclass configuration happens in [method setup].

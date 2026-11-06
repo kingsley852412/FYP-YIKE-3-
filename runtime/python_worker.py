@@ -96,6 +96,9 @@ class Robot:
     def goto(self, position):
         return self._channel.call("robot.goto", [position])
 
+    def submit(self, *args):
+        return self._channel.call("robot.submit", [*args])
+
     @property
     def position(self):
         return tuple(self._channel.call("robot.position", []))
@@ -110,10 +113,18 @@ class CustomList(list):
         super().__init__(iterable)   # populate with items
         self._channel = channel
 
+        self.start_row = 0
+        self.row_margin = 1
+        self.board_width = 11
+
     def __getitem__(self, index):
         print(f"[read] index={index}")
-        position = (index, 1)
+
+        position = self._calculate_target_position(index)
+        
         self._channel.call("robot.goto", [position])
+        self._channel.call("array.__getitem__", [index])
+        # self._channel.call("_wait", [])
         
         value = super().__getitem__(index)
         # You can transform the value here, e.g. type coercion
@@ -121,14 +132,28 @@ class CustomList(list):
 
     def __setitem__(self, index, value):
         print(f"[write] index={index} value={value!r}")
-        position = (index, 1)
+        position = self._calculate_target_position(index)
         self._channel.call("robot.goto", [position])
         
-        # Validation / transformation
-        if not isinstance(value, int):
-            raise TypeError(f"Only ints allowed, got {type(value).__name__}")
+        # Validation
+        # ONLY int/floats are allowed to be in CustomList
+        if not isinstance(value, int) and not isinstance(value, float):
+            raise TypeError(f"Only ints/floats allowed, got {type(value).__name__}")
+
+        self._channel.call("array.__setitem__", [index, value])
         super().__setitem__(index, value)
 
+    def _calculate_target_position(self, index):
+        """calculating which grid the robot should goto when accessing an array element"""
+        row_group = index // self.board_width
+        col       = index %  self.board_width
+
+        box_row   = self.start_row + row_group * (self.row_margin + 1)
+        robot_row = box_row + 1
+
+        position = (col, robot_row)
+
+        return position
 
 def check_source(source):
     if not source.strip():

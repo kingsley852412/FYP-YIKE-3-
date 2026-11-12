@@ -84,7 +84,7 @@ func level_reset() -> void:
 	target_body.snap_to_cell(target_cell)
 	
 	var min_steps: int = abs(target_cell.x - mc_cell.x) + abs(target_cell.y - mc_cell.y)
-	robot_api.set_max_movement_steps(min_steps)
+	robot_api.max_movement_steps = min_steps
 	
 	HintLabel.text = "Ready. Write Python code and press Submit."
 

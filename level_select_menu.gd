@@ -25,6 +25,7 @@ const IMPLEMENTED_LEVELS := {
 	6: true,
 	7: true,
 	20: true,
+	13: true,
 }
 
 @onready var left_arrow_button: Button = $VBoxContainer/NavigationRow/LeftArrowButton

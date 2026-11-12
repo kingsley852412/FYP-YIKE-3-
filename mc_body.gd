@@ -201,5 +201,22 @@ func rescue() -> void:
 ## MC calls this function after collecting a collectable (used in level with multiple collectable)
 ## can put animation/audio code here, this function is for this purpose
 func collect() -> void:
+	print("mcbody.collect called!")
 	pass
 	## animtaion/audio not implemented
+
+## MC calls this function when the "array" accessed to
+## get item
+## TODO: Put animation/audios here, or anywhere suitable/appropriate
+func get_array_element() -> void:
+	print("mcbody.get_array_element called!")
+	pass
+	## not implemented eyet
+	
+## MC calls this function when the "array" accessed to
+## get item
+## TODO: Put animation/audios here, or anywhere suitable/appropriate
+func set_array_element() -> void:
+	print("mcbody.set_array_element called!")
+	pass
+	## not implemented eyet

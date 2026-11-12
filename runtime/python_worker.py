@@ -104,6 +104,17 @@ class Robot:
     def target_position(self):
         return tuple(self._channel.call("robot.target_position", []))
 
+    def scan(self):
+        return self._channel.call("robot.scan", [])
+
+    @property
+    def items_remaining(self):
+        return self._channel.call("robot.items_remaining", [])
+
+    @property
+    def exit_unlocked(self):
+        return self._channel.call("robot.exit_unlocked", [])
+
 
 class CustomList(list):
     def __init__(self, iterable=(), *, channel):

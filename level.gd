@@ -41,6 +41,7 @@ extends Control
 ## Placeholder container that reserves screen space for the level scene.
 ## The level is added as its child, so the Panel's layout determines where the level appears.
 @onready var panel: Panel = %Panel
+const MAP_PANEL_PADDING := 20.0
 
 ## Displays hints and code-error / status messages.
 ## Passed to the level via [method GameMapScene.setup].
@@ -95,6 +96,7 @@ const LEVEL_PATHS := {
 	5: "res://game_map_scenes/game_map_scene_minimum_step.tscn",
 	6: "res://game_map_scenes/game_map_scene_exploding_wall.tscn",
 	7: "res://game_map_scenes/game_map_scene_multiple_collection.tscn",
+	20: "res://game_map_scenes/game_map_scene_maze_exploration.tscn",
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
@@ -105,6 +107,7 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 	5: "res://game_map_script/game_map_scene_minimum_step.gd",
 	6: "res://game_map_script/game_map_scene_exploding_wall.gd",
 	7: "res://game_map_script/game_map_scene_multiple_collection.gd",
+	20: "res://game_map_script/game_map_scene_maze_exploration.gd",
 }
 
 ## default text in code entry box for each level
@@ -222,6 +225,31 @@ for c in cords:
     robot.goto(c)
     robot.collect()
 ",
+	
+	20: """# MEDIUM FINAL — MAZE EXPLORATION
+# The robot can only observe its current cell
+# and the four neighbouring cells.
+#
+# Objective:
+# 1. Explore the unknown maze.
+# 2. Collect every Data Fragment.
+# 3. Return to the starting cell after the exit unlocks.
+
+visited = set()
+
+
+def explore():
+    position = robot.position
+
+    # TODO:
+    # Add position to visited.
+    # Scan nearby cells.
+    # Explore every unvisited walkable neighbour.
+    # Backtrack after exploring each branch.
+
+
+explore()
+""",
 }
 
 ## Builds the level UI: instantiates the level scene, embeds it, and connects
@@ -264,6 +292,14 @@ func _ready() -> void:
 	panel.add_child(game_map_scene)
 
 	game_map_scene.setup(hint_label)
+	
+	# Waiting for the Container to calculate the actual size of the Panel.
+	await get_tree().process_frame
+	_fit_game_map_to_panel()
+	
+	# When players change the window size, readjust the map.
+	panel.resized.connect(_fit_game_map_to_panel)
+	
 	game_map_scene.level_completed.connect(_on_level_completed)
 	game_map_scene.level_failed.connect(_on_level_failed)
 	game_map_scene.execution_state_changed.connect(_on_execution_state_changed)
@@ -314,8 +350,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-	
-	
+
 func _create_reset_clouds() -> void:
 	# Prevent duplicate creation.
 	if not reset_clouds.is_empty():
@@ -523,6 +558,83 @@ func _on_execution_state_changed(running: bool) -> void:
 	reset_code_button.disabled = running
 	stop_button.disabled = not running
 	code_text_edit.editable = not running
+
+## Automatically scales and centers the map inside the left Panel.
+func _fit_game_map_to_panel() -> void:
+	if not is_instance_valid(game_map_scene):
+		return
+	
+	var fog_layer := game_map_scene.get_node_or_null(
+		"FogTileMapLayer"
+	) as TileMapLayer
+	
+	if fog_layer == null:
+		return
+	
+	if fog_layer.tile_set == null:
+		return
+	
+	var used_rect: Rect2i = fog_layer.get_used_rect()
+	
+	if used_rect.size == Vector2i.ZERO:
+		return
+	
+	# Fog refers to the top left and bottom right corner squares.
+	var first_cell: Vector2i = used_rect.position
+	var last_cell: Vector2i = (
+		used_rect.position
+		+ used_rect.size
+		- Vector2i.ONE
+	)
+	
+	var half_tile_size := (
+		Vector2(fog_layer.tile_set.tile_size) * 0.5
+	)
+	
+	# Take the center of the first and last squares.
+	var first_cell_center := fog_layer.map_to_local(first_cell)
+	var last_cell_center := fog_layer.map_to_local(last_cell)
+	
+	# Convert the coordinates within the TileMapLayer to the coordinates of the level Root.
+	var map_top_left := fog_layer.transform * (
+		first_cell_center - half_tile_size
+	)
+	
+	var map_bottom_right := fog_layer.transform * (
+		last_cell_center + half_tile_size
+	)
+	
+	var map_size := map_bottom_right - map_top_left
+	
+	# The usable space within the panel retains padding on all four sides.
+	var available_size := panel.size - Vector2(
+		MAP_PANEL_PADDING * 2.0,
+		MAP_PANEL_PADDING * 2.0
+	)
+	
+	if available_size.x <= 0.0 or available_size.y <= 0.0:
+		return
+	
+	# Both horizontal and vertical scaling are calculated, and the smaller one is used.
+	var fit_scale := minf(
+		available_size.x / map_size.x,
+		available_size.y / map_size.y
+	)
+	
+	# Instead of enlarging smaller maps, shrink them only when they can't fit in the space.
+	fit_scale = min(fit_scale, 1.0)
+	
+	game_map_scene.scale = Vector2.ONE * fit_scale
+	
+	# The actual size after scaling.
+	var scaled_map_size := map_size * fit_scale
+	
+	# It centers the data and compensates for cases where Fog starts from negative coordinates.
+	game_map_scene.position = (
+		(panel.size - scaled_map_size) * 0.5
+		- map_top_left * fit_scale
+	)
+
 
 func _on_code_output(text: String) -> void:
 	output_text.text += text

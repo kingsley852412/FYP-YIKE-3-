@@ -52,6 +52,7 @@ size_flags_vertical = 3
 
 [node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=1949104473]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.05

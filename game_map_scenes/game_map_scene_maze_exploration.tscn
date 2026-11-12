@@ -1,0 +1,168 @@
+[gd_scene format=4 uid="uid://bq2g7q3qp37xu"]
+
+[ext_resource type="Texture2D" uid="uid://bosf4nmedmwdr" path="res://asset/tiles-animated.png" id="1_ceyxd"]
+[ext_resource type="Texture2D" uid="uid://dvyh3tcv6nj03" path="res://asset/fog_tile.png" id="2_71vnc"]
+[ext_resource type="Script" uid="uid://d3n58aoqfdgwu" path="res://mc_body.gd" id="2_liu03"]
+[ext_resource type="Texture2D" uid="uid://drynw2dbfl780" path="res://asset/Chip item.png" id="2_qgicp"]
+[ext_resource type="Texture2D" uid="uid://dcs4e4xvpjn5o" path="res://asset/Trigger.png" id="3_71vnc"]
+[ext_resource type="SpriteFrames" uid="uid://ci86qkt83u5sg" path="res://asset/robot_sprite_frames.tres" id="4_71vnc"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mwogo"]
+texture = ExtResource("1_ceyxd")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1vypj"]
+load_path = "res://.godot/imported/tiles-animated.png-5047d44acffbca4a0eb1b0e418fe7f87.ctex"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oi3di"]
+texture = SubResource("CompressedTexture2D_1vypj")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSet" id="TileSet_0b4ue"]
+sources/1 = SubResource("TileSetAtlasSource_oi3di")
+sources/0 = SubResource("TileSetAtlasSource_mwogo")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vxeu6"]
+texture = ExtResource("2_71vnc")
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSet" id="TileSet_iqixl"]
+sources/2 = SubResource("TileSetAtlasSource_vxeu6")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iet1i"]
+texture = ExtResource("1_ceyxd")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m6wmu"]
+texture = SubResource("CompressedTexture2D_1vypj")
+texture_region_size = Vector2i(16, 21)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -2)
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -2)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -2)
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -2)
+1:1/0 = 0
+1:1/0/texture_origin = Vector2i(0, -2)
+2:1/0 = 0
+2:1/0/texture_origin = Vector2i(0, -2)
+0:2/0 = 0
+0:2/0/texture_origin = Vector2i(0, -2)
+1:2/0 = 0
+1:2/0/texture_origin = Vector2i(0, -2)
+2:2/0 = 0
+2:2/0/texture_origin = Vector2i(0, -2)
+
+[sub_resource type="TileSet" id="TileSet_uhp08"]
+sources/0 = SubResource("TileSetAtlasSource_iet1i")
+sources/1 = SubResource("TileSetAtlasSource_m6wmu")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f2txt"]
+radius = 5.0990195
+
+[node name="GameMapSceneMazeExploration" type="Node2D" unique_id=1966619356]
+y_sort_enabled = true
+
+[node name="RoadTileMapLayer" type="TileMapLayer" parent="." unique_id=1730706158]
+z_index = -1
+scale = Vector2(4.3, 4.3)
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAEAAAABAAAAAAAAAAEAAAACAAAAAAAAAAEAAAAEAAAAAAAAAAEAAAAFAAAAAAAAAAEAAAAGAAAAAAAAAAEAAAAIAAAAAAAAAAEAAAAJAAAAAAAAAAEAAAAKAAAAAAAAAAEAAAACAAEAAAAAAAEAAAAEAAEAAAAAAAEAAAAGAAEAAAAAAAEAAAAIAAEAAAAAAAEAAAAKAAEAAAAAAAEAAAAAAAIAAAAAAAEAAAABAAIAAAAAAAEAAAACAAIAAAAAAAEAAAADAAIAAAAAAAEAAAAEAAIAAAAAAAEAAAAGAAIAAAAAAAEAAAAHAAIAAAAAAAEAAAAIAAIAAAAAAAEAAAAKAAIAAAAAAAEAAAAAAAMAAAAAAAEAAAAEAAMAAAAAAAEAAAAFAAMAAAAAAAEAAAAGAAMAAAAAAAEAAAAIAAMAAAAAAAEAAAAJAAMAAAAAAAEAAAAKAAMAAAAAAAEAAAAAAAQAAAAAAAEAAAABAAQAAAAAAAEAAAACAAQAAAAAAAEAAAAFAAQAAAAAAAEAAAAHAAQAAAAAAAEAAAAIAAQAAAAAAAEAAAAKAAQAAAAAAAEAAAABAAUAAAAAAAEAAAACAAUAAAAAAAEAAAADAAUAAAAAAAEAAAAEAAUAAAAAAAEAAAAFAAUAAAAAAAEAAAAGAAUAAAAAAAEAAAAHAAUAAAAAAAEAAAAJAAUAAAAAAAEAAAAKAAUAAAAAAAEAAAA=")
+tile_set = SubResource("TileSet_0b4ue")
+
+[node name="FogTileMapLayer" type="TileMapLayer" parent="." unique_id=787597789]
+z_index = 20
+scale = Vector2(4.3, 4.3)
+tile_map_data = PackedByteArray("AAAAAAAAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAMAAgAAAAAAAAAAAAQAAgAAAAAAAAAAAAUAAgAAAAAAAAABAAAAAgAAAAAAAAABAAEAAgAAAAAAAAABAAIAAgAAAAAAAAABAAMAAgAAAAAAAAABAAQAAgAAAAAAAAABAAUAAgAAAAAAAAACAAAAAgAAAAAAAAACAAEAAgAAAAAAAAACAAIAAgAAAAAAAAACAAMAAgAAAAAAAAACAAQAAgAAAAAAAAACAAUAAgAAAAAAAAADAAAAAgAAAAAAAAADAAEAAgAAAAAAAAADAAIAAgAAAAAAAAADAAMAAgAAAAAAAAADAAQAAgAAAAAAAAADAAUAAgAAAAAAAAAEAAAAAgAAAAAAAAAEAAEAAgAAAAAAAAAEAAIAAgAAAAAAAAAEAAMAAgAAAAAAAAAEAAQAAgAAAAAAAAAEAAUAAgAAAAAAAAAFAAAAAgAAAAAAAAAFAAEAAgAAAAAAAAAFAAIAAgAAAAAAAAAFAAMAAgAAAAAAAAAFAAQAAgAAAAAAAAAFAAUAAgAAAAAAAAAGAAAAAgAAAAAAAAAGAAEAAgAAAAAAAAAGAAIAAgAAAAAAAAAGAAMAAgAAAAAAAAAGAAQAAgAAAAAAAAAGAAUAAgAAAAAAAAAHAAAAAgAAAAAAAAAHAAEAAgAAAAAAAAAHAAIAAgAAAAAAAAAHAAMAAgAAAAAAAAAHAAQAAgAAAAAAAAAHAAUAAgAAAAAAAAAIAAAAAgAAAAAAAAAIAAEAAgAAAAAAAAAIAAIAAgAAAAAAAAAIAAMAAgAAAAAAAAAIAAQAAgAAAAAAAAAIAAUAAgAAAAAAAAAJAAAAAgAAAAAAAAAJAAEAAgAAAAAAAAAJAAIAAgAAAAAAAAAJAAMAAgAAAAAAAAAJAAQAAgAAAAAAAAAJAAUAAgAAAAAAAAAKAAAAAgAAAAAAAAAKAAEAAgAAAAAAAAAKAAIAAgAAAAAAAAAKAAMAAgAAAAAAAAAKAAQAAgAAAAAAAAAKAAUAAgAAAAAAAAAAAAYAAgAAAAAAAAABAAYAAgAAAAAAAAACAAYAAgAAAAAAAAADAAYAAgAAAAAAAAAEAAYAAgAAAAAAAAAFAAYAAgAAAAAAAAAGAAYAAgAAAAAAAAAHAAYAAgAAAAAAAAAIAAYAAgAAAAAAAAAJAAYAAgAAAAAAAAAKAAYAAgAAAAAAAAALAAAAAgAAAAAAAAALAAEAAgAAAAAAAAALAAIAAgAAAAAAAAALAAMAAgAAAAAAAAALAAQAAgAAAAAAAAALAAUAAgAAAAAAAAALAAYAAgAAAAAAAAD/////AgAAAAAAAAAAAP//AgAAAAAAAAABAP//AgAAAAAAAAACAP//AgAAAAAAAAADAP//AgAAAAAAAAAEAP//AgAAAAAAAAAFAP//AgAAAAAAAAAGAP//AgAAAAAAAAAHAP//AgAAAAAAAAAIAP//AgAAAAAAAAAJAP//AgAAAAAAAAAKAP//AgAAAAAAAAALAP//AgAAAAAAAAD//wAAAgAAAAAAAAD//wEAAgAAAAAAAAD//wIAAgAAAAAAAAD//wMAAgAAAAAAAAD//wQAAgAAAAAAAAD//wUAAgAAAAAAAAD//wYAAgAAAAAAAAA=")
+tile_set = SubResource("TileSet_iqixl")
+
+[node name="MountainTileMapLayer" type="TileMapLayer" parent="." unique_id=453869002]
+y_sort_enabled = true
+scale = Vector2(4.3, 4.3)
+tile_set = SubResource("TileSet_uhp08")
+
+[node name="Items" type="Node2D" parent="." unique_id=265598901]
+
+[node name="ItemTemplate" type="Sprite2D" parent="Items" unique_id=803876019]
+visible = false
+scale = Vector2(3.5, 3.5)
+texture = ExtResource("2_qgicp")
+offset = Vector2(0, 3)
+
+[node name="ExitMarker" type="Sprite2D" parent="." unique_id=1506534035]
+visible = false
+scale = Vector2(4, 4)
+texture = ExtResource("3_71vnc")
+offset = Vector2(0, 3)
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 21)
+
+[node name="MCBody" type="CharacterBody2D" parent="." unique_id=2020776745]
+position = Vector2(33, 31)
+scale = Vector2(4, 4)
+script = ExtResource("2_liu03")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MCBody" unique_id=2000706987]
+shape = SubResource("CircleShape2D_f2txt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MCBody" unique_id=435194801]
+position = Vector2(0, 2)
+sprite_frames = ExtResource("4_71vnc")
+autoplay = "default"

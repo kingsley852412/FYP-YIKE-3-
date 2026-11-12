@@ -17,6 +17,11 @@ extends CharacterBody2D
 ## The tilemap that defines grid coordinates and walkable cells.
 @onready var tiles: TileMapLayer = $"../RoadTileMapLayer"
 var movement_delay := 0.28		## Time required to move each cell.
+
+## After the Robot has completed a certain percentage of its movement, it notifies Fog to display the new area.
+## 0.20 represents when approximately 20% of the distance has been covered.
+var fog_reveal_progress: float = 0.20
+
 var _movement_generation := 0	
 var _movement_tween: Tween
 var _movement_start_position := Vector2.ZERO
@@ -25,6 +30,9 @@ var _movement_active := false
 ## Emitted when [method tile_movement] is blocked by a wall.
 signal bumped_into_wall
 signal updated_position(grid_coordinate: Vector2)
+
+## Emitted after the robot has started moving towards target_cell, but before it finishes the movement.
+signal movement_in_progress(target_cell: Vector2i)
 
 ## Moves this body one cell in [param direction], if the destination is walkable.
 ##
@@ -42,9 +50,9 @@ signal updated_position(grid_coordinate: Vector2)
 func tile_movement(direction: Vector2) -> bool:
 	# this function moves the character across the grid board, according to the "direction" parameter,
 	# examples input for the direction: Vector2.UP, Vector2.Down, etc, other vector2 is unexpected input 
-
+	
 	assert(direction in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT], "unexpected input")
-
+	
 	# calculates current and destination cell/grid	
 	var ticket := _movement_generation
 	var target_cell := get_cell() + Vector2i(direction)
@@ -56,12 +64,12 @@ func tile_movement(direction: Vector2) -> bool:
 		await bump(direction)
 		bumped_into_wall.emit()
 		return false
-
+	
 	# Convert grid coordinates to the target's world coordinates.
 	var target_position := tiles.to_global(
 		tiles.map_to_local(target_cell)
 	)
-
+	
 	## Record the previous position.
 	_movement_start_position = global_position
 	_movement_active = true
@@ -69,14 +77,34 @@ func tile_movement(direction: Vector2) -> bool:
 	# Establish Tween.
 	var tween := create_tween()
 	_movement_tween = tween
-
+	
 	tween.tween_property(
 		self, 
 		"global_position", 
 		target_position, 
 		movement_delay
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-
+	
+	## Tween is now operating.
+	## The signal is sent only after the robot has completed a small portion of the journey.
+	var reveal_delay := movement_delay * fog_reveal_progress
+	
+	await get_tree().create_timer(reveal_delay).timeout
+	
+	## Someone may have pressed Stop or Reset during the waiting period.
+	if ticket != _movement_generation:
+		if tween.is_valid():
+			tween.kill()
+	
+		if _movement_tween == tween:
+			_movement_tween = null
+	
+		_movement_active = false
+		return false
+	
+	## The robot is now between two squares.
+	movement_in_progress.emit(target_cell)
+	
 	## Make sure that target won't be pulled back by the old animation after Reset/Stop.
 	while tween.is_running():
 		if ticket != _movement_generation:

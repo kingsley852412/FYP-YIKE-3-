@@ -54,7 +54,7 @@ func setup(hintLabelInput: Label) -> void:
 	
 
 
-## Restores the level to its starting state.
+	## Restores the level to its starting state.
 ##
 ## Places the robot at cell (0, 0) and the target at (5, 4).
 ## Called on first entry via [method setup], and every

@@ -81,10 +81,51 @@ implements function for code execution/etc.
 
 Future Plan: store level-specific info in inherited scene class (e.g. Hints, implementation of code execution/reset function, etc.)
 
+<h3>
+Hierarchy of levels (關卡) scripts and .tscn
+
+(not to be confused with the class with name "level")
+</h3>
+
+<ul>
+    <li>level 1</li>
+    <li>level 2</li>
+    <li>
+    (all levels from 1 to 10 inclusive has their own seperate scene and script, although they share some similarities)
+    </li>
+    <li>
+    Sorting and Searching Array Levels (11-14) (NOT Implemented Yet)
+    </li>
+    <ul>
+        <li>Linear Search</li>
+        <li>Binary Search</li>
+        <li>Bubble Sort</li>
+        <li>Quick Sort</li>
+        <li>
+        (they share same .tscn; while scripts bases on same base class)
+        </li>
+    </ul>
+</ul>
+
 <h2> Compiler </h2>
 Recieves Raw, unprocessed code inputted by user (from Game_Map_Scene)
 Returns List of instructions to Game_Map_Scene
 (e.g. move_up, move_down, etc.)
+
+<h3>New Features:</h3>
+<ul>
+    <li>in the godot script, while Calling Compiler to execute code, You Can Now add python varibles in Player's Code Namespace!</li>
+    <li>Application: You can Initialize Random Values in your godot script, then let the user be able to Access those Values!</li>
+    <li>Types of Variables include:</li>
+    <ul>
+        <li>int</li>
+        <li>float</li>
+        <li>string</li>
+        <li>list</li>
+        <li>2d list</li>
+        <li>it's very flexible! Try It Out!</li>
+    </ul>
+</ul>
 <br></br>
 
 <h1>Implementing Scene Transition</h1>

@@ -118,19 +118,25 @@ class CustomList(list):
         self.board_width = 11
 
     def __getitem__(self, index):
+        if isinstance(index, slice):
+            raise TypeError("Slice is not allowed! Please use array[i] with a single integer.")
+
         print(f"[read] index={index}")
 
         position = self._calculate_target_position(index)
         
         self._channel.call("robot.goto", [position])
         self._channel.call("array.__getitem__", [index])
-        # self._channel.call("_wait", [])
+        self._channel.call("_wait", [])
         
         value = super().__getitem__(index)
         # You can transform the value here, e.g. type coercion
         return value
 
     def __setitem__(self, index, value):
+        ## player should now use .swap in sorting levels Instead
+        raise SyntaxError("Use array.swap(i, j) instead!")
+
         print(f"[write] index={index} value={value!r}")
         position = self._calculate_target_position(index)
         self._channel.call("robot.goto", [position])
@@ -143,7 +149,24 @@ class CustomList(list):
         self._channel.call("array.__setitem__", [index, value])
         super().__setitem__(index, value)
 
+    def swap(self, index_I, index_J):
+        if type(index_I) is not int or type(index_J) is not int:
+            raise TypeError("swap indices must be integers")
+            
+        # 1. 通知 Godot 播放交换动画，并真正修改 Godot 里的 array_values
+        self._channel.call("array.swap", [index_I, index_J])
+        
+        # 2. 同步 Python 内存中的底层数据（不触发额外的 __getitem__ 和 __setitem__）
+        # 使用 list.__getitem__ 和 list.__setitem__ 直接操作底层 C 数组
+        val_i = list.__getitem__(self, index_I)
+        val_j = list.__getitem__(self, index_J)
+        list.__setitem__(self, index_I, val_j)
+        list.__setitem__(self, index_J, val_i)
+
+
+
     def _calculate_target_position(self, index):
+        """PRIVATE Function, NOT TO BE USED BY PLAYER!"""
         """calculating which grid the robot should goto when accessing an array element"""
         row_group = index // self.board_width
         col       = index %  self.board_width

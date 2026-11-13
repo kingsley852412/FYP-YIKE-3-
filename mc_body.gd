@@ -186,9 +186,17 @@ func get_array_element() -> void:
 	## not implemented eyet
 	
 ## MC calls this function when the "array" accessed to
-## get item
+## set item
 ## TODO: Put animation/audios here, or anywhere suitable/appropriate
 func set_array_element() -> void:
 	print("mcbody.set_array_element called!")
+	pass
+	## not implemented eyet
+	
+## MC calls this function when the "array" accessed to
+## Swap item
+## TODO: Put animation/audios here, or anywhere suitable/appropriate
+func swap_array_element() -> void:
+	print("mcbody.swap_array_element called!")
 	pass
 	## not implemented eyet

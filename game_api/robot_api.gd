@@ -3,6 +3,7 @@ extends RefCounted
 
 signal array_get_item(index: int)
 signal array_set_item(index: int, value)
+signal array_swap_item(index_I: int, index_J: int)
 
 const DIRECTIONS := {
 	"up": Vector2i.UP, "down": Vector2i.DOWN,
@@ -11,6 +12,7 @@ const DIRECTIONS := {
 
 var max_movement_steps: int
 var max_array_access: int		# this is for Limiting Max number of access to the array, including value assignment, for setting time complexity limit for Sorting/Searching
+var max_array_swap: int		# this is for Limiting Max number of Swap to the array, including value assignment, for setting time complexity limit for Sorting/Searching
 
 var body: mcBody
 var target_body: mcBody
@@ -24,6 +26,7 @@ var _target_bodies_collected: Array[bool] = []
 var answer: Array = []
 
 var array_access_used: int = 0
+var array_swap_used: int = 0
 var steps_used := 0
 var _generation := 0
 
@@ -44,7 +47,6 @@ func set_target_bodies(input_target_bodies: Array[mcBody]):
 func begin_run() -> void:
 	stop()
 	steps_used = 0
-
 
 func stop() -> void:
 	_generation += 1
@@ -214,6 +216,19 @@ func dispatch(method: String, args: Array) -> Dictionary:
 		var value = args[1]			# this stores the value to be SET into the array
 		
 		array_set_item.emit(index, value)
+		return {"value": true}
+		
+	if method == "array.swap":
+		if args.size() != 2:
+			return {"error": "swap expects 2 indices"}
+		if array_swap_used >= max_array_swap:
+			return {"error": "Max array SWAP Exceeded, make ur code more Efficient!"}
+		
+		var idx1 = int(args[0])
+		var idx2 = int(args[1])
+		
+		# 发出信号，让关卡去更新数据并播放动画
+		array_swap_item.emit(idx1, idx2)
 		return {"value": true}
 		
 	

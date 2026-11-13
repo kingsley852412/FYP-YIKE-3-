@@ -96,8 +96,14 @@ const LEVEL_PATHS := {
 	5: "res://game_map_scenes/game_map_scene_minimum_step.tscn",
 	6: "res://game_map_scenes/game_map_scene_exploding_wall.tscn",
 	7: "res://game_map_scenes/game_map_scene_multiple_collection.tscn",
+	
+	# 11-14 share same scene, since they are all operating on array
+	11: "res://game_map_scenes/game_map_scene_search_sort.tscn",
+	12: "res://game_map_scenes/game_map_scene_search_sort.tscn",
+	13: "res://game_map_scenes/game_map_scene_search_sort.tscn",
+	14: "res://game_map_scenes/game_map_scene_search_sort.tscn",
+	
 	20: "res://game_map_scenes/game_map_scene_maze_exploration.tscn",
-	13: "res://game_map_scenes/game_map_scene_bubble_sort.tscn",
 }
 
 const LEVEL_SCRIPT_PATHS: Dictionary = {
@@ -108,8 +114,13 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 	5: "res://game_map_script/game_map_scene_minimum_step.gd",
 	6: "res://game_map_script/game_map_scene_exploding_wall.gd",
 	7: "res://game_map_script/game_map_scene_multiple_collection.gd",
-	20: "res://game_map_script/game_map_scene_maze_exploration.gd",
+	
+	11: "res://game_map_script/game_map_scene_linear_search.gd",
+	12: "res://game_map_script/game_map_scene_binary_search.gd",
 	13: "res://game_map_script/game_map_scene_bubble_sort.gd",
+	14: "res://game_map_script/game_map_scene_quick_sort.gd",
+	
+	20: "res://game_map_script/game_map_scene_maze_exploration.gd",
 }
 
 ## default text in code entry box for each level
@@ -227,31 +238,35 @@ for c in cords:
     robot.goto(c)
     robot.collect()
 ",
-	
-	20: """# MEDIUM FINAL — MAZE EXPLORATION
-# The robot can only observe its current cell
-# and the four neighbouring cells.
-#
-# Objective:
-# 1. Explore the unknown maze.
-# 2. Collect every Data Fragment.
-# 3. Return to the starting cell after the exit unlocks.
 
-visited = set()
+	11: """# Find index of "1"!!!
 
-
-def explore():
-    position = robot.position
-
-    # TODO:
-    # Add position to visited.
-    # Scan nearby cells.
-    # Explore every unvisited walkable neighbour.
-    # Backtrack after exploring each branch.
-
-
-explore()
+for i in range(len(array)):
+    if array[i] == 1:
+        robot.submit(i)
 """,
+
+	12: """# Find index of "42"
+# Use Binary Search!
+
+def binary_search(target):
+    low = 0
+    high = len(array) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        guess = array[mid]
+
+        if guess == target:
+            return mid
+        elif guess < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+            
+robot.submit(binary_search(42))
+""",
+
 	13: """# not initialized yet
 def bubble_sort(array):
     n = len(array)
@@ -277,7 +292,32 @@ bubble_sort(array)
 print("After: ", array)
 
 robot.submit(array)
-"""
+""",
+	
+	20: """# MEDIUM FINAL — MAZE EXPLORATION
+# The robot can only observe its current cell
+# and the four neighbouring cells.
+#
+# Objective:
+# 1. Explore the unknown maze.
+# 2. Collect every Data Fragment.
+# 3. Return to the starting cell after the exit unlocks.
+
+visited = set()
+
+
+def explore():
+    position = robot.position
+
+    # TODO:
+    # Add position to visited.
+    # Scan nearby cells.
+    # Explore every unvisited walkable neighbour.
+    # Backtrack after exploring each branch.
+
+
+explore()
+""",
 }
 
 ## Builds the level UI: instantiates the level scene, embeds it, and connects
@@ -684,8 +724,8 @@ func _on_level_failed(fail_message: String) -> void:
 	retry_modal.show()
 
 func reset_code_input(selected_level: int) -> void:
-	var default_code: String = DEFAULT_CODE_TEXT.get(selected_level, "")
-	assert(default_code != "", "default code not defined, or empty")
+	# get default code stored in the Dict, if not defined yet, use a default code
+	var default_code: String = DEFAULT_CODE_TEXT.get(selected_level, "#Default Code not defined Yet!")
 	
 	code_text_edit.text = default_code
 

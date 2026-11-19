@@ -211,10 +211,3 @@ func _on_execution_cancelled() -> void:
 func _on_mc_bumped_wall() -> void:
 	warning_raised.emit("Bumped Into Wall!")
 	
-	
-## a Helper Function
-func _vector2_array_to_nested_array(coords: Array[Vector2]) -> Array:
-	return coords.map(
-		func(v: Vector2) -> Array:
-			return [v.x, v.y]
-	)

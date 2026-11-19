@@ -1,9 +1,3 @@
-## This script must be attached to the root node of
-## [code]res://game_map_scenes/game_map_scene_level1.tscn[/code].
-## If the script is missing or fails to parse, [method GameMapScene.execute_code]
-## cannot be reached and casting the instance to [GameMapScene] will return
-## null.
-
 ## this class is the base class for script in Level about Sorting And Searching.
 ## specific level's script is child class of this class
 class_name GameMapSceneSearchSort
@@ -26,12 +20,13 @@ var num_of_targets: int
 var target_coordinates: Array[Vector2] = []
 # for storing array values to be used by player
 var array_values: Array[int] = []
-
+# for storing list of coordinate the robot should goto, when it Get/Set an Array Element
+var goto_coordinates: Array[Vector2] = []
 
 var robot_api = preload("res://game_api/robot_api.gd").new()
 
 ## Called when the node enters the scene tree.
-## Intentionally empty — all setup is deferred to [method setup], which is
+## all setup is deferred to [method setup], which is
 ## called by the [Level] UI after this node is added as a child.
 func _ready() -> void:
 	super._ready()
@@ -110,19 +105,10 @@ func level_reset() -> void:
 	mc_animated_sprite.play("default")
 	
 	robot_api.set_target_bodies(target_bodies)	# this is called to reset "Collected" Boolean record in robot_api 
-	target_coordinates = []
-	# generate a vec2 coordinate for each target
-	const start_row = 0
-	const row_margin = 1
-	const board_width = 11
 
 	_generate_question_answer()
-	
-	for i in range(num_of_targets):
-		var row_group: int = i / board_width          # int division in GDScript 4
-		var col:       int = i % board_width
-		var box_row:   int = start_row + row_group * (row_margin + 1)
-		target_coordinates.append(Vector2(col, box_row))
+	_generate_target_coordinate()		
+	_generate_goto_coordinate()		# set goto_coordinate, now Robot knows which grid to go, when it Get/Set array element	
 
 	assert (len(target_bodies) == len(target_coordinates))
 	assert (len(target_bodies) == len(array_values))
@@ -139,6 +125,7 @@ func level_reset() -> void:
 		# change numberTag number
 		number_tag_label.text = str(array_values[i])
 
+	# reset the limit and record of operations used.
 	robot_api.array_access_used = 0
 	robot_api.array_swap_used = 0
 	
@@ -172,6 +159,7 @@ func execute_code(code_text: String) -> void:
 		code_text, 
 		{
 			"array" : array_values,		# this part initializes what variables are AVAILABLE to player
+			"_goto_coordinates" : _vector2_array_to_nested_array(goto_coordinates)	# NOT FOR PLAYER, this is for calculating which grid should the robot goto, when set/get array items
 		},
 	)
 
@@ -203,6 +191,29 @@ func _on_call_requested(method: String, args: Array, request_id: int, ticket: in
 			level_completed.emit()
 		else:
 			level_failed.emit("Incorrect Answer!")
+			
+	elif method == "robot.breakthrough" and not result.has("error"):
+		if result["value"] == true:
+			# --- 1. 成功打破一面墙 ---
+			var broken_idx: int = result["wall_broken"]
+			
+			# 动态计算每面墙的高度 (calculate, instead of Hard-Coding wall height)
+			var wall_height: int = target_bodies.size() / robot_api.answer.size()
+			
+			# 隐藏这面墙对应的所有 target_bodies (模拟墙体碎裂消失)
+			for i in range(broken_idx * wall_height, (broken_idx + 1) * wall_height):
+				if i < target_bodies.size():
+					target_bodies[i].visible = false
+			
+			# --- 2. 检查是否所有墙都被打破了 ---
+			if result.get("all_broken") == true:
+				level_completed.emit() # 通关
+				stop_code()
+				
+		else:
+			# --- 3. 打偏了，没有击中弱点 ---
+			level_failed.emit("Weak point missed!\nThe sum is not the minimum.")
+			stop_code() # 立即终止 Python 代码运行
 			
 	compiler.reply(request_id, ticket, result.get("value"), result.get("error", ""))
 
@@ -274,8 +285,31 @@ func _on_array_swap_item(index_I: int, index_J: int) -> void:
 
 ## things to Do when Implementing this Func:
 ## randomize array value,
-## set correct answer in robot_api,
+## set correct answer in robot_api, send array_values to robot_api by REFERENCE
 ## set max number of array access (if needed) 
 func _generate_question_answer() -> void:
 	assert(false, "Function Not Implemented!")
 	
+## generates coordinate the robot should Go to, when it get/set an Array Element
+## can OVERRIDE this func in subclass
+func _generate_goto_coordinate() -> void:
+	# 1. uses duplicate(), to avoid accidentally editing target_coordinates
+	goto_coordinates = target_coordinates.duplicate()
+	
+	for i in range(goto_coordinates.size()):
+		goto_coordinates[i].y += 1	# DEFAULT IMEPLEMENTATION: when get/set, goto the grid Below the array item
+
+## generates target coordinates, will be used in level_reset()
+## can OVERRIDE this func in subclass
+func _generate_target_coordinate() -> void:
+	target_coordinates = []
+	# generate a vec2 coordinate for each target
+	const start_row = 0
+	const row_margin = 1
+	const board_width = 11
+
+	for i in range(num_of_targets):
+		var row_group: int = i / board_width          # int division in GDScript 4
+		var col:       int = i % board_width
+		var box_row:   int = start_row + row_group * (row_margin + 1)
+		target_coordinates.append(Vector2(col, box_row))

@@ -75,7 +75,7 @@ func level_reset() -> void:
 	assert(false, "Error, game_map_scene.gd level_reset(), not implemented by subclass yet")
 
 ## Compiles [param code_text] and performs the resulting actions.
-## [b]Virtual — every subclass must override this.[/b]
+## Virtual — every subclass must override this.
 ## Subclass implementations maybe be coroutines (they may use [code]await[/code]);
 ## callers that need to sequence logic after execution must [code]await[/code] them.
 func execute_code(code_text: String) -> void:
@@ -104,3 +104,12 @@ func show_damaged_robot() -> void:
 	
 	if mc_sprite.sprite_frames.has_animation(&"damaged"):
 		mc_sprite.play(&"damaged")
+
+
+## =================== Helper Functions ====================
+
+func _vector2_array_to_nested_array(coords: Array[Vector2]) -> Array:
+	return coords.map(
+		func(v: Vector2) -> Array:
+			return [v.x, v.y]
+	)

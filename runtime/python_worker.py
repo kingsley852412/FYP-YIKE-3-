@@ -99,6 +99,10 @@ class Robot:
     def submit(self, *args):
         return self._channel.call("robot.submit", [*args])
 
+    def breakthrough(self, start_index, end_index):
+        ## (start, end) is the range on the Array, they are INCLUSIVE!!!
+        return self._channel.call("robot.breakthrough", [start_index, end_index])
+
     @property
     def position(self):
         return tuple(self._channel.call("robot.position", []))
@@ -120,7 +124,7 @@ class Robot:
 
 
 class CustomList(list):
-    def __init__(self, iterable=(), *, channel):
+    def __init__(self, iterable=(), *, channel, positions):
         super().__init__(iterable)   # populate with items
         self._channel = channel
 
@@ -128,37 +132,20 @@ class CustomList(list):
         self.row_margin = 1
         self.board_width = 11
 
-    def __getitem__(self, index):
-        if isinstance(index, slice):
-            raise TypeError("Slice is not allowed! Please use array[i] with a single integer.")
+        # This will be initialized with data from Godot Script
+        self.positions = positions     # list of coordinates robot Goes to, when It Get/Set an array item
 
-        print(f"[read] index={index}")
 
-        position = self._calculate_target_position(index)
+    def _get_position(self, index):
+        # to know which grid the robot should Goto when it Get/Set Array items,
+        # it recieves the list of coordinate from Godot GameMapScene Script,
+        # then look up the list and return the Coordinate.
+        if index < 0:
+            index += len(self)  # support Negative Index in array, by Players
+        if index < len(self.positions):
+            return self.positions[index]
         
-        self._channel.call("robot.goto", [position])
-        self._channel.call("array.__getitem__", [index])
-        self._channel.call("_wait", [])
-        
-        value = super().__getitem__(index)
-        # You can transform the value here, e.g. type coercion
-        return value
-
-    def __setitem__(self, index, value):
-        ## player should now use .swap in sorting levels Instead
-        raise SyntaxError("Use array.swap(i, j) instead!")
-
-        print(f"[write] index={index} value={value!r}")
-        position = self._calculate_target_position(index)
-        self._channel.call("robot.goto", [position])
-        
-        # Validation
-        # ONLY int/floats are allowed to be in CustomList
-        if not isinstance(value, int) and not isinstance(value, float):
-            raise TypeError(f"Only ints/floats allowed, got {type(value).__name__}")
-
-        self._channel.call("array.__setitem__", [index, value])
-        super().__setitem__(index, value)
+        raise LookupError("CustomList._get_position() error!")
 
     def swap(self, index_I, index_J):
         if type(index_I) is not int or type(index_J) is not int:
@@ -174,20 +161,37 @@ class CustomList(list):
         list.__setitem__(self, index_I, val_j)
         list.__setitem__(self, index_J, val_i)
 
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            raise TypeError("Slice is not allowed! Please use array[i] with a single integer.")
 
+        print(f"[read] index={index}")
 
-    def _calculate_target_position(self, index):
-        """PRIVATE Function, NOT TO BE USED BY PLAYER!"""
-        """calculating which grid the robot should goto when accessing an array element"""
-        row_group = index // self.board_width
-        col       = index %  self.board_width
+        position = self._get_position(index)
+        
+        self._channel.call("robot.goto", [position])
+        self._channel.call("array.__getitem__", [index])
+        self._channel.call("_wait", [])
+        
+        value = super().__getitem__(index)
+        # You can transform the value here, e.g. type coercion
+        return value
 
-        box_row   = self.start_row + row_group * (self.row_margin + 1)
-        robot_row = box_row + 1
+    def __setitem__(self, index, value):
+        ## player should now use .swap in sorting levels Instead
+        raise SyntaxError("Use array.swap(i, j) instead!")
 
-        position = (col, robot_row)
+        print(f"[write] index={index} value={value!r}")
+        position = self._get_position(index)
+        self._channel.call("robot.goto", [position])
+        
+        # Validation
+        # ONLY int/floats are allowed to be in CustomList
+        if not isinstance(value, int) and not isinstance(value, float):
+            raise TypeError(f"Only ints/floats allowed, got {type(value).__name__}")
 
-        return position
+        self._channel.call("array.__setitem__", [index, value])
+        super().__setitem__(index, value)
 
 def check_source(source):
     if not source.strip():
@@ -264,11 +268,16 @@ def execute(source, channel, max_steps=100000, max_output=16000, init_data = Non
     if init_data:
         for key in init_data:
             # some Special Case for initializing values
-            if key == 'array':
+            if key == 'array':      # array to be used by player, initializes CustomList
                 assert isinstance(init_data['array'], list)
-                namespace["array"] = CustomList(init_data['array'], channel = channel)
 
-            # non-special case, just initalize as normally
+                # also get the goto_coordinates for the GOTO() call in other member functions
+                goto_coordinates = init_data.get('_goto_coordinates', None)
+                assert goto_coordinates != None, "We forget to put \"_goto_coordinates\" in the init_data Dict!"
+                
+                namespace['array'] = CustomList(init_data['array'], channel = channel, positions = goto_coordinates)
+
+            # non-special case, just initalize as normally as normal data types
             else:
                 namespace[key] = init_data[key]
 

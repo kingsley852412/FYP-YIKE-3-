@@ -22,3 +22,4 @@ func _generate_question_answer() -> void:
 	robot_api.answer = [sorted_answer]
 	
 	robot_api.max_array_access = 10000 		# No limit in practice
+	robot_api.max_array_swap = 10000		# No limit in practice

@@ -85,6 +85,10 @@ const CLOUD_VERTICAL_STEP: float = 0.16
 const CLOUD_MOVE_TIME: float = 0.7
 const CLOUD_COVER_HOLD_TIME: float = 0.12
 
+# time to wait after level completion, for showing Animation
+const LEVEL_COMPLETED_WAIT_TIME: float = 1
+const LEVEL_FAILED_WAIT_TIME: float = 1
+
 ## To prevent players from pressing Reset repeatedly.
 var reset_transition_running: bool = false
 
@@ -102,6 +106,7 @@ const LEVEL_PATHS := {
 	12: "res://game_map_scenes/game_map_scene_search_sort.tscn",
 	13: "res://game_map_scenes/game_map_scene_search_sort.tscn",
 	14: "res://game_map_scenes/game_map_scene_search_sort.tscn",
+	15: "res://game_map_scenes/game_map_scene_search_sort.tscn",
 	
 	20: "res://game_map_scenes/game_map_scene_maze_exploration.tscn",
 }
@@ -119,6 +124,7 @@ const LEVEL_SCRIPT_PATHS: Dictionary = {
 	12: "res://game_map_script/game_map_scene_binary_search.gd",
 	13: "res://game_map_script/game_map_scene_bubble_sort.gd",
 	14: "res://game_map_script/game_map_scene_quick_sort.gd",
+	15: "res://game_map_script/game_map_scene_min_subarray.gd",
 	
 	20: "res://game_map_script/game_map_scene_maze_exploration.gd",
 }
@@ -285,13 +291,77 @@ def bubble_sort(array):
             break
     return array
 
-
 # Example usage
 print("Before:", array)
 bubble_sort(array)
 print("After: ", array)
 
 robot.submit(array)
+""",
+
+	14:"""
+def quick_sort(array, low=0, high=None):
+    if high is None:
+        high = len(array) - 1
+        
+    if low < high:
+        # Partition the array and get the pivot index
+        pi = partition(array, low, high)
+        
+        # Recursively sort elements before and after partition
+        quick_sort(array, low, pi - 1)
+        quick_sort(array, pi + 1, high)
+
+def partition(array, low, high):
+    # Choose the last element as the pivot
+    pivot = array[high]
+    i = low - 1
+    
+    for j in range(low, high):
+        if array[j] <= pivot:
+            i += 1
+            array.swap(i, j)
+            
+    # Place the pivot in its correct position
+    array.swap(i + 1, high)
+    return i + 1
+    
+quick_sort(array)
+robot.submit(array)
+""",
+
+	15: """
+# Break the Walls!
+num_of_walls = 4
+wall_height = len(array) // num_of_walls
+
+# break walls one-by-one
+for w in range(num_of_walls):
+    wall_start = w * wall_height
+    wall_end = wall_start + wall_height - 1
+    
+    min_sum = 99999999
+    current_sum = 0
+    
+    current_start = wall_start
+    best_start = wall_start
+    best_end = wall_start
+    
+    for i in range(wall_start, wall_end + 1):
+        current_sum += array[i]
+        
+        if current_sum < min_sum:
+            min_sum = current_sum
+            best_start = current_start
+            best_end = i
+            
+        if current_sum > 0:
+            current_sum = 0
+            current_start = i + 1
+            
+    # Found the Weakpoint, Call for Attack!
+    print(f"Wall {w}: Weak point from index {best_start} to {best_end}, Sum: {min_sum}")
+    robot.breakthrough(best_start, best_end)
 """,
 	
 	20: """# MEDIUM FINAL — MAZE EXPLORATION
@@ -714,12 +784,12 @@ func _on_code_error(line: int) -> void:
 		code_text_edit.set_caret_line(line - 1)
 
 func _on_level_completed() -> void:
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(LEVEL_COMPLETED_WAIT_TIME).timeout
 	confirm_modal.show()
 	
 func _on_level_failed(fail_message: String) -> void:
 	game_map_scene.show_damaged_robot()
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(LEVEL_FAILED_WAIT_TIME).timeout
 	retry_modal.set_message_text(fail_message)
 	retry_modal.show()
 

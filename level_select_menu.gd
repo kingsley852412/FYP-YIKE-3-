@@ -29,6 +29,7 @@ const IMPLEMENTED_LEVELS := {
 	12: true,
 	13: true,
 	14: true,
+	15: true,
 	
 	20: true,
 }

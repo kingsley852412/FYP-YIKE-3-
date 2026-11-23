@@ -1,12 +1,15 @@
 [gd_scene format=3 uid="uid://df7bkpec17vnt"]
 
 [ext_resource type="Script" uid="uid://cmb7w4tyemdch" path="res://level.gd" id="1_u52ul"]
+[ext_resource type="Script" uid="uid://biupbve2614x8" path="res://ui/window.gd" id="2_f2txt"]
 [ext_resource type="PackedScene" uid="uid://n6uxis3iw2ug" path="res://confirmation_modal.tscn" id="2_vonw3"]
 [ext_resource type="Script" uid="uid://pfs13pwr6hak" path="res://ui/player_code_edit.gd" id="3_code_editor"]
 [ext_resource type="PackedScene" uid="uid://du7kuqbxcjb63" path="res://retry_modal.tscn" id="4_0b4ue"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xgho"]
 bg_color = Color(0.48773485, 0.61558396, 0.73970956, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ivvew"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u52ul"]
 bg_color = Color(0.60775006, 0.66, 0.495, 1)
@@ -80,11 +83,92 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=4354782]
+[node name="Panel2" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=2006436010]
+custom_minimum_size = Vector2(62, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ButtonColumnContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Panel2" unique_id=504804359]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="ToggleCodeButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel2/ButtonColumnContainer" unique_id=1662789387]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Code"
+
+[node name="ToggleHintButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel2/ButtonColumnContainer" unique_id=578698056]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Hint"
+
+[node name="ToggleOutputButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel2/ButtonColumnContainer" unique_id=1850236582]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Output"
+
+[node name="ToggleAllButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel2/ButtonColumnContainer" unique_id=1464124438]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_vertical = 10
+text = "Toggle
+All"
+
+[node name="CodeWindow" type="Control" parent="." unique_id=927656012 node_paths=PackedStringArray("title_bar", "resize_handle", "close_button")]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 196.6954
+offset_top = 205.72983
+offset_right = 616.0759
+offset_bottom = 532.08044
+script = ExtResource("2_f2txt")
+title_bar = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar")
+resize_handle = NodePath("ResizeHandle")
+close_button = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/CloseButton")
+
+[node name="CodeWindowPanelContainer" type="PanelContainer" parent="CodeWindow" unique_id=1492487256]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CodeWindow/CodeWindowPanelContainer" unique_id=1210768145]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer" unique_id=203470348]
+layout_mode = 2
+
+[node name="TitleBar" type="Panel" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer" unique_id=1672554873]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ivvew")
 
-[node name="CodeTextEdit" type="CodeEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1473680451]
+[node name="TitleLabel" type="Label" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar" unique_id=577791825]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Code Edit Window"
+
+[node name="CloseButton" type="Button" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer" unique_id=1363919210]
+layout_mode = 2
+text = "   X   "
+
+[node name="CodeTextEdit" type="CodeEdit" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer" unique_id=1473680451]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -100,54 +184,191 @@ context_menu_enabled = false
 emoji_menu_enabled = false
 script = ExtResource("3_code_editor")
 
-[node name="OutputText" type="TextEdit" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=573219015]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-placeholder_text = "Python output appears here..."
-editable = false
-
-[node name="HintLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1139675910]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-size_flags_stretch_ratio = 0.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_u52ul")
-text = "Hi, im hint label"
-autowrap_mode = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1341030296]
+[node name="ButtonContainer" type="HBoxContainer" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer" unique_id=879791737]
 layout_mode = 2
 
-[node name="SubmitButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1539872353]
+[node name="SubmitButton" type="Button" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer/ButtonContainer" unique_id=699919489]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Submit"
 
-[node name="StopButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1382539046]
+[node name="StopButton" type="Button" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer/ButtonContainer" unique_id=2010655246]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 disabled = true
 text = "Stop"
 
-[node name="ResetButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=376378441]
+[node name="ResetButton" type="Button" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer/ButtonContainer" unique_id=2068809795]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Reset"
 
-[node name="ResetCodeButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1691948934]
+[node name="ResetCodeButton" type="Button" parent="CodeWindow/CodeWindowPanelContainer/VBoxContainer/ButtonContainer" unique_id=655624486]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Reset Code"
 
-[node name="HintButton" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=272316367]
+[node name="ResizeHandle" type="Control" parent="CodeWindow" unique_id=538177983]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 12
+
+[node name="OutputWindow" type="Control" parent="." unique_id=1463542275 node_paths=PackedStringArray("title_bar", "resize_handle", "close_button")]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 833.2382
+offset_top = 496.2219
+offset_right = 1130.566
+offset_bottom = 638.2
+script = ExtResource("2_f2txt")
+title_bar = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar")
+resize_handle = NodePath("ResizeHandle")
+close_button = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/CloseButton")
+
+[node name="CodeWindowPanelContainer" type="PanelContainer" parent="OutputWindow" unique_id=1650579295]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OutputWindow/CodeWindowPanelContainer" unique_id=1308256241]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OutputWindow/CodeWindowPanelContainer/VBoxContainer" unique_id=29182172]
+layout_mode = 2
+
+[node name="TitleBar" type="Panel" parent="OutputWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer" unique_id=1021026894]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ivvew")
+
+[node name="TitleLabel" type="Label" parent="OutputWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar" unique_id=1394537752]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Output Window"
+
+[node name="CloseButton" type="Button" parent="OutputWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer" unique_id=294232026]
+layout_mode = 2
+text = "   X   "
+
+[node name="OutputText" type="TextEdit" parent="OutputWindow/CodeWindowPanelContainer/VBoxContainer" unique_id=1010048351]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Python output appears here..."
+editable = false
+
+[node name="ResizeHandle" type="Control" parent="OutputWindow" unique_id=83698291]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 12
+
+[node name="HintWindow" type="Control" parent="." unique_id=751521262 node_paths=PackedStringArray("title_bar", "resize_handle", "close_button")]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 15.099106
+offset_top = 534.2301
+offset_right = 227.0991
+offset_bottom = 631.2301
+script = ExtResource("2_f2txt")
+min_size = Vector2(300, 100)
+max_size = Vector2(300, 150)
+title_bar = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar")
+resize_handle = NodePath("ResizeHandle")
+close_button = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/CloseButton")
+
+[node name="CodeWindowPanelContainer" type="PanelContainer" parent="HintWindow" unique_id=402637706]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HintWindow/CodeWindowPanelContainer" unique_id=1593338539]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HintWindow/CodeWindowPanelContainer/VBoxContainer" unique_id=392658878]
+layout_mode = 2
+
+[node name="TitleBar" type="Panel" parent="HintWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer" unique_id=1921966681]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ivvew")
+
+[node name="TitleLabel" type="Label" parent="HintWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar" unique_id=279513912]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Hints Window"
+
+[node name="CloseButton" type="Button" parent="HintWindow/CodeWindowPanelContainer/VBoxContainer/HBoxContainer" unique_id=199480308]
+layout_mode = 2
+text = "   X   "
+
+[node name="HintLabel" type="Label" parent="HintWindow/CodeWindowPanelContainer/VBoxContainer" unique_id=574947689]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 60)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_u52ul")
+text = "Hi, im hint label"
+autowrap_mode = 3
+
+[node name="HintButton" type="Button" parent="HintWindow/CodeWindowPanelContainer" unique_id=653851468]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 10
+size_flags_vertical = 8
 text = "Hint"
+
+[node name="ResizeHandle" type="Control" parent="HintWindow" unique_id=2028905611]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 12
 
 [node name="ConfirmationModal" parent="." unique_id=839314098 instance=ExtResource("2_vonw3")]
 unique_name_in_owner = true
@@ -160,8 +381,3 @@ visible = false
 layout_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/ExitButton" to="." method="_on_exit_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/SubmitButton" to="." method="_on_submit_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ResetCodeButton" to="." method="_on_reset_code_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/HintButton" to="." method="_on_hint_button_pressed"]

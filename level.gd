@@ -32,6 +32,12 @@ extends Control
 
 @onready var exit_button: Button = %ExitButton
 
+# these button are for Toggling Visibility of the Windows
+@onready var toggle_code_button: Button = %ToggleCodeButton
+@onready var toggle_hint_button: Button = %ToggleHintButton
+@onready var toggle_output_button: Button = %ToggleOutputButton
+@onready var toggle_all_button: Button = %ToggleAllButton
+
 ## The embedded level instance. Created in [method _ready]; do not access before then.
 @onready var game_map_scene: GameMapScene
 
@@ -49,6 +55,10 @@ const MAP_PANEL_PADDING := 20.0
 
 @onready var confirm_modal: ConfirmationModal = %ConfirmationModal
 @onready var retry_modal: RetryModal = %RetryModal
+
+@onready var code_window: Control = %CodeWindow
+@onready var hint_window: Control = %HintWindow
+@onready var output_window: Control = %OutputWindow
 
 ## Displays clouds transition while pressing the Reset button.
 @onready var cloud_transition: Control = %CloudTransition
@@ -360,7 +370,7 @@ for w in range(num_of_walls):
             current_start = i + 1
             
     # Found the Weakpoint, Call for Attack!
-    print(f"Wall {w}: Weak point from index {best_start} to {best_end}, Sum: {min_sum}")
+	print(f"Wall {w}: Weak point from index {best_start} to {best_end}, Sum: {min_sum}")
     robot.breakthrough(best_start, best_end)
 """,
 	
@@ -414,11 +424,13 @@ func _ready() -> void:
 	
 	var current_level: int = SceneManager.selected_level
 	
+	title_label.text = "Level " + str(current_level)
+	
 	# make an instance of level1 gameMapScene, set its script, 
 	# so that it knows its a gameMapScene class, otherwise casting as gameMapScene will FAIL
 	var scene_path = LEVEL_PATHS.get(current_level, "")
 	var script_path = LEVEL_SCRIPT_PATHS.get(current_level, "")
-	
+		
 	assert(scene_path != "", ".tscn not found in LEVEL_PATH")
 	assert(script_path != "", ".gd not found in LEVEL_SCRIPT_PATH")
 	
@@ -428,7 +440,7 @@ func _ready() -> void:
 	# set up the GameMapScene node
 	game_map_scene = inst as GameMapScene
 	panel.add_child(game_map_scene)
-
+	
 	game_map_scene.setup(hint_label)
 	
 	# Waiting for the Container to calculate the actual size of the Panel.
@@ -479,6 +491,11 @@ func _ready() -> void:
 	hint_button.pressed.connect(
 		game_map_scene.refresh_hint
 	)
+	
+	toggle_code_button.pressed.connect(_on_toggle_code_button_pressed)
+	toggle_hint_button.pressed.connect(_on_toggle_hint_button_pressed)
+	toggle_output_button.pressed.connect(_on_toggle_output_button_pressed)
+	toggle_all_button.pressed.connect(_on_toggle_all_button_pressed)
 	
 	exit_button.pressed.connect(SceneManager.goto_level_select)
 	
@@ -839,3 +856,26 @@ func _on_stop_button_pressed() -> void:
 
 func _on_hint_button_pressed() -> void:
 	AudioManager.play_click()
+
+func _on_toggle_code_button_pressed() -> void:
+	code_window.visible = not code_window.visible
+
+func _on_toggle_hint_button_pressed() -> void:
+	hint_window.visible = not hint_window.visible
+
+func _on_toggle_output_button_pressed() -> void:
+	output_window.visible = not output_window.visible
+
+func _on_toggle_all_button_pressed() -> void:
+	var all_windows: Array[Control] = [code_window, hint_window, output_window]
+	
+	# check if all windows visible
+	var all_visible: bool = all_windows.all(func(w: Control) -> bool: return w.visible)
+	
+	# if any invisible, toggle all to be visible, 
+	# if all visible, toggle all to be invisible
+	var target_visibility: bool = not all_visible
+	
+	# toggle visibility for All Windows
+	for window in all_windows:
+		window.visible = target_visibility

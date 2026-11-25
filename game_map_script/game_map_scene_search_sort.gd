@@ -99,7 +99,7 @@ func level_reset() -> void:
 	compiler.cancel()
 	robot_api.stop()
 	
-	var mc_body_spawn_point: Vector2i = Vector2i(5, 3)
+	var mc_body_spawn_point: Vector2i = Vector2i(5, 3) if SceneManager.selected_level in [11, 12, 13, 14] else Vector2i(1, 3)
 	mc_body.snap_to_cell(mc_body_spawn_point)
 	var mc_animated_sprite: AnimatedSprite2D = $MCBody/AnimatedSprite2D
 	mc_animated_sprite.play("default")
@@ -118,6 +118,7 @@ func level_reset() -> void:
 		var t = target_bodies[i]
 		var pos = target_coordinates[i]
 		t.snap_to_cell(pos)
+		t.visible = true
 			
 		# get TargetBody's NumberTag node's Text Label
 		var number_tag_label: Label = t.get_node("NumberTag/TextureRect/Label")
@@ -287,6 +288,7 @@ func _on_array_swap_item(index_I: int, index_J: int) -> void:
 ## randomize array value,
 ## set correct answer in robot_api, send array_values to robot_api by REFERENCE
 ## set max number of array access (if needed) 
+## anything else that are Necessary etc.
 func _generate_question_answer() -> void:
 	assert(false, "Function Not Implemented!")
 	

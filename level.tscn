@@ -126,10 +126,10 @@ All"
 [node name="CodeWindow" type="Control" parent="." unique_id=927656012 node_paths=PackedStringArray("title_bar", "resize_handle", "close_button")]
 unique_name_in_owner = true
 anchors_preset = 0
-offset_left = 196.6954
-offset_top = 205.72983
-offset_right = 616.0759
-offset_bottom = 532.08044
+offset_left = 763.53406
+offset_top = 78.49962
+offset_right = 1087.0
+offset_bottom = 404.85022
 script = ExtResource("2_f2txt")
 title_bar = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar")
 resize_handle = NodePath("ResizeHandle")
@@ -228,10 +228,10 @@ mouse_default_cursor_shape = 12
 [node name="OutputWindow" type="Control" parent="." unique_id=1463542275 node_paths=PackedStringArray("title_bar", "resize_handle", "close_button")]
 unique_name_in_owner = true
 anchors_preset = 0
-offset_left = 833.2382
-offset_top = 496.2219
-offset_right = 1130.566
-offset_bottom = 638.2
+offset_left = 758.5672
+offset_top = 484.9595
+offset_right = 1055.895
+offset_bottom = 626.9376
 script = ExtResource("2_f2txt")
 title_bar = NodePath("CodeWindowPanelContainer/VBoxContainer/HBoxContainer/TitleBar")
 resize_handle = NodePath("ResizeHandle")
